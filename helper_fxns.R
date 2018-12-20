@@ -1,9 +1,8 @@
 # helper_fxns.R
 
-
 # Define handy function to get meta data ----
-get_meta_data <- function(api_token, 
-                          api_uri = REDCAP_API_TOKEN, 
+get_meta_data <- function(api_token,
+                          api_uri = REDCAP_API_TOKEN,
                           api_call = FALSE) {
   # Get JSON string via API call
   if (api_call) {
@@ -17,7 +16,7 @@ get_meta_data <- function(api_token,
   }
   # Convert JSON to data.frame
   df_meta <- jsonlite::fromJSON(json_meta) %>%
-    dplyr::na_if('') %>% 
+    dplyr::na_if('') %>%
     dplyr::select(field_name, form_name)
   # Return the meta data data.frame
   return(df_meta)
@@ -25,8 +24,8 @@ get_meta_data <- function(api_token,
 
 
 # Define handy function to get data dictionary ----
-get_data_dict <- function(api_token, 
-                          api_uri = REDCAP_API_TOKEN, 
+get_data_dict <- function(api_token,
+                          api_uri = REDCAP_API_TOKEN,
                           api_call = FALSE) {
   # Get JSON string via API call
   if (api_call) {
