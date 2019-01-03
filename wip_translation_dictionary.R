@@ -25,7 +25,8 @@ if (get_api_data) {
     token=REDCAP_API_TOKEN_UDS2,
     content='exportFieldNames',
     format='json',
-    returnFormat='json'
+    returnFormat='json'#,
+    # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
 export_fields_u2_df <- jsonlite::fromJSON(export_fields_u2_json) %>% 
@@ -38,7 +39,8 @@ if (get_api_data) {
     token=REDCAP_API_TOKEN_UDS31,
     content='exportFieldNames',
     format='json',
-    returnFormat='json'
+    returnFormat='json'#,
+    # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
 export_fields_u31_df <- jsonlite::fromJSON(export_fields_u31_json) %>% 
@@ -51,7 +53,8 @@ if (get_api_data) {
     token=REDCAP_API_TOKEN_UDS3,
     content='exportFieldNames',
     format='json',
-    returnFormat='json'
+    returnFormat='json'#,
+    # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
 export_fields_u32_df <- jsonlite::fromJSON(export_fields_u32_json) %>% 
@@ -64,7 +67,8 @@ if (get_api_data) {
     token=REDCAP_API_TOKEN_MINDSET,
     content='exportFieldNames',
     format='json',
-    returnFormat='json'
+    returnFormat='json'#,
+    # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
 export_fields_ms_df <- jsonlite::fromJSON(export_fields_ms_json) %>% 
@@ -123,7 +127,8 @@ if (get_api_data) {
     exportCheckboxLabel='false',
     exportSurveyFields='false',
     exportDataAccessGroups='false',
-    returnFormat='json'
+    returnFormat='json'#,
+    # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
 df_u2 <- jsonlite::fromJSON(json_u2) %>% dplyr::na_if('')
@@ -142,7 +147,8 @@ if (get_api_data) {
     exportCheckboxLabel='false',
     exportSurveyFields='false',
     exportDataAccessGroups='false',
-    returnFormat='json'
+    returnFormat='json'#,
+    # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
 df_u31 <- jsonlite::fromJSON(json_u31) %>% dplyr::na_if('')
@@ -161,7 +167,8 @@ if (get_api_data) {
     exportCheckboxLabel='false',
     exportSurveyFields='false',
     exportDataAccessGroups='false',
-    returnFormat='json'
+    returnFormat='json'#,
+    # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
 df_u32 <- jsonlite::fromJSON(json_u32) %>% dplyr::na_if('')
