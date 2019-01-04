@@ -1,14 +1,17 @@
 # wip_translation_dictionary.R
 
+# USEFUL LIBRARIES ----
+library(dplyr)
+library(stringr)
 
 # USEFUL VARS ----
-`%>%` <- dplyr::`%>%`
+`%>%` <- `%>%`
 source('~/Desktop/config.R')
 rm(BOX_CLIENT_ID); rm(BOX_CLIENT_SECRET); rm(BOX_REDIRECT_URI)
 rm(REDCAP_DATA_REQUESTS_TOKEN)
 
 ## switch to access API (TRUE) or not (FALSE)
-get_api_data <- TRUE
+get_api_data <- FALSE
 
 # USEFUL HELPER FUNCTIONS ----
 remove_NAs <- function(x) {
@@ -30,7 +33,7 @@ if (get_api_data) {
   )
 }
 export_fields_u2_df <- jsonlite::fromJSON(export_fields_u2_json) %>% 
-  dplyr::na_if('')
+  na_if('')
 
 # _ UDS 3 (old) ----
 if (get_api_data) {
@@ -44,7 +47,7 @@ if (get_api_data) {
   )
 }
 export_fields_u31_df <- jsonlite::fromJSON(export_fields_u31_json) %>% 
-  dplyr::na_if('')
+  na_if('')
 
 # _ UDS 3 (new) ----
 if (get_api_data) {
@@ -58,7 +61,7 @@ if (get_api_data) {
   )
 }
 export_fields_u32_df <- jsonlite::fromJSON(export_fields_u32_json) %>% 
-  dplyr::na_if('')
+  na_if('')
 
 # _ MiNDSet ----
 if (get_api_data) {
@@ -72,13 +75,16 @@ if (get_api_data) {
   )
 }
 export_fields_ms_df <- jsonlite::fromJSON(export_fields_ms_json) %>% 
-  dplyr::na_if('')
+  na_if('')
 
 # _ Get work-in-progress translation dictionary ----
 trans_dict <- readxl::read_excel('WIP__translation_dictionary.xlsx')
 
 # _ Get work-in-progress UDS3 ivp-fvp-tvp matches ----
-u32_ift_match <- readxl::read_excel('WIP__uds3_ift_matches.xlsx')
+u32_ift_match <- readxl::read_excel('WIP__uds3_ift_matches.xlsx') %>% 
+  select(field_ivp, form_ivp, 
+         field_fvp, form_fvp,
+         field_tvp, form_tvp)
 
 # _ UDS 2 ----
 fields_u2_raw <- trans_dict$field_u2
@@ -95,14 +101,14 @@ fields_u31 <- fields_u31_raw %>% paste(collapse = ',')
 fields_u32_raw_i <- trans_dict$field_u32
 # _ _ FVP
 fields_u32_raw_fu <- u32_ift_match %>% 
-  dplyr::filter(field_ivp %in% fields_u32_raw_i) %>% 
-  dplyr::filter(!is.na(field_fvp)) %>% 
-  dplyr::pull(field_fvp)
+  filter(field_ivp %in% fields_u32_raw_i) %>% 
+  filter(!is.na(field_fvp)) %>% 
+  pull(field_fvp)
 # _ _ TVP
 fields_u32_raw_tele <- u32_ift_match %>% 
-  dplyr::filter(field_ivp %in% fields_u32_raw_i) %>% 
-  dplyr::filter(!is.na(field_tvp)) %>%
-  dplyr::pull(field_tvp)
+  filter(field_ivp %in% fields_u32_raw_i) %>% 
+  filter(!is.na(field_tvp)) %>%
+  pull(field_tvp)
 # _ _ IVP + FVP + TVP
 fields_u32_raw <- c(fields_u32_raw_i
                     , fields_u32_raw_fu
@@ -131,7 +137,11 @@ if (get_api_data) {
     # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
-df_u2 <- jsonlite::fromJSON(json_u2) %>% dplyr::na_if('')
+df_u2 <- jsonlite::fromJSON(json_u2) %>% na_if('')
+# Clean out '___1' from field some field names -- May need to generalize later
+names(df_u2) <- str_replace(names(df_u2), 
+                            pattern = "___1", 
+                            replacement = "")
 
 # _ UDS 3 (old) ----
 if (get_api_data) {
@@ -151,7 +161,7 @@ if (get_api_data) {
     # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
-df_u31 <- jsonlite::fromJSON(json_u31) %>% dplyr::na_if('')
+df_u31 <- jsonlite::fromJSON(json_u31) %>% na_if('')
 
 # _ UDS 3 (new) ----
 if (get_api_data) {
@@ -171,70 +181,67 @@ if (get_api_data) {
     # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
-df_u32 <- jsonlite::fromJSON(json_u32) %>% dplyr::na_if('')
+df_u32 <- jsonlite::fromJSON(json_u32) %>% na_if('')
 
+readr::write_csv(df_u2, './Raw Data/df_u2.csv', na = '')
+readr::write_csv(df_u31, './Raw Data/df_u31.csv', na = '')
+readr::write_csv(df_u32, './Raw Data/df_u32.csv', na = '')
 
 # IVP/FVP/TVP TRANSFORM (UDS 2, UDS 3 old) ----
 
 # _ UDS 2 ----
 # _ _ UDS 2 IVP ----
 df_u2_i <- df_u2 %>% 
-  dplyr::filter(a1pkt_type == 'I') # %>% 
-  # dplyr::select(-a1pkt_type)
+  filter(a1pkt_type == 'I')
 # _ _ UDS 2 FVP ----
-u32_fvp_vars <- stringr::str_replace(fields_u32_raw_fu, 'fu_', '')
+u32_fvp_vars <- str_replace(fields_u32_raw_fu, '^fu_|^fu', '')
 u2_fvp_vars <- trans_dict %>% 
-  dplyr::filter(field_u32 %in% u32_fvp_vars) %>% 
-  dplyr::pull(field_u2) %>% 
+  filter(field_u32 %in% u32_fvp_vars) %>% 
+  pull(field_u2) %>% 
   remove_NAs(.)
-df_u2_f <- df_u2 %>% 
-  dplyr::filter(a1pkt_type == 'F') %>% 
-  dplyr::rename_at(.vars = dplyr::vars(dplyr::one_of(u2_fvp_vars)),
-                   .funs = dplyr::funs(sub('(*)', 'fu_', .))) # %>% 
-  # dplyr::select(-a1pkt_type)
+df_u2_f <- df_u2 %>%
+  filter(a1pkt_type == 'F') %>%
+  rename_at(.vars = vars(one_of(u2_fvp_vars)),
+            .funs = funs(str_replace(., '(.*)', 'fu_\\1')))
 # _ _ UDS 2 TVP ----
-u32_tvp_vars <- stringr::str_replace(fields_u32_raw_tele, 'tele_', '')
+u32_tvp_vars <- str_replace(fields_u32_raw_tele, 'tele_', '')
 u2_tvp_vars <- trans_dict %>% 
-  dplyr::filter(field_u32 %in% u32_tvp_vars) %>% 
-  dplyr::pull(field_u2) %>% 
+  filter(field_u32 %in% u32_tvp_vars) %>% 
+  pull(field_u2) %>% 
   remove_NAs(.)
 df_u2_t <- df_u2 %>% 
-  dplyr::filter(a1pkt_type == 'T') %>% 
-  dplyr::rename_at(.vars = dplyr::vars(dplyr::one_of(u2_tvp_vars)),
-                   .funs = dplyr::funs(sub('(*)', 'tele_', .))) # %>% 
-  # dplyr::select(-a1pkt_type)
+  filter(a1pkt_type == 'T') %>% 
+  rename_at(.vars = vars(one_of(u2_tvp_vars)),
+            .funs = funs(str_replace(., '(.*)', 'tele_\\1')))
 # _ _ Row bind UDS 2 I+F+T ----
-df_u2_ift <- dplyr::bind_rows(df_u2_i, df_u2_f, df_u2_t)
+df_u2_ift <- bind_rows(df_u2_i, df_u2_f, df_u2_t)
 
 # _ UDS 3 (old) ----
 # _ _ UDS 3 (old) IVP ----
 df_u31_i <- df_u31 %>% 
-  dplyr::filter(a1pkt_type == 'I') # %>% 
-  # dplyr::select(-a1pkt_type)
+  filter(a1pkt_type == 'I')
 # _ _ UDS 3 (old) FVP ----
-u32_fvp_vars <- stringr::str_replace(fields_u32_raw_fu, 'fu_', '')
+u32_fvp_vars <- str_replace(fields_u32_raw_fu, 'fu_', '')
 u31_fvp_vars <- trans_dict %>% 
-  dplyr::filter(field_u32 %in% u32_fvp_vars) %>% 
-  dplyr::pull(field_u31) %>% 
+  filter(field_u32 %in% u32_fvp_vars) %>% 
+  pull(field_u31) %>% 
   remove_NAs(.)
 df_u31_f <- df_u31 %>% 
-  dplyr::filter(a1pkt_type == 'F') %>% 
-  dplyr::rename_at(.vars = dplyr::vars(dplyr::one_of(u31_fvp_vars)),
-                   .funs = dplyr::funs(sub('(*)', 'fu_', .))) # %>% 
-  # dplyr::select(-a1pkt_type)
+  filter(a1pkt_type == 'F') %>% 
+  rename_at(.vars = vars(one_of(u31_fvp_vars)),
+            .funs = funs(str_replace(., '(.*)', 'fu_')))
 # _ _ UDS 3 (old) TVP ----
-u32_tvp_vars <- stringr::str_replace(fields_u32_raw_tele, 'tele_', '')
+u32_tvp_vars <- str_replace(fields_u32_raw_tele, 'tele_', '')
 u31_tvp_vars <- trans_dict %>% 
-  dplyr::filter(field_u32 %in% u32_tvp_vars) %>% 
-  dplyr::pull(field_u31) %>% 
+  filter(field_u32 %in% u32_tvp_vars) %>% 
+  pull(field_u31) %>% 
   remove_NAs(.)
 df_u31_t <- df_u31 %>% 
-  dplyr::filter(a1pkt_type == 'T') %>% 
-  dplyr::rename_at(.vars = dplyr::vars(dplyr::one_of(u31_tvp_vars)),
-                   .funs = dplyr::funs(sub('(*)', 'tele_', .))) # %>% 
-  # dplyr::select(-a1pkt_type)
+  filter(a1pkt_type == 'T') %>% 
+  rename_at(.vars = vars(one_of(u31_tvp_vars)),
+            .funs = funs(str_replace(., '(.*)', 'tele_')))
 # _ _ Row bind UDS 3 (old) I+F+T ----
-df_u31_ift <- dplyr::bind_rows(df_u31_i, df_u31_f, df_u31_t)
+df_u31_ift <- bind_rows(df_u31_i, df_u31_f, df_u31_t)
 
 
 # STITCH TOGETHER DATA ----
@@ -265,9 +272,9 @@ trans_dict_std <- cbind(trans_dict, std_names_df)
 
 ## Append `fu_*` fields ----
 u32_ift_match_f <- u32_ift_match %>% 
-  dplyr::filter(!is.na(field_fvp)) %>% 
-  dplyr::filter(field_ivp %in% u32_fvp_vars) %>% 
-  dplyr::pull(field_ivp)
+  filter(!is.na(field_fvp)) %>% 
+  filter(field_ivp %in% u32_fvp_vars) %>% 
+  pull(field_ivp)
 for (i in seq_along(u32_ift_match_f)) {
   # cat(paste(i, u32_ift_match_f[i], '\n'))
   # cat(paste(i, nrow(trans_dict_std)+i, '\n'))
@@ -292,22 +299,23 @@ for (i in seq_along(u32_ift_match_f)) {
              which(trans_dict_std$field_u32 == u32_ift_match_f[i]), 'field_u32'
              ]])
   trans_dict_std[curr_row, 'form_u32'] <-
-    stringr::str_replace(
-           trans_dict_std[[
-             which(trans_dict_std$field_u32 == u32_ift_match_f[i]), 'form_u32'
-           ]],
-           pattern = 'ivp_',
-           replacement = 'fvp_')
+    str_replace(
+      trans_dict_std[[
+        which(trans_dict_std$field_u32 == u32_ift_match_f[i]), 'form_u32'
+        ]],
+      pattern = 'ivp_',
+      replacement = 'fvp_')
   trans_dict_std[curr_row, 'Notes'] <- 
     '__ synthetic field in UDS 2, UDS 3 (old) __'
   trans_dict_std[curr_row, 'std_source'] <- 'field_u32'
-  trans_dict_std[curr_row, 'std_field'] <- trans_dict_std[[curr_row, 'field_u32']]
+  trans_dict_std[curr_row, 'std_field'] <- 
+    trans_dict_std[[curr_row, 'field_u32']]
 }
 ## Append `tele_*` fields
 u32_ift_match_t <- u32_ift_match %>% 
-  dplyr::filter(!is.na(field_tvp)) %>% 
-  dplyr::filter(field_ivp %in% u32_tvp_vars) %>% 
-  dplyr::pull(field_ivp)
+  filter(!is.na(field_tvp)) %>% 
+  filter(field_ivp %in% u32_tvp_vars) %>% 
+  pull(field_ivp)
 for (i in seq_along(u32_ift_match_t)) {
   # cat(paste(i, u32_ift_match_t[i], '\n'))
   # cat(paste(i, nrow(trans_dict_std)+i, '\n'))
@@ -332,7 +340,7 @@ for (i in seq_along(u32_ift_match_t)) {
              which(trans_dict_std$field_u32 == u32_ift_match_t[i]), 'field_u32'
              ]])
   trans_dict_std[curr_row, 'form_u32'] <-
-    stringr::str_replace(
+    str_replace(
       trans_dict_std[[
         which(trans_dict_std$field_u32 == u32_ift_match_t[i]), 'form_u32'
         ]],
@@ -345,8 +353,8 @@ for (i in seq_along(u32_ift_match_t)) {
     trans_dict_std[[curr_row, 'field_u32']]
 }
 # _ Remove any instances of 'fu_NA' or 'tele_NA' -----
-trans_dict_std <- trans_dict_std %>% dplyr::na_if('fu_NA')
-trans_dict_std <- trans_dict_std %>% dplyr::na_if('tele_NA')
+trans_dict_std <- trans_dict_std %>% na_if('fu_NA')
+trans_dict_std <- trans_dict_std %>% na_if('tele_NA')
 
 # _ Build stitched data df ----
 ## Stitched df is `df_u2_u31_u32`
@@ -361,33 +369,37 @@ names(df_u2_u31_u32) <- trans_dict_std$std_field
 ## Loop through `trans_dict_std` rows to build stitched df column by column
 ## ... using df_u2_ift, df_u31_ift, df_u32
 for (i in seq_len(nrow(trans_dict_std))) {
+# for (i in 1:601) {
   cat(paste(i, '\n'))
-
+  
   ## Build temp UDS 2 vector
-  if (!is.na(trans_dict_std[i, 'field_u2'])) {
+  if (!is.na(trans_dict_std[i, 'field_u2']) &&
+      !is.null(df_u2_ift[[trans_dict_std[i, 'field_u2']]])) {
     temp_u2_vec <- df_u2_ift[[trans_dict_std[i, 'field_u2']]]
   } else {
     temp_u2_vec <- rep(NA_character_, times = nrow(df_u2_ift))
   }
-
+  
   ## Build temp UDS 3 (old) vector
-  if (!is.na(trans_dict_std[i, 'field_u31'])) {
+  if (!is.na(trans_dict_std[i, 'field_u31']) &&
+      !is.null(df_u31_ift[[trans_dict_std[i, 'field_u31']]])) {
     temp_u31_vec <- df_u31_ift[[trans_dict_std[i, 'field_u31']]]
   } else {
     temp_u31_vec <- rep(NA_character_, times = nrow(df_u31_ift))
   }
-
+  
   ## Build temp UDS 3 (new) vector
-  if (!is.na(trans_dict_std[i, 'field_u32'])) {
+  if (!is.na(trans_dict_std[i, 'field_u32']) &&
+      !is.null(df_u32[[trans_dict_std[i, 'field_u32']]])) {
     temp_u32_vec <- df_u32[[trans_dict_std[i, 'field_u32']]]
   } else {
     temp_u32_vec <- rep(NA_character_, times = nrow(df_u32))
   }
-
+  
   ## Concat `temp_*_vec` vectors
   temp_u2_u31_u32_vec <- c(temp_u2_vec, temp_u31_vec, temp_u32_vec)
   # print(length(temp_u2_u31_u32_vec))
-
+  
   ## Lay concat'd `temp_*_vec` vectors into stitched df column
   df_u2_u31_u32[, i] <- temp_u2_u31_u32_vec
 }
@@ -395,13 +407,13 @@ for (i in seq_len(nrow(trans_dict_std))) {
 print(object.size(df_u2_u31_u32), units = 'auto')
 
 # _ Guess column types
-df_u2_u31_u32 <- readr::type_convert(df_u2_u31_u32)
+df_u2_u31_u32 <- suppressMessages( readr::type_convert(df_u2_u31_u32) )
 print(object.size(df_u2_u31_u32), units = 'auto')
 
-dplyr::glimpse(df_u2_ift)
-dplyr::glimpse(df_u31_ift)
-dplyr::glimpse(df_u32)
-dplyr::glimpse(df_u2_u31_u32)
+# glimpse(df_u2_ift)
+# glimpse(df_u31_ift)
+# glimpse(df_u32)
+# glimpse(df_u2_u31_u32)
 
 
 # WRITE TO CSV ----
