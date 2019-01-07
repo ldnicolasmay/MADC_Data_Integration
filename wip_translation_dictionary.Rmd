@@ -1,9 +1,32 @@
-# wip_translation_dictionary.R
+---
+title: "WIP MADC Data Unification"
+author: "Nicolas May"
+date: "1/7/2019"
+output: 
+  html_document:
+    theme: cerulean
+    highlight: zenburn
+---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Load Requirements
+
+## Load Useful Libraries
+
+```{r}
 # USEFUL LIBRARIES ----
 library(dplyr)
 library(stringr)
+library(knitr)
+library(kableExtra)
+```
 
+## Load Useful Variables
+
+```{r}
 # USEFUL VARS ----
 `%>%` <- `%>%`
 source('~/Desktop/config.R')
@@ -11,16 +34,26 @@ rm(BOX_CLIENT_ID); rm(BOX_CLIENT_SECRET); rm(BOX_REDIRECT_URI)
 rm(REDCAP_DATA_REQUESTS_TOKEN)
 
 ## switch to access API (TRUE) or not (FALSE)
-get_api_data <- FALSE
+get_api_data <- TRUE
+```
 
+## Load Useful Helper Functions
+
+```{r}
 # USEFUL HELPER FUNCTIONS ----
 remove_NAs <- function(x) {
   if (is.vector(x)) return(x[!is.na(x)])
   else stop('x is not a vector')
 }
+```
 
-# GET FIELDS ----
 
+# Get Data
+
+## Get REDCap Project Data Fields
+
+### UDS 2
+```{r}
 # _ UDS 2 ----
 if (get_api_data) {
   export_fields_u2_json <- RCurl::postForm(
@@ -32,9 +65,17 @@ if (get_api_data) {
     # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
-export_fields_u2_df <- jsonlite::fromJSON(export_fields_u2_json) %>%
+export_fields_u2_df <- jsonlite::fromJSON(export_fields_u2_json) %>% 
   na_if('')
+head(export_fields_u2_df) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
+    font_size = 9)
+```
 
+### UDS 3 Old
+```{r}
 # _ UDS 3 (old) ----
 if (get_api_data) {
   export_fields_u31_json <- RCurl::postForm(
@@ -46,9 +87,17 @@ if (get_api_data) {
     # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
-export_fields_u31_df <- jsonlite::fromJSON(export_fields_u31_json) %>%
+export_fields_u31_df <- jsonlite::fromJSON(export_fields_u31_json) %>% 
   na_if('')
+head(export_fields_u31_df) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
+    font_size = 9)
+```
 
+### UDS 3 New
+```{r}
 # _ UDS 3 (new) ----
 if (get_api_data) {
   export_fields_u32_json <- RCurl::postForm(
@@ -60,9 +109,17 @@ if (get_api_data) {
     # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
-export_fields_u32_df <- jsonlite::fromJSON(export_fields_u32_json) %>%
+export_fields_u32_df <- jsonlite::fromJSON(export_fields_u32_json) %>% 
   na_if('')
+head(export_fields_u32_df) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
+    font_size = 9)
+```
 
+### MiNDSet Registry
+```{r}
 # _ MiNDSet ----
 if (get_api_data) {
   export_fields_ms_json <- RCurl::postForm(
@@ -74,39 +131,78 @@ if (get_api_data) {
     # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
-export_fields_ms_df <- jsonlite::fromJSON(export_fields_ms_json) %>%
+export_fields_ms_df <- jsonlite::fromJSON(export_fields_ms_json) %>% 
   na_if('')
+head(export_fields_ms_df) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
+    font_size = 9)
+```
 
+## Get Human-Resolved Fields 
+
+Because there are asystematic mismatches between the three UDS datsets that MADC has stored in REDCap, there are two XLSX files that require human creation/maintenance. Loading and processing the data in the files makes it possible to resolve field name mismatches in order to harmonize and unify the data.
+
+```{r}
 # _ Get work-in-progress translation dictionary ----
 trans_dict <- readxl::read_excel('WIP__translation_dictionary.xlsx')
+head(trans_dict) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
+    font_size = 9)
 
 # _ Get work-in-progress UDS3 ivp-fvp-tvp matches ----
-u32_ift_match <- readxl::read_excel('WIP__uds3_ift_matches.xlsx') %>%
-  select(field_ivp, form_ivp,
+u32_ift_match <- readxl::read_excel('WIP__uds3_ift_matches.xlsx') %>% 
+  select(field_ivp, form_ivp, 
          field_fvp, form_fvp,
          field_tvp, form_tvp)
+head(u32_ift_match) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
+    font_size = 9)
+```
 
+## Process Dataset Fields
+
+### UDS 2
+```{r}
 # _ UDS 2 ----
 fields_u2_raw <- trans_dict$field_u2
 fields_u2_raw <- remove_NAs(fields_u2_raw)
 fields_u2 <- fields_u2_raw %>% paste(collapse = ',')
+```
 
+### UDS 3 Old
+```{r}
 # _ UDS 3 (old) ----
 fields_u31_raw <- trans_dict$field_u31
 fields_u31_raw <- remove_NAs(fields_u31_raw)
 fields_u31 <- fields_u31_raw %>% paste(collapse = ',')
+```
 
+### UDS 3 New
+
+The fields for UDS 3 (New) require a little more work because there are three packets to collect participant data:
+
+1. initial visit, IVP
+2. follow-up visit, FVP
+3. telephone visit, TVP
+
+```{r}
 # _ UDS 3 (new) ----
 # _ _ IVP
 fields_u32_raw_i <- trans_dict$field_u32
 # _ _ FVP
-fields_u32_raw_fu <- u32_ift_match %>%
-  filter(field_ivp %in% fields_u32_raw_i) %>%
-  filter(!is.na(field_fvp)) %>%
+fields_u32_raw_fu <- u32_ift_match %>% 
+  filter(field_ivp %in% fields_u32_raw_i) %>% 
+  filter(!is.na(field_fvp)) %>% 
   pull(field_fvp)
 # _ _ TVP
-fields_u32_raw_tele <- u32_ift_match %>%
-  filter(field_ivp %in% fields_u32_raw_i) %>%
+fields_u32_raw_tele <- u32_ift_match %>% 
+  filter(field_ivp %in% fields_u32_raw_i) %>% 
   filter(!is.na(field_tvp)) %>%
   pull(field_tvp)
 # _ _ IVP + FVP + TVP
@@ -114,11 +210,13 @@ fields_u32_raw <- c(fields_u32_raw_i
                     , fields_u32_raw_fu
                     , fields_u32_raw_tele)
 fields_u32_raw <- remove_NAs(fields_u32_raw) # remove NAs
-fields_u32 <- fields_u32_raw %>% paste(collapse = ',')
+fields_u32 <- fields_u32_raw %>% paste(collapse = ',') 
+```
 
+## REDCap API Data Retrieval
 
-# GET DATA ----
-
+### UDS 2
+```{r}
 # _ UDS 2 ----
 if (get_api_data) {
   json_u2 <- RCurl::postForm(
@@ -139,10 +237,13 @@ if (get_api_data) {
 }
 df_u2 <- jsonlite::fromJSON(json_u2) %>% na_if('')
 # Clean out '___1' from field some field names -- May need to generalize later
-names(df_u2) <- str_replace(names(df_u2),
-                            pattern = "___1",
+names(df_u2) <- str_replace(names(df_u2), 
+                            pattern = "___1", 
                             replacement = "")
+```
 
+### UDS 3 Old
+```{r}
 # _ UDS 3 (old) ----
 if (get_api_data) {
   json_u31 <- RCurl::postForm(
@@ -162,7 +263,10 @@ if (get_api_data) {
   )
 }
 df_u31 <- jsonlite::fromJSON(json_u31) %>% na_if('')
+```
 
+### UDS 3 New
+```{r}
 # _ UDS 3 (new) ----
 if (get_api_data) {
   json_u32 <- RCurl::postForm(
@@ -182,22 +286,38 @@ if (get_api_data) {
   )
 }
 df_u32 <- jsonlite::fromJSON(json_u32) %>% na_if('')
+```
 
+## Write Raw Data To CSV
+
+This comes in handy when diagnosising and resolving possible code errors.
+
+```{r}
 readr::write_csv(df_u2, './Raw Data/df_u2.csv', na = '')
 readr::write_csv(df_u31, './Raw Data/df_u31.csv', na = '')
 readr::write_csv(df_u32, './Raw Data/df_u32.csv', na = '')
+```
 
+
+# Restructure Data
+
+Since the UDS 3 (New) strcuture will be the standard template for all unified MADC UDS data, both UDS 2 and UDS 3 (Old) need to be restructured to match the structure of UDS 3 (New), viz., the IVP/FVP/TVP format.
+
+## UDS 3 (New) Data Structure As Standard
+
+### UDS 2
+```{r}
 # IVP/FVP/TVP TRANSFORM (UDS 2, UDS 3 old) ----
 
 # _ UDS 2 ----
 # _ _ UDS 2 IVP ----
-df_u2_i <- df_u2 %>%
+df_u2_i <- df_u2 %>% 
   filter(a1pkt_type == 'I')
 # _ _ UDS 2 FVP ----
 u32_fvp_vars <- str_replace(fields_u32_raw_fu, '^fu_|^fu', '')
-u2_fvp_vars <- trans_dict %>%
-  filter(field_u32 %in% u32_fvp_vars) %>%
-  pull(field_u2) %>%
+u2_fvp_vars <- trans_dict %>% 
+  filter(field_u32 %in% u32_fvp_vars) %>% 
+  pull(field_u2) %>% 
   remove_NAs(.)
 df_u2_f <- df_u2 %>%
   filter(a1pkt_type == 'F') %>%
@@ -205,48 +325,59 @@ df_u2_f <- df_u2 %>%
             .funs = funs(str_replace(., '(.*)', 'fu_\\1')))
 # _ _ UDS 2 TVP ----
 u32_tvp_vars <- str_replace(fields_u32_raw_tele, 'tele_', '')
-u2_tvp_vars <- trans_dict %>%
-  filter(field_u32 %in% u32_tvp_vars) %>%
-  pull(field_u2) %>%
+u2_tvp_vars <- trans_dict %>% 
+  filter(field_u32 %in% u32_tvp_vars) %>% 
+  pull(field_u2) %>% 
   remove_NAs(.)
-df_u2_t <- df_u2 %>%
-  filter(a1pkt_type == 'T') %>%
+df_u2_t <- df_u2 %>% 
+  filter(a1pkt_type == 'T') %>% 
   rename_at(.vars = vars(one_of(u2_tvp_vars)),
             .funs = funs(str_replace(., '(.*)', 'tele_\\1')))
 # _ _ Row bind UDS 2 I+F+T ----
 df_u2_ift <- bind_rows(df_u2_i, df_u2_f, df_u2_t)
+```
+
+### UDS 3 (Old)
+```{r}
+# IVP/FVP/TVP TRANSFORM (UDS 2, UDS 3 old) ----
 
 # _ UDS 3 (old) ----
 # _ _ UDS 3 (old) IVP ----
-df_u31_i <- df_u31 %>%
+df_u31_i <- df_u31 %>% 
   filter(a1pkt_type == 'I')
 # _ _ UDS 3 (old) FVP ----
 u32_fvp_vars <- str_replace(fields_u32_raw_fu, 'fu_', '')
-u31_fvp_vars <- trans_dict %>%
-  filter(field_u32 %in% u32_fvp_vars) %>%
-  pull(field_u31) %>%
+u31_fvp_vars <- trans_dict %>% 
+  filter(field_u32 %in% u32_fvp_vars) %>% 
+  pull(field_u31) %>% 
   remove_NAs(.)
-df_u31_f <- df_u31 %>%
-  filter(a1pkt_type == 'F') %>%
+df_u31_f <- df_u31 %>% 
+  filter(a1pkt_type == 'F') %>% 
   rename_at(.vars = vars(one_of(u31_fvp_vars)),
             .funs = funs(str_replace(., '(.*)', 'fu_')))
 # _ _ UDS 3 (old) TVP ----
 u32_tvp_vars <- str_replace(fields_u32_raw_tele, 'tele_', '')
-u31_tvp_vars <- trans_dict %>%
-  filter(field_u32 %in% u32_tvp_vars) %>%
-  pull(field_u31) %>%
+u31_tvp_vars <- trans_dict %>% 
+  filter(field_u32 %in% u32_tvp_vars) %>% 
+  pull(field_u31) %>% 
   remove_NAs(.)
-df_u31_t <- df_u31 %>%
-  filter(a1pkt_type == 'T') %>%
+df_u31_t <- df_u31 %>% 
+  filter(a1pkt_type == 'T') %>% 
   rename_at(.vars = vars(one_of(u31_tvp_vars)),
             .funs = funs(str_replace(., '(.*)', 'tele_')))
 # _ _ Row bind UDS 3 (old) I+F+T ----
 df_u31_ift <- bind_rows(df_u31_i, df_u31_f, df_u31_t)
+```
 
+# Stitch Data Together
 
-# STITCH TOGETHER DATA ----
-# df_u2 + df_u31 + df_u32 based on translation dictionary
+Based on the translation dictionary (`WIP__translation_diction.xlsx`), we'll stitch together all the UDS data into one harmonized dataset.
 
+## Build Standard Names DF (`std_names_df`)
+
+### Set up the empty df
+
+```{r}
 # _ Build standard names df ----
 ## Set up empty df
 std_names_df <- data.frame(matrix(data = NA_character_,
@@ -254,23 +385,47 @@ std_names_df <- data.frame(matrix(data = NA_character_,
                                   ncol = 2),
                            stringsAsFactors = FALSE)
 names(std_names_df) <- c('std_source', 'std_field')
+head(std_names_df) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
+    font_size = 9)
+```
 
+### Loop through rows of `trans_dict` to standardize field names
+
+`trans_dict` is just a df of the spreadsheet `WIP__translation_dictionary.xlsx`. From this, we'll grab first the UDS 3 New field name; if that doesn't exist, we'll grab the UDS 3 Old field name; if that doesn't exist, it'll be the UDS 2 field name.
+
+From this process is born the standard translation dictionary, `trans_dict_std`.
+
+```{r}
 ## Loop through rows of `trans_dict`
 for (i in seq_len(nrow(trans_dict))) {
 
   ## Std field name is from UDS 3 (new), then UDS 3 (old), then UDS 2
   if (!is.na(trans_dict[i, 'field_u32'])) {
-    std_names_df[i, ] <- list('field_u32', trans_dict[i, 'field_u32'])
+    std_names_df[i, ] <- list('field_u32', trans_dict[[i, 'field_u32']])
   } else if (!is.na(trans_dict[i, 'field_u31'])) {
-    std_names_df[i, ] <- list('field_u31', trans_dict[i, 'field_u31'])
+    std_names_df[i, ] <- list('field_u31', trans_dict[[i, 'field_u31']])
   } else if (!is.na(trans_dict[i, 'field_u2'])) {
-    std_names_df[i, ] <- list('field_u2', trans_dict[i, 'field_u2'])
+    std_names_df[i, ] <- list('field_u2', trans_dict[[i, 'field_u2']])
   }
 
 }
 trans_dict_std <- cbind(trans_dict, std_names_df)
+head(trans_dict_std) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
+    font_size = 9)
+```
 
-## Append `fu_*` fields
+### Append `fu_*` and `tele_*` fields to bottom of Standard Translation Dictionary
+
+This chunk uses data from human-created/-maintained `WIP__uds3_ift_matches.xlsx` to append `fu_*` and `tele_*` fields to the bottom of the Standard Translation Dictionary (which started out as human-created/-maintained `WIP__translation_dictionary.xlsx`).
+
+```{r}
+## Append `fu_*` fields ----
 u32_ift_match_f <- u32_ift_match %>%
   filter(!is.na(field_fvp)) %>%
   filter(field_ivp %in% u32_fvp_vars) %>%
@@ -311,7 +466,15 @@ for (i in seq_along(u32_ift_match_f)) {
   trans_dict_std[curr_row, 'std_field'] <-
     trans_dict_std[[curr_row, 'field_u32']]
 }
-## Append `tele_*` fields
+tail(trans_dict_std) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
+    font_size = 9)
+```
+
+```{r}
+## Append `tele_*` fields ----
 u32_ift_match_t <- u32_ift_match %>%
   filter(!is.na(field_tvp)) %>%
   filter(field_ivp %in% u32_tvp_vars) %>%
@@ -352,12 +515,33 @@ for (i in seq_along(u32_ift_match_t)) {
   trans_dict_std[curr_row, 'std_field'] <-
     trans_dict_std[[curr_row, 'field_u32']]
 }
+tail(trans_dict_std) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
+    font_size = 9)
+```
+
+Now remove any instances of non-existing field names after `fu_*` and `tele_*` preprends.
+
+```{r}
 # _ Remove any instances of 'fu_NA', 'tele_NA', 'fu_', 'tele_' -----
 trans_dict_std <- trans_dict_std %>% na_if('fu_NA')
 trans_dict_std <- trans_dict_std %>% na_if('tele_NA')
 trans_dict_std <- trans_dict_std %>% na_if('fu_')
 trans_dict_std <- trans_dict_std %>% na_if('tele_')
+tail(trans_dict_std) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
+    font_size = 9)
+```
 
+## Build Stitched DF (`df_u2_u31_u32`)
+
+### Create empty df
+
+```{r}
 # _ Build stitched data df ----
 ## Stitched df is `df_u2_u31_u32`
 df_u2_u31_u32 <- data.frame(matrix(data = NA_character_,
@@ -366,13 +550,19 @@ df_u2_u31_u32 <- data.frame(matrix(data = NA_character_,
                                               nrow(df_u32)),
                                    ncol = nrow(trans_dict_std)))
 names(df_u2_u31_u32) <- trans_dict_std$std_field
+```
 
+### Build `df_u2_u31_u32`
 
-## Loop through `trans_dict_std` rows to build stitched df column by column
+To accomplish this, we iterate over the rows of `trans_dict_std` and build `df_u2_u31_u32` column by column.
+
+```{r}
+# Loop through `trans_dict_std` rows to build stitched df column by column
 ## ... using df_u2_ift, df_u31_ift, df_u32
+cat("Number of columns in df_u2_u31_u32 df:\n")
 for (i in seq_len(nrow(trans_dict_std))) {
 # for (i in 1:601) {
-  cat(paste(i, '\n'))
+  cat(paste(i, ' '))
 
   ## Build temp UDS 2 vector
   if (!is.na(trans_dict_std[i, 'field_u2']) &&
@@ -405,23 +595,28 @@ for (i in seq_len(nrow(trans_dict_std))) {
   ## Lay concat'd `temp_*_vec` vectors into stitched df column
   df_u2_u31_u32[, i] <- temp_u2_u31_u32_vec
 }
+```
 
+### Reduce the size of `df_u2_u31_u32` by guessing column data types
+
+```{r}
 print(object.size(df_u2_u31_u32), units = 'auto')
-
 # _ Guess column types
 df_u2_u31_u32 <- suppressMessages( readr::type_convert(df_u2_u31_u32) )
 print(object.size(df_u2_u31_u32), units = 'auto')
+```
 
-# glimpse(df_u2_ift)
-# glimpse(df_u31_ift)
-# glimpse(df_u32)
-# glimpse(df_u2_u31_u32)
+# Write to CSV
 
+Write the resulting harmonized dataset `df_u2_u31_u32` to a CSV file of the same name.
 
+```{r}
 # WRITE TO CSV ----
 readr::write_csv(df_u2_u31_u32, 'df_u2_u31_u32.csv', na = '')
+```
 
 
+```
 ###@    #==--  :  --==#    @##==---==##@##==---==##@    #==--  :  --==#    @###
 #==##@    #==-- --==#    @##==---==##@   @##==---==##@    #==-- --==#    @##==#
 #--==##@    #==-==#    @##==---==##@   #   @##==---==##@    #==-==#    @##==--#
@@ -447,3 +642,4 @@ readr::write_csv(df_u2_u31_u32, 'df_u2_u31_u32.csv', na = '')
 #--==##@    #==-==#    @##==---==##@   #   @##==---==##@    #==-==#    @##==--#
 #==##@    #==-- --==#    @##==---==##@   @##==---==##@    #==-- --==#    @##==#
 ###@    #==--  :  --==#    @##==---==##@##==---==##@    #==--  :  --==#    @###
+```
