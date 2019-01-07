@@ -401,7 +401,7 @@ From this process is born the standard translation dictionary, `trans_dict_std`.
 ```{r}
 ## Loop through rows of `trans_dict`
 for (i in seq_len(nrow(trans_dict))) {
-
+  
   ## Std field name is from UDS 3 (new), then UDS 3 (old), then UDS 2
   if (!is.na(trans_dict[i, 'field_u32'])) {
     std_names_df[i, ] <- list('field_u32', trans_dict[[i, 'field_u32']])
@@ -410,7 +410,7 @@ for (i in seq_len(nrow(trans_dict))) {
   } else if (!is.na(trans_dict[i, 'field_u2'])) {
     std_names_df[i, ] <- list('field_u2', trans_dict[[i, 'field_u2']])
   }
-
+  
 }
 trans_dict_std <- cbind(trans_dict, std_names_df)
 head(trans_dict_std) %>% 
@@ -561,9 +561,9 @@ To accomplish this, we iterate over the rows of `trans_dict_std` and build `df_u
 ## ... using df_u2_ift, df_u31_ift, df_u32
 cat("Number of columns in df_u2_u31_u32 df:\n")
 for (i in seq_len(nrow(trans_dict_std))) {
-# for (i in 1:601) {
+  # for (i in 1:601) {
   cat(paste(i, ' '))
-
+  
   ## Build temp UDS 2 vector
   if (!is.na(trans_dict_std[i, 'field_u2']) &&
       !is.null(df_u2_ift[[trans_dict_std[i, 'field_u2']]])) {
@@ -571,7 +571,7 @@ for (i in seq_len(nrow(trans_dict_std))) {
   } else {
     temp_u2_vec <- rep(NA_character_, times = nrow(df_u2_ift))
   }
-
+  
   ## Build temp UDS 3 (old) vector
   if (!is.na(trans_dict_std[i, 'field_u31']) &&
       !is.null(df_u31_ift[[trans_dict_std[i, 'field_u31']]])) {
@@ -579,7 +579,7 @@ for (i in seq_len(nrow(trans_dict_std))) {
   } else {
     temp_u31_vec <- rep(NA_character_, times = nrow(df_u31_ift))
   }
-
+  
   ## Build temp UDS 3 (new) vector
   if (!is.na(trans_dict_std[i, 'field_u32']) &&
       !is.null(df_u32[[trans_dict_std[i, 'field_u32']]])) {
@@ -587,11 +587,11 @@ for (i in seq_len(nrow(trans_dict_std))) {
   } else {
     temp_u32_vec <- rep(NA_character_, times = nrow(df_u32))
   }
-
+  
   ## Concat `temp_*_vec` vectors
   temp_u2_u31_u32_vec <- c(temp_u2_vec, temp_u31_vec, temp_u32_vec)
   # print(length(temp_u2_u31_u32_vec))
-
+  
   ## Lay concat'd `temp_*_vec` vectors into stitched df column
   df_u2_u31_u32[, i] <- temp_u2_u31_u32_vec
 }
@@ -606,13 +606,122 @@ df_u2_u31_u32 <- suppressMessages( readr::type_convert(df_u2_u31_u32) )
 print(object.size(df_u2_u31_u32), units = 'auto')
 ```
 
-# Write to CSV
+## Write Harmonized Data To CSV
 
 Write the resulting harmonized dataset `df_u2_u31_u32` to a CSV file of the same name.
 
 ```{r}
 # WRITE TO CSV ----
 readr::write_csv(df_u2_u31_u32, 'df_u2_u31_u32.csv', na = '')
+```
+
+
+# Build Data Dictionary
+
+## Get UDS Fields
+
+### UDS 2
+```{r}
+# UDS 2
+data_dict_fields_u2_raw <- trans_dict_std %>% 
+  select(std_source, std_field) %>% 
+  filter(std_source == 'field_u2') %>% 
+  pull(std_field)
+```
+
+### UDS 3 Old
+```{r}
+# UDS 3 (Old)
+data_dict_fields_u31_raw <- trans_dict_std %>% 
+  select(std_source, std_field) %>% 
+  filter(std_source == 'field_u31') %>% 
+  pull(std_field)
+```
+
+### UDS 3 New
+```{r}
+# UDS 3 (New)
+data_dict_fields_u32_raw <- trans_dict_std %>% 
+  select(std_source, std_field) %>% 
+  filter(std_source == 'field_u32') %>% 
+  pull(std_field)
+```
+
+## Retrieve Data Dictionary via REDCap API
+
+### UDS 2
+```{r}
+json_data_dict_u2 <- RCurl::postForm(
+  uri=REDCAP_API_URI,
+  token=REDCAP_API_TOKEN_UDS2,
+  content='metadata',
+  format='json',
+  returnFormat='json'
+)
+df_data_dict_u2_all <- jsonlite::fromJSON(json_data_dict_u2)
+df_data_dict_u2 <- df_data_dict_u2_all %>% 
+  filter(field_name %in% data_dict_fields_u2_raw)
+```
+
+### UDS 3 (Old)
+```{r}
+json_data_dict_u31 <- RCurl::postForm(
+  uri=REDCAP_API_URI,
+  token=REDCAP_API_TOKEN_UDS31,
+  content='metadata',
+  format='json',
+  returnFormat='json'
+)
+df_data_dict_u31_all <- jsonlite::fromJSON(json_data_dict_u31)
+df_data_dict_u31 <- df_data_dict_u31_all %>% 
+  filter(field_name %in% data_dict_fields_u31_raw)
+```
+
+### UDS 3 (New)
+```{r}
+json_data_dict_u32 <- RCurl::postForm(
+  uri=REDCAP_API_URI,
+  token=REDCAP_API_TOKEN_UDS3,
+  content='metadata',
+  format='json',
+  returnFormat='json'
+)
+df_data_dict_u32_all <- jsonlite::fromJSON(json_data_dict_u32)
+df_data_dict_u32 <- df_data_dict_u31_all %>% 
+  filter(field_name %in% data_dict_fields_u32_raw)
+```
+
+## Rowbind Data Dictionaries & Order
+
+Order by form name, then field name.
+
+```{r}
+df_data_dict <- bind_rows(df_data_dict_u2,
+                          df_data_dict_u31,
+                          df_data_dict_u32)
+df_data_dict_form <- df_data_dict %>% 
+  arrange(form_name, field_name)
+df_data_dict_field <- df_data_dict %>% 
+  arrange(field_name)
+
+head(df_data_dict_field) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
+    font_size = 9)
+
+head(df_data_dict_form) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
+    font_size = 9)
+```
+
+## Write Harmonized Data Dictionary To CSV
+
+```{r}
+readr::write_csv(df_data_dict_form, 'df_data_dict_form.csv', na = '')
+readr::write_csv(df_data_dict_field, 'df_data_dict_field.csv', na = '')
 ```
 
 

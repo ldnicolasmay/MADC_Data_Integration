@@ -1249,7 +1249,7 @@ std_field
 <p>From this process is born the standard translation dictionary, <code>trans_dict_std</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Loop through rows of `trans_dict`
 <span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq_len</span>(<span class="kw">nrow</span>(trans_dict))) {
-
+  
   ## Std field name is from UDS 3 (new), then UDS 3 (old), then UDS 2
   <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(trans_dict[i, <span class="st">'field_u32'</span>])) {
     std_names_df[i, ] &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">'field_u32'</span>, trans_dict[[i, <span class="st">'field_u32'</span>]])
@@ -1258,7 +1258,7 @@ std_field
   } <span class="cf">else</span> <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(trans_dict[i, <span class="st">'field_u2'</span>])) {
     std_names_df[i, ] &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">'field_u2'</span>, trans_dict[[i, <span class="st">'field_u2'</span>]])
   }
-
+  
 }
 trans_dict_std &lt;-<span class="st"> </span><span class="kw">cbind</span>(trans_dict, std_names_df)
 <span class="kw">head</span>(trans_dict_std) <span class="op">%&gt;%</span><span class="st"> </span>
@@ -2544,9 +2544,9 @@ df_u2_u31_u32 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<
 <span class="kw">cat</span>(<span class="st">&quot;Number of columns in df_u2_u31_u32 df:</span><span class="ch">\n</span><span class="st">&quot;</span>)</code></pre></div>
 <pre><code>## Number of columns in df_u2_u31_u32 df:</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq_len</span>(<span class="kw">nrow</span>(trans_dict_std))) {
-<span class="co"># for (i in 1:601) {</span>
+  <span class="co"># for (i in 1:601) {</span>
   <span class="kw">cat</span>(<span class="kw">paste</span>(i, <span class="st">' '</span>))
-
+  
   ## Build temp UDS 2 vector
   <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(trans_dict_std[i, <span class="st">'field_u2'</span>]) <span class="op">&amp;&amp;</span>
 <span class="st">      </span><span class="op">!</span><span class="kw">is.null</span>(df_u2_ift[[trans_dict_std[i, <span class="st">'field_u2'</span>]]])) {
@@ -2554,7 +2554,7 @@ df_u2_u31_u32 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<
   } <span class="cf">else</span> {
     temp_u2_vec &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA_character_</span>, <span class="dt">times =</span> <span class="kw">nrow</span>(df_u2_ift))
   }
-
+  
   ## Build temp UDS 3 (old) vector
   <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(trans_dict_std[i, <span class="st">'field_u31'</span>]) <span class="op">&amp;&amp;</span>
 <span class="st">      </span><span class="op">!</span><span class="kw">is.null</span>(df_u31_ift[[trans_dict_std[i, <span class="st">'field_u31'</span>]]])) {
@@ -2562,7 +2562,7 @@ df_u2_u31_u32 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<
   } <span class="cf">else</span> {
     temp_u31_vec &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA_character_</span>, <span class="dt">times =</span> <span class="kw">nrow</span>(df_u31_ift))
   }
-
+  
   ## Build temp UDS 3 (new) vector
   <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(trans_dict_std[i, <span class="st">'field_u32'</span>]) <span class="op">&amp;&amp;</span>
 <span class="st">      </span><span class="op">!</span><span class="kw">is.null</span>(df_u32[[trans_dict_std[i, <span class="st">'field_u32'</span>]]])) {
@@ -2570,11 +2570,11 @@ df_u2_u31_u32 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<
   } <span class="cf">else</span> {
     temp_u32_vec &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA_character_</span>, <span class="dt">times =</span> <span class="kw">nrow</span>(df_u32))
   }
-
+  
   ## Concat `temp_*_vec` vectors
   temp_u2_u31_u32_vec &lt;-<span class="st"> </span><span class="kw">c</span>(temp_u2_vec, temp_u31_vec, temp_u32_vec)
   <span class="co"># print(length(temp_u2_u31_u32_vec))</span>
-
+  
   ## Lay concat'd `temp_*_vec` vectors into stitched df column
   df_u2_u31_u32[, i] &lt;-<span class="st"> </span>temp_u2_u31_u32_vec
 }</code></pre></div>
@@ -2590,12 +2590,745 @@ df_u2_u31_u32 &lt;-<span class="st"> </span><span class="kw">suppressMessages</s
 <pre><code>## 14.1 Mb</code></pre>
 </div>
 </div>
-</div>
-<div id="write-to-csv" class="section level1">
-<h1>Write to CSV</h1>
+<div id="write-harmonized-data-to-csv" class="section level2">
+<h2>Write Harmonized Data To CSV</h2>
 <p>Write the resulting harmonized dataset <code>df_u2_u31_u32</code> to a CSV file of the same name.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># WRITE TO CSV ----</span>
 readr<span class="op">::</span><span class="kw">write_csv</span>(df_u2_u31_u32, <span class="st">'df_u2_u31_u32.csv'</span>, <span class="dt">na =</span> <span class="st">''</span>)</code></pre></div>
+</div>
+</div>
+<div id="build-data-dictionary" class="section level1">
+<h1>Build Data Dictionary</h1>
+<div id="get-uds-fields" class="section level2">
+<h2>Get UDS Fields</h2>
+<div id="uds-2-4" class="section level3">
+<h3>UDS 2</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># UDS 2</span>
+data_dict_fields_u2_raw &lt;-<span class="st"> </span>trans_dict_std <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(std_source, std_field) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(std_source <span class="op">==</span><span class="st"> 'field_u2'</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">pull</span>(std_field)</code></pre></div>
+</div>
+<div id="uds-3-old-4" class="section level3">
+<h3>UDS 3 Old</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># UDS 3 (Old)</span>
+data_dict_fields_u31_raw &lt;-<span class="st"> </span>trans_dict_std <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(std_source, std_field) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(std_source <span class="op">==</span><span class="st"> 'field_u31'</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">pull</span>(std_field)</code></pre></div>
+</div>
+<div id="uds-3-new-3" class="section level3">
+<h3>UDS 3 New</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># UDS 3 (New)</span>
+data_dict_fields_u32_raw &lt;-<span class="st"> </span>trans_dict_std <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(std_source, std_field) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(std_source <span class="op">==</span><span class="st"> 'field_u32'</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">pull</span>(std_field)</code></pre></div>
+</div>
+</div>
+<div id="retrieve-data-dictionary-via-redcap-api" class="section level2">
+<h2>Retrieve Data Dictionary via REDCap API</h2>
+<div id="uds-2-5" class="section level3">
+<h3>UDS 2</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">json_data_dict_u2 &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(
+  <span class="dt">uri=</span>REDCAP_API_URI,
+  <span class="dt">token=</span>REDCAP_API_TOKEN_UDS2,
+  <span class="dt">content=</span><span class="st">'metadata'</span>,
+  <span class="dt">format=</span><span class="st">'json'</span>,
+  <span class="dt">returnFormat=</span><span class="st">'json'</span>
+)
+df_data_dict_u2_all &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(json_data_dict_u2)
+df_data_dict_u2 &lt;-<span class="st"> </span>df_data_dict_u2_all <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(field_name <span class="op">%in%</span><span class="st"> </span>data_dict_fields_u2_raw)</code></pre></div>
+</div>
+<div id="uds-3-old-5" class="section level3">
+<h3>UDS 3 (Old)</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">json_data_dict_u31 &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(
+  <span class="dt">uri=</span>REDCAP_API_URI,
+  <span class="dt">token=</span>REDCAP_API_TOKEN_UDS31,
+  <span class="dt">content=</span><span class="st">'metadata'</span>,
+  <span class="dt">format=</span><span class="st">'json'</span>,
+  <span class="dt">returnFormat=</span><span class="st">'json'</span>
+)
+df_data_dict_u31_all &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(json_data_dict_u31)
+df_data_dict_u31 &lt;-<span class="st"> </span>df_data_dict_u31_all <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(field_name <span class="op">%in%</span><span class="st"> </span>data_dict_fields_u31_raw)</code></pre></div>
+</div>
+<div id="uds-3-new-4" class="section level3">
+<h3>UDS 3 (New)</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">json_data_dict_u32 &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(
+  <span class="dt">uri=</span>REDCAP_API_URI,
+  <span class="dt">token=</span>REDCAP_API_TOKEN_UDS3,
+  <span class="dt">content=</span><span class="st">'metadata'</span>,
+  <span class="dt">format=</span><span class="st">'json'</span>,
+  <span class="dt">returnFormat=</span><span class="st">'json'</span>
+)
+df_data_dict_u32_all &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(json_data_dict_u32)
+df_data_dict_u32 &lt;-<span class="st"> </span>df_data_dict_u31_all <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(field_name <span class="op">%in%</span><span class="st"> </span>data_dict_fields_u32_raw)</code></pre></div>
+</div>
+</div>
+<div id="rowbind-data-dictionaries-order" class="section level2">
+<h2>Rowbind Data Dictionaries &amp; Order</h2>
+<p>Order by form name, then field name.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_data_dict &lt;-<span class="st"> </span><span class="kw">rbind</span>(df_data_dict_u2,
+                      df_data_dict_u31,
+                      df_data_dict_u32)
+df_data_dict_form &lt;-<span class="st"> </span>df_data_dict <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(form_name, field_name)
+df_data_dict_field &lt;-<span class="st"> </span>df_data_dict <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(field_name)
+
+<span class="kw">head</span>(df_data_dict_field) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">kable_styling</span>(
+    <span class="dt">bootstrap_options =</span> <span class="kw">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>, <span class="st">&quot;condensed&quot;</span>, <span class="st">&quot;responsive&quot;</span>), 
+    <span class="dt">font_size =</span> <span class="dv">9</span>)</code></pre></div>
+<table class="table table-striped table-hover table-condensed table-responsive" style="font-size: 9px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+field_name
+</th>
+<th style="text-align:left;">
+form_name
+</th>
+<th style="text-align:left;">
+section_header
+</th>
+<th style="text-align:left;">
+field_type
+</th>
+<th style="text-align:left;">
+field_label
+</th>
+<th style="text-align:left;">
+select_choices_or_calculations
+</th>
+<th style="text-align:left;">
+field_note
+</th>
+<th style="text-align:left;">
+text_validation_type_or_show_slider_number
+</th>
+<th style="text-align:left;">
+text_validation_min
+</th>
+<th style="text-align:left;">
+text_validation_max
+</th>
+<th style="text-align:left;">
+identifier
+</th>
+<th style="text-align:left;">
+branching_logic
+</th>
+<th style="text-align:left;">
+required_field
+</th>
+<th style="text-align:left;">
+custom_alignment
+</th>
+<th style="text-align:left;">
+question_number
+</th>
+<th style="text-align:left;">
+matrix_group_name
+</th>
+<th style="text-align:left;">
+matrix_ranking
+</th>
+<th style="text-align:left;">
+field_annotation
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+a1pkt_type
+</td>
+<td style="text-align:left;">
+form_a1_participant_demographics
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+dropdown
+</td>
+<td style="text-align:left;">
+Packet Type
+</td>
+<td style="text-align:left;">
+I, I | F, F | T, T
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+a2_examiner
+</td>
+<td style="text-align:left;">
+form_a2_informant_demographics
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+text
+</td>
+<td style="text-align:left;">
+Initials
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+a2_form_date
+</td>
+<td style="text-align:left;">
+form_a2_informant_demographics
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+text
+</td>
+<td style="text-align:left;">
+Form Date
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+date_ymd
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+a2_formver
+</td>
+<td style="text-align:left;">
+form_a2_informant_demographics
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+text
+</td>
+<td style="text-align:left;">
+Form Version
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+a2_visit_day
+</td>
+<td style="text-align:left;">
+form_a2_informant_demographics
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+text
+</td>
+<td style="text-align:left;">
+Day
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+number
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+a2_visit_month
+</td>
+<td style="text-align:left;">
+form_a2_informant_demographics
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+text
+</td>
+<td style="text-align:left;">
+Month
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+number
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(df_data_dict_form) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">kable_styling</span>(
+    <span class="dt">bootstrap_options =</span> <span class="kw">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>, <span class="st">&quot;condensed&quot;</span>, <span class="st">&quot;responsive&quot;</span>), 
+    <span class="dt">font_size =</span> <span class="dv">9</span>)</code></pre></div>
+<table class="table table-striped table-hover table-condensed table-responsive" style="font-size: 9px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+field_name
+</th>
+<th style="text-align:left;">
+form_name
+</th>
+<th style="text-align:left;">
+section_header
+</th>
+<th style="text-align:left;">
+field_type
+</th>
+<th style="text-align:left;">
+field_label
+</th>
+<th style="text-align:left;">
+select_choices_or_calculations
+</th>
+<th style="text-align:left;">
+field_note
+</th>
+<th style="text-align:left;">
+text_validation_type_or_show_slider_number
+</th>
+<th style="text-align:left;">
+text_validation_min
+</th>
+<th style="text-align:left;">
+text_validation_max
+</th>
+<th style="text-align:left;">
+identifier
+</th>
+<th style="text-align:left;">
+branching_logic
+</th>
+<th style="text-align:left;">
+required_field
+</th>
+<th style="text-align:left;">
+custom_alignment
+</th>
+<th style="text-align:left;">
+question_number
+</th>
+<th style="text-align:left;">
+matrix_group_name
+</th>
+<th style="text-align:left;">
+matrix_ranking
+</th>
+<th style="text-align:left;">
+field_annotation
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+initials
+</td>
+<td style="text-align:left;">
+adco
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+text
+</td>
+<td style="text-align:left;">
+Examiner Initials
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+a1pkt_type
+</td>
+<td style="text-align:left;">
+form_a1_participant_demographics
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+dropdown
+</td>
+<td style="text-align:left;">
+Packet Type
+</td>
+<td style="text-align:left;">
+I, I | F, F | T, T
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+birthmo
+</td>
+<td style="text-align:left;">
+form_a1_participant_demographics
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+text
+</td>
+<td style="text-align:left;">
+Subject’s birth month
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+birthyr
+</td>
+<td style="text-align:left;">
+form_a1_participant_demographics
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+text
+</td>
+<td style="text-align:left;">
+Subject’s birth year
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+educ
+</td>
+<td style="text-align:left;">
+form_a1_participant_demographics
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+text
+</td>
+<td style="text-align:left;">
+Education
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+(99 = Unknown)
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+handed
+</td>
+<td style="text-align:left;">
+form_a1_participant_demographics
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+dropdown
+</td>
+<td style="text-align:left;">
+Handedness
+</td>
+<td style="text-align:left;">
+1, 1 | 2, 2 | 3, 3 | 9, 9
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="write-harmonized-data-dictionary-to-csv" class="section level2">
+<h2>Write Harmonized Data Dictionary To CSV</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">readr<span class="op">::</span><span class="kw">write_csv</span>(df_data_dict_form, <span class="st">'df_data_dict_form.csv'</span>, <span class="dt">na =</span> <span class="st">''</span>)
+readr<span class="op">::</span><span class="kw">write_csv</span>(df_data_dict_field, <span class="st">'df_data_dict_field.csv'</span>, <span class="dt">na =</span> <span class="st">''</span>)</code></pre></div>
 <pre><code>###@    #==--  :  --==#    @##==---==##@##==---==##@    #==--  :  --==#    @###
 #==##@    #==-- --==#    @##==---==##@   @##==---==##@    #==-- --==#    @##==#
 #--==##@    #==-==#    @##==---==##@   #   @##==---==##@    #==-==#    @##==--#
@@ -2621,6 +3354,7 @@ readr<span class="op">::</span><span class="kw">write_csv</span>(df_u2_u31_u32, 
 #--==##@    #==-==#    @##==---==##@   #   @##==---==##@    #==-==#    @##==--#
 #==##@    #==-- --==#    @##==---==##@   @##==---==##@    #==-- --==#    @##==#
 ###@    #==--  :  --==#    @##==---==##@##==---==##@    #==--  :  --==#    @###</code></pre>
+</div>
 </div>
 
 
