@@ -367,26 +367,6 @@ remove_NAs &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
 <h3>UDS 2</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBfIFVEUyAyIC0tLS1cbmlmIChnZXRfYXBpX2RhdGEpIHtcbiAgZXhwb3J0X2ZpZWxkc191Ml9qc29uIDwtIFJDdXJsOjpwb3N0Rm9ybShcbiAgICB1cmk9UkVEQ0FQX0FQSV9VUkksXG4gICAgdG9rZW49UkVEQ0FQX0FQSV9UT0tFTl9VRFMyLFxuICAgIGNvbnRlbnQ9J2V4cG9ydEZpZWxkTmFtZXMnLFxuICAgIGZvcm1hdD0nanNvbicsXG4gICAgcmV0dXJuRm9ybWF0PSdqc29uJyMsXG4gICAgIyAub3B0cyA9IGxpc3Qoc3NsLnZlcmlmeXBlZXIgPSBGQUxTRSkgIyB1c2luZyBsaW51eFxuICApXG59XG5leHBvcnRfZmllbGRzX3UyX2RmIDwtIGpzb25saXRlOjpmcm9tSlNPTihleHBvcnRfZmllbGRzX3UyX2pzb24pICU+JSBcbiAgbmFfaWYoJycpXG5oZWFkKGV4cG9ydF9maWVsZHNfdTJfZGYpICU+JSBcbiAga2FibGUoKSAlPiUgXG4gIGthYmxlX3N0eWxpbmcoXG4gICAgYm9vdHN0cmFwX29wdGlvbnMgPSBjKFwic3RyaXBlZFwiLCBcImhvdmVyXCIsIFwiY29uZGVuc2VkXCIsIFwicmVzcG9uc2l2ZVwiKSwgXG4gICAgZm9udF9zaXplID0gOSlcbmBgYCJ9 -->
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># _ UDS 2 ----</span>
-<span class="cf">if</span> (get_api_data) {
-  export_fields_u2_json &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(
-    <span class="dt">uri=</span>REDCAP_API_URI,
-    <span class="dt">token=</span>REDCAP_API_TOKEN_UDS2,
-    <span class="dt">content=</span><span class="st">'exportFieldNames'</span>,
-    <span class="dt">format=</span><span class="st">'json'</span>,
-    <span class="dt">returnFormat=</span><span class="st">'json'</span><span class="co">#,</span>
-    <span class="co"># .opts = list(ssl.verifypeer = FALSE) # using linux</span>
-  )
-}
-export_fields_u2_df &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(export_fields_u2_json) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">na_if</span>(<span class="st">''</span>)
-<span class="kw">head</span>(export_fields_u2_df) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">kable_styling</span>(
-    <span class="dt">bootstrap_options =</span> <span class="kw">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>, <span class="st">&quot;condensed&quot;</span>, <span class="st">&quot;responsive&quot;</span>), 
-    <span class="dt">font_size =</span> <span class="dv">9</span>)</code></pre></div>
-<!-- rnb-source-end -->
 
 <!-- rnb-htmlwidget-begin eyJkZXBlbmRlbmNpZXMiOlt7ImFsbF9maWxlcyI6dHJ1ZSwiYXR0YWNobWVudCI6W10sImhlYWQiOltdLCJtZXRhIjpbXSwibmFtZSI6ImpxdWVyeSIsInBhY2thZ2UiOltdLCJzY3JpcHQiOiJqcXVlcnkubWluLmpzIiwic3JjIjp7ImZpbGUiOiIvdXNyL2xvY2FsL0NlbGxhci9yLzMuNS4yXzEvbGliL1IvbGlicmFyeS9ybWFya2Rvd24vcm1kL2gvanF1ZXJ5In0sInN0eWxlc2hlZXQiOltdLCJ2ZXJzaW9uIjoiMS4xMS4zIn0seyJhbGxfZmlsZXMiOnRydWUsImF0dGFjaG1lbnQiOltdLCJoZWFkIjpbXSwibWV0YSI6eyJ2aWV3cG9ydCI6IndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xIn0sIm5hbWUiOiJib290c3RyYXAiLCJwYWNrYWdlIjpbXSwic2NyaXB0IjpbImpzL2Jvb3RzdHJhcC5taW4uanMiLCJzaGltL2h0bWw1c2hpdi5taW4uanMiLCJzaGltL3Jlc3BvbmQubWluLmpzIl0sInNyYyI6eyJmaWxlIjoiL3Vzci9sb2NhbC9DZWxsYXIvci8zLjUuMl8xL2xpYi9SL2xpYnJhcnkvcm1hcmtkb3duL3JtZC9oL2Jvb3RzdHJhcCJ9LCJzdHlsZXNoZWV0IjoiY3NzL3NpbXBsZXgubWluLmNzcyIsInZlcnNpb24iOiIzLjMuNSJ9LHsiYWxsX2ZpbGVzIjp0cnVlLCJhdHRhY2htZW50IjpbXSwiaGVhZCI6W10sIm1ldGEiOltdLCJuYW1lIjoia2VQcmludCIsInBhY2thZ2UiOltdLCJzY3JpcHQiOiJrZVByaW50LmpzIiwic3JjIjp7ImZpbGUiOiIvdXNyL2xvY2FsL0NlbGxhci9yLzMuNS4yXzEvbGliL1IvbGlicmFyeS9rYWJsZUV4dHJhL2tlUHJpbnQtMC4wLjEifSwic3R5bGVzaGVldCI6W10sInZlcnNpb24iOiIwLjAuMSJ9XSwibWV0YWRhdGEiOnsiY2xhc3NlcyI6WyJzaGlueS50YWcubGlzdCIsImxpc3QiXSwic2l6aW5nUG9saWN5IjpbXX19 -->
 
@@ -441,26 +421,6 @@ export_fields_u2_df &lt;-<span class="st"> </span>jsonlite<span class="op">::</s
 <h3>UDS 3 Old</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBfIFVEUyAzIChvbGQpIC0tLS1cbmlmIChnZXRfYXBpX2RhdGEpIHtcbiAgZXhwb3J0X2ZpZWxkc191MzFfanNvbiA8LSBSQ3VybDo6cG9zdEZvcm0oXG4gICAgdXJpPVJFRENBUF9BUElfVVJJLFxuICAgIHRva2VuPVJFRENBUF9BUElfVE9LRU5fVURTMzEsXG4gICAgY29udGVudD0nZXhwb3J0RmllbGROYW1lcycsXG4gICAgZm9ybWF0PSdqc29uJyxcbiAgICByZXR1cm5Gb3JtYXQ9J2pzb24nIyxcbiAgICAjIC5vcHRzID0gbGlzdChzc2wudmVyaWZ5cGVlciA9IEZBTFNFKSAjIHVzaW5nIGxpbnV4XG4gIClcbn1cbmV4cG9ydF9maWVsZHNfdTMxX2RmIDwtIGpzb25saXRlOjpmcm9tSlNPTihleHBvcnRfZmllbGRzX3UzMV9qc29uKSAlPiUgXG4gIG5hX2lmKCcnKVxuaGVhZChleHBvcnRfZmllbGRzX3UzMV9kZikgJT4lIFxuICBrYWJsZSgpICU+JSBcbiAga2FibGVfc3R5bGluZyhcbiAgICBib290c3RyYXBfb3B0aW9ucyA9IGMoXCJzdHJpcGVkXCIsIFwiaG92ZXJcIiwgXCJjb25kZW5zZWRcIiwgXCJyZXNwb25zaXZlXCIpLCBcbiAgICBmb250X3NpemUgPSA5KVxuYGBgIn0= -->
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># _ UDS 3 (old) ----</span>
-<span class="cf">if</span> (get_api_data) {
-  export_fields_u31_json &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(
-    <span class="dt">uri=</span>REDCAP_API_URI,
-    <span class="dt">token=</span>REDCAP_API_TOKEN_UDS31,
-    <span class="dt">content=</span><span class="st">'exportFieldNames'</span>,
-    <span class="dt">format=</span><span class="st">'json'</span>,
-    <span class="dt">returnFormat=</span><span class="st">'json'</span><span class="co">#,</span>
-    <span class="co"># .opts = list(ssl.verifypeer = FALSE) # using linux</span>
-  )
-}
-export_fields_u31_df &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(export_fields_u31_json) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">na_if</span>(<span class="st">''</span>)
-<span class="kw">head</span>(export_fields_u31_df) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">kable_styling</span>(
-    <span class="dt">bootstrap_options =</span> <span class="kw">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>, <span class="st">&quot;condensed&quot;</span>, <span class="st">&quot;responsive&quot;</span>), 
-    <span class="dt">font_size =</span> <span class="dv">9</span>)</code></pre></div>
-<!-- rnb-source-end -->
 
 <!-- rnb-htmlwidget-begin eyJkZXBlbmRlbmNpZXMiOlt7ImFsbF9maWxlcyI6dHJ1ZSwiYXR0YWNobWVudCI6W10sImhlYWQiOltdLCJtZXRhIjpbXSwibmFtZSI6ImpxdWVyeSIsInBhY2thZ2UiOltdLCJzY3JpcHQiOiJqcXVlcnkubWluLmpzIiwic3JjIjp7ImZpbGUiOiIvdXNyL2xvY2FsL0NlbGxhci9yLzMuNS4yXzEvbGliL1IvbGlicmFyeS9ybWFya2Rvd24vcm1kL2gvanF1ZXJ5In0sInN0eWxlc2hlZXQiOltdLCJ2ZXJzaW9uIjoiMS4xMS4zIn0seyJhbGxfZmlsZXMiOnRydWUsImF0dGFjaG1lbnQiOltdLCJoZWFkIjpbXSwibWV0YSI6eyJ2aWV3cG9ydCI6IndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xIn0sIm5hbWUiOiJib290c3RyYXAiLCJwYWNrYWdlIjpbXSwic2NyaXB0IjpbImpzL2Jvb3RzdHJhcC5taW4uanMiLCJzaGltL2h0bWw1c2hpdi5taW4uanMiLCJzaGltL3Jlc3BvbmQubWluLmpzIl0sInNyYyI6eyJmaWxlIjoiL3Vzci9sb2NhbC9DZWxsYXIvci8zLjUuMl8xL2xpYi9SL2xpYnJhcnkvcm1hcmtkb3duL3JtZC9oL2Jvb3RzdHJhcCJ9LCJzdHlsZXNoZWV0IjoiY3NzL3NpbXBsZXgubWluLmNzcyIsInZlcnNpb24iOiIzLjMuNSJ9LHsiYWxsX2ZpbGVzIjp0cnVlLCJhdHRhY2htZW50IjpbXSwiaGVhZCI6W10sIm1ldGEiOltdLCJuYW1lIjoia2VQcmludCIsInBhY2thZ2UiOltdLCJzY3JpcHQiOiJrZVByaW50LmpzIiwic3JjIjp7ImZpbGUiOiIvdXNyL2xvY2FsL0NlbGxhci9yLzMuNS4yXzEvbGliL1IvbGlicmFyeS9rYWJsZUV4dHJhL2tlUHJpbnQtMC4wLjEifSwic3R5bGVzaGVldCI6W10sInZlcnNpb24iOiIwLjAuMSJ9XSwibWV0YWRhdGEiOnsiY2xhc3NlcyI6WyJzaGlueS50YWcubGlzdCIsImxpc3QiXSwic2l6aW5nUG9saWN5IjpbXX19 -->
 
@@ -515,26 +475,6 @@ export_fields_u31_df &lt;-<span class="st"> </span>jsonlite<span class="op">::</
 <h3>UDS 3 New</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBfIFVEUyAzIChuZXcpIC0tLS1cbmlmIChnZXRfYXBpX2RhdGEpIHtcbiAgZXhwb3J0X2ZpZWxkc191MzJfanNvbiA8LSBSQ3VybDo6cG9zdEZvcm0oXG4gICAgdXJpPVJFRENBUF9BUElfVVJJLFxuICAgIHRva2VuPVJFRENBUF9BUElfVE9LRU5fVURTMyxcbiAgICBjb250ZW50PSdleHBvcnRGaWVsZE5hbWVzJyxcbiAgICBmb3JtYXQ9J2pzb24nLFxuICAgIHJldHVybkZvcm1hdD0nanNvbicjLFxuICAgICMgLm9wdHMgPSBsaXN0KHNzbC52ZXJpZnlwZWVyID0gRkFMU0UpICMgdXNpbmcgbGludXhcbiAgKVxufVxuZXhwb3J0X2ZpZWxkc191MzJfZGYgPC0ganNvbmxpdGU6OmZyb21KU09OKGV4cG9ydF9maWVsZHNfdTMyX2pzb24pICU+JSBcbiAgbmFfaWYoJycpXG5oZWFkKGV4cG9ydF9maWVsZHNfdTMyX2RmKSAlPiUgXG4gIGthYmxlKCkgJT4lIFxuICBrYWJsZV9zdHlsaW5nKFxuICAgIGJvb3RzdHJhcF9vcHRpb25zID0gYyhcInN0cmlwZWRcIiwgXCJob3ZlclwiLCBcImNvbmRlbnNlZFwiLCBcInJlc3BvbnNpdmVcIiksIFxuICAgIGZvbnRfc2l6ZSA9IDkpXG5gYGAifQ== -->
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># _ UDS 3 (new) ----</span>
-<span class="cf">if</span> (get_api_data) {
-  export_fields_u32_json &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(
-    <span class="dt">uri=</span>REDCAP_API_URI,
-    <span class="dt">token=</span>REDCAP_API_TOKEN_UDS3,
-    <span class="dt">content=</span><span class="st">'exportFieldNames'</span>,
-    <span class="dt">format=</span><span class="st">'json'</span>,
-    <span class="dt">returnFormat=</span><span class="st">'json'</span><span class="co">#,</span>
-    <span class="co"># .opts = list(ssl.verifypeer = FALSE) # using linux</span>
-  )
-}
-export_fields_u32_df &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(export_fields_u32_json) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">na_if</span>(<span class="st">''</span>)
-<span class="kw">head</span>(export_fields_u32_df) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">kable_styling</span>(
-    <span class="dt">bootstrap_options =</span> <span class="kw">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>, <span class="st">&quot;condensed&quot;</span>, <span class="st">&quot;responsive&quot;</span>), 
-    <span class="dt">font_size =</span> <span class="dv">9</span>)</code></pre></div>
-<!-- rnb-source-end -->
 
 <!-- rnb-htmlwidget-begin eyJkZXBlbmRlbmNpZXMiOlt7ImFsbF9maWxlcyI6dHJ1ZSwiYXR0YWNobWVudCI6W10sImhlYWQiOltdLCJtZXRhIjpbXSwibmFtZSI6ImpxdWVyeSIsInBhY2thZ2UiOltdLCJzY3JpcHQiOiJqcXVlcnkubWluLmpzIiwic3JjIjp7ImZpbGUiOiIvdXNyL2xvY2FsL0NlbGxhci9yLzMuNS4yXzEvbGliL1IvbGlicmFyeS9ybWFya2Rvd24vcm1kL2gvanF1ZXJ5In0sInN0eWxlc2hlZXQiOltdLCJ2ZXJzaW9uIjoiMS4xMS4zIn0seyJhbGxfZmlsZXMiOnRydWUsImF0dGFjaG1lbnQiOltdLCJoZWFkIjpbXSwibWV0YSI6eyJ2aWV3cG9ydCI6IndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xIn0sIm5hbWUiOiJib290c3RyYXAiLCJwYWNrYWdlIjpbXSwic2NyaXB0IjpbImpzL2Jvb3RzdHJhcC5taW4uanMiLCJzaGltL2h0bWw1c2hpdi5taW4uanMiLCJzaGltL3Jlc3BvbmQubWluLmpzIl0sInNyYyI6eyJmaWxlIjoiL3Vzci9sb2NhbC9DZWxsYXIvci8zLjUuMl8xL2xpYi9SL2xpYnJhcnkvcm1hcmtkb3duL3JtZC9oL2Jvb3RzdHJhcCJ9LCJzdHlsZXNoZWV0IjoiY3NzL3NpbXBsZXgubWluLmNzcyIsInZlcnNpb24iOiIzLjMuNSJ9LHsiYWxsX2ZpbGVzIjp0cnVlLCJhdHRhY2htZW50IjpbXSwiaGVhZCI6W10sIm1ldGEiOltdLCJuYW1lIjoia2VQcmludCIsInBhY2thZ2UiOltdLCJzY3JpcHQiOiJrZVByaW50LmpzIiwic3JjIjp7ImZpbGUiOiIvdXNyL2xvY2FsL0NlbGxhci9yLzMuNS4yXzEvbGliL1IvbGlicmFyeS9rYWJsZUV4dHJhL2tlUHJpbnQtMC4wLjEifSwic3R5bGVzaGVldCI6W10sInZlcnNpb24iOiIwLjAuMSJ9XSwibWV0YWRhdGEiOnsiY2xhc3NlcyI6WyJzaGlueS50YWcubGlzdCIsImxpc3QiXSwic2l6aW5nUG9saWN5IjpbXX19 -->
 
@@ -589,26 +529,6 @@ export_fields_u32_df &lt;-<span class="st"> </span>jsonlite<span class="op">::</
 <h3>MiNDSet Registry</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBfIE1pTkRTZXQgLS0tLVxuaWYgKGdldF9hcGlfZGF0YSkge1xuICBleHBvcnRfZmllbGRzX21zX2pzb24gPC0gUkN1cmw6OnBvc3RGb3JtKFxuICAgIHVyaT1SRURDQVBfQVBJX1VSSSxcbiAgICB0b2tlbj1SRURDQVBfQVBJX1RPS0VOX01JTkRTRVQsXG4gICAgY29udGVudD0nZXhwb3J0RmllbGROYW1lcycsXG4gICAgZm9ybWF0PSdqc29uJyxcbiAgICByZXR1cm5Gb3JtYXQ9J2pzb24nIyxcbiAgICAjIC5vcHRzID0gbGlzdChzc2wudmVyaWZ5cGVlciA9IEZBTFNFKSAjIHVzaW5nIGxpbnV4XG4gIClcbn1cbmV4cG9ydF9maWVsZHNfbXNfZGYgPC0ganNvbmxpdGU6OmZyb21KU09OKGV4cG9ydF9maWVsZHNfbXNfanNvbikgJT4lIFxuICBuYV9pZignJylcbmhlYWQoZXhwb3J0X2ZpZWxkc19tc19kZikgJT4lIFxuICBrYWJsZSgpICU+JSBcbiAga2FibGVfc3R5bGluZyhcbiAgICBib290c3RyYXBfb3B0aW9ucyA9IGMoXCJzdHJpcGVkXCIsIFwiaG92ZXJcIiwgXCJjb25kZW5zZWRcIiwgXCJyZXNwb25zaXZlXCIpLCBcbiAgICBmb250X3NpemUgPSA5KVxuYGBgIn0= -->
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># _ MiNDSet ----</span>
-<span class="cf">if</span> (get_api_data) {
-  export_fields_ms_json &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(
-    <span class="dt">uri=</span>REDCAP_API_URI,
-    <span class="dt">token=</span>REDCAP_API_TOKEN_MINDSET,
-    <span class="dt">content=</span><span class="st">'exportFieldNames'</span>,
-    <span class="dt">format=</span><span class="st">'json'</span>,
-    <span class="dt">returnFormat=</span><span class="st">'json'</span><span class="co">#,</span>
-    <span class="co"># .opts = list(ssl.verifypeer = FALSE) # using linux</span>
-  )
-}
-export_fields_ms_df &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(export_fields_ms_json) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">na_if</span>(<span class="st">''</span>)
-<span class="kw">head</span>(export_fields_ms_df) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">kable_styling</span>(
-    <span class="dt">bootstrap_options =</span> <span class="kw">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>, <span class="st">&quot;condensed&quot;</span>, <span class="st">&quot;responsive&quot;</span>), 
-    <span class="dt">font_size =</span> <span class="dv">9</span>)</code></pre></div>
-<!-- rnb-source-end -->
 
 <!-- rnb-htmlwidget-begin eyJkZXBlbmRlbmNpZXMiOlt7ImFsbF9maWxlcyI6dHJ1ZSwiYXR0YWNobWVudCI6W10sImhlYWQiOltdLCJtZXRhIjpbXSwibmFtZSI6ImpxdWVyeSIsInBhY2thZ2UiOltdLCJzY3JpcHQiOiJqcXVlcnkubWluLmpzIiwic3JjIjp7ImZpbGUiOiIvdXNyL2xvY2FsL0NlbGxhci9yLzMuNS4yXzEvbGliL1IvbGlicmFyeS9ybWFya2Rvd24vcm1kL2gvanF1ZXJ5In0sInN0eWxlc2hlZXQiOltdLCJ2ZXJzaW9uIjoiMS4xMS4zIn0seyJhbGxfZmlsZXMiOnRydWUsImF0dGFjaG1lbnQiOltdLCJoZWFkIjpbXSwibWV0YSI6eyJ2aWV3cG9ydCI6IndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xIn0sIm5hbWUiOiJib290c3RyYXAiLCJwYWNrYWdlIjpbXSwic2NyaXB0IjpbImpzL2Jvb3RzdHJhcC5taW4uanMiLCJzaGltL2h0bWw1c2hpdi5taW4uanMiLCJzaGltL3Jlc3BvbmQubWluLmpzIl0sInNyYyI6eyJmaWxlIjoiL3Vzci9sb2NhbC9DZWxsYXIvci8zLjUuMl8xL2xpYi9SL2xpYnJhcnkvcm1hcmtkb3duL3JtZC9oL2Jvb3RzdHJhcCJ9LCJzdHlsZXNoZWV0IjoiY3NzL3NpbXBsZXgubWluLmNzcyIsInZlcnNpb24iOiIzLjMuNSJ9LHsiYWxsX2ZpbGVzIjp0cnVlLCJhdHRhY2htZW50IjpbXSwiaGVhZCI6W10sIm1ldGEiOltdLCJuYW1lIjoia2VQcmludCIsInBhY2thZ2UiOltdLCJzY3JpcHQiOiJrZVByaW50LmpzIiwic3JjIjp7ImZpbGUiOiIvdXNyL2xvY2FsL0NlbGxhci9yLzMuNS4yXzEvbGliL1IvbGlicmFyeS9rYWJsZUV4dHJhL2tlUHJpbnQtMC4wLjEifSwic3R5bGVzaGVldCI6W10sInZlcnNpb24iOiIwLjAuMSJ9XSwibWV0YWRhdGEiOnsiY2xhc3NlcyI6WyJzaGlueS50YWcubGlzdCIsImxpc3QiXSwic2l6aW5nUG9saWN5IjpbXX19 -->
 
@@ -665,138 +585,6 @@ export_fields_ms_df &lt;-<span class="st"> </span>jsonlite<span class="op">::</s
 <p>Because there are asystematic mismatches between the three UDS datsets that MADC has stored in REDCap, there are two XLSX files that require human creation/maintenance. Loading and processing the data in the files makes it possible to resolve field name mismatches in order to harmonize and unify the data.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBfIEdldCB3b3JrLWluLXByb2dyZXNzIHRyYW5zbGF0aW9uIGRpY3Rpb25hcnkgLS0tLVxudHJhbnNfZGljdCA8LSByZWFkeGw6OnJlYWRfZXhjZWwoJ1dJUF9fdHJhbnNsYXRpb25fZGljdGlvbmFyeS54bHN4JylcbmBgYCJ9 -->
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># _ Get work-in-progress translation dictionary ----</span>
-trans_dict &lt;-<span class="st"> </span>readxl<span class="op">::</span><span class="kw">read_excel</span>(<span class="st">'WIP__translation_dictionary.xlsx'</span>)</code></pre></div>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG4tXG4vXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4ifQ== -->
-<pre><code>
--
-/
-                                                                         </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaGVhZCh0cmFuc19kaWN0KSAlPiUgXG4gIGthYmxlKCkgJT4lIFxuICBrYWJsZV9zdHlsaW5nKFxuICAgIGJvb3RzdHJhcF9vcHRpb25zID0gYyhcInN0cmlwZWRcIiwgXCJob3ZlclwiLCBcImNvbmRlbnNlZFwiLCBcInJlc3BvbnNpdmVcIiksIFxuICAgIGZvbnRfc2l6ZSA9IDkpXG5gYGAifQ== -->
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(trans_dict) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">kable_styling</span>(
-    <span class="dt">bootstrap_options =</span> <span class="kw">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>, <span class="st">&quot;condensed&quot;</span>, <span class="st">&quot;responsive&quot;</span>), 
-    <span class="dt">font_size =</span> <span class="dv">9</span>)</code></pre></div>
-<!-- rnb-source-end -->
-<p>
-<!-- rnb-htmlwidget-begin eyJkZXBlbmRlbmNpZXMiOlt7ImFsbF9maWxlcyI6dHJ1ZSwiYXR0YWNobWVudCI6W10sImhlYWQiOltdLCJtZXRhIjpbXSwibmFtZSI6ImpxdWVyeSIsInBhY2thZ2UiOltdLCJzY3JpcHQiOiJqcXVlcnkubWluLmpzIiwic3JjIjp7ImZpbGUiOiIvdXNyL2xvY2FsL0NlbGxhci9yLzMuNS4yXzEvbGliL1IvbGlicmFyeS9ybWFya2Rvd24vcm1kL2gvanF1ZXJ5In0sInN0eWxlc2hlZXQiOltdLCJ2ZXJzaW9uIjoiMS4xMS4zIn0seyJhbGxfZmlsZXMiOnRydWUsImF0dGFjaG1lbnQiOltdLCJoZWFkIjpbXSwibWV0YSI6eyJ2aWV3cG9ydCI6IndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xIn0sIm5hbWUiOiJib290c3RyYXAiLCJwYWNrYWdlIjpbXSwic2NyaXB0IjpbImpzL2Jvb3RzdHJhcC5taW4uanMiLCJzaGltL2h0bWw1c2hpdi5taW4uanMiLCJzaGltL3Jlc3BvbmQubWluLmpzIl0sInNyYyI6eyJmaWxlIjoiL3Vzci9sb2NhbC9DZWxsYXIvci8zLjUuMl8xL2xpYi9SL2xpYnJhcnkvcm1hcmtkb3duL3JtZC9oL2Jvb3RzdHJhcCJ9LCJzdHlsZXNoZWV0IjoiY3NzL3NpbXBsZXgubWluLmNzcyIsInZlcnNpb24iOiIzLjMuNSJ9LHsiYWxsX2ZpbGVzIjp0cnVlLCJhdHRhY2htZW50IjpbXSwiaGVhZCI6W10sIm1ldGEiOltdLCJuYW1lIjoia2VQcmludCIsInBhY2thZ2UiOltdLCJzY3JpcHQiOiJrZVByaW50LmpzIiwic3JjIjp7ImZpbGUiOiIvdXNyL2xvY2FsL0NlbGxhci9yLzMuNS4yXzEvbGliL1IvbGlicmFyeS9rYWJsZUV4dHJhL2tlUHJpbnQtMC4wLjEifSwic3R5bGVzaGVldCI6W10sInZlcnNpb24iOiIwLjAuMSJ9XSwibWV0YWRhdGEiOnsiY2xhc3NlcyI6WyJzaGlueS50YWcubGlzdCIsImxpc3QiXSwic2l6aW5nUG9saWN5IjpbXX19 -->
-
-<table class="table table-striped table-hover table-condensed table-responsive" style="font-size: 9px; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;"> field_u2 </th>
-   <th style="text-align:left;"> form_u2 </th>
-   <th style="text-align:left;"> field_u31 </th>
-   <th style="text-align:left;"> form_u31 </th>
-   <th style="text-align:left;"> field_u32 </th>
-   <th style="text-align:left;"> form_u32 </th>
-   <th style="text-align:left;"> Accounted_For </th>
-   <th style="text-align:left;"> Flag </th>
-   <th style="text-align:left;"> Matcher </th>
-   <th style="text-align:left;"> Notes </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> a1ptid </td>
-   <td style="text-align:left;"> form_a1_subject_demographics </td>
-   <td style="text-align:left;"> a1ptid </td>
-   <td style="text-align:left;"> form_a1_participant_demographics </td>
-   <td style="text-align:left;"> ptid </td>
-   <td style="text-align:left;"> header </td>
-   <td style="text-align:left;"> Yes </td>
-   <td style="text-align:left;"> NA </td>
-   <td style="text-align:left;"> LDNM </td>
-   <td style="text-align:left;"> PRIMARY KEY (1) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> a1pkt_type </td>
-   <td style="text-align:left;"> form_a1_subject_demographics </td>
-   <td style="text-align:left;"> a1pkt_type </td>
-   <td style="text-align:left;"> form_a1_participant_demographics </td>
-   <td style="text-align:left;"> NA </td>
-   <td style="text-align:left;"> NA </td>
-   <td style="text-align:left;"> Yes </td>
-   <td style="text-align:left;"> NA </td>
-   <td style="text-align:left;"> LDNM </td>
-   <td style="text-align:left;"> UDS2/UDS3 old options are I,F,T =&gt; Map these to UDS3 initial, follow-up, telephone visits </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> a1_formver </td>
-   <td style="text-align:left;"> form_a1_subject_demographics </td>
-   <td style="text-align:left;"> a1_formver </td>
-   <td style="text-align:left;"> form_a1_participant_demographics </td>
-   <td style="text-align:left;"> formver </td>
-   <td style="text-align:left;"> header </td>
-   <td style="text-align:left;"> Yes </td>
-   <td style="text-align:left;"> NA </td>
-   <td style="text-align:left;"> LDNM </td>
-   <td style="text-align:left;"> NA </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> a1form_date </td>
-   <td style="text-align:left;"> form_a1_subject_demographics </td>
-   <td style="text-align:left;"> a1form_date </td>
-   <td style="text-align:left;"> form_a1_participant_demographics </td>
-   <td style="text-align:left;"> form_date </td>
-   <td style="text-align:left;"> header </td>
-   <td style="text-align:left;"> Yes </td>
-   <td style="text-align:left;"> NA </td>
-   <td style="text-align:left;"> LDNM </td>
-   <td style="text-align:left;"> PRIMARY KEY (2) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> a1_visit_month </td>
-   <td style="text-align:left;"> form_a1_subject_demographics </td>
-   <td style="text-align:left;"> a1_visit_month </td>
-   <td style="text-align:left;"> form_a1_participant_demographics </td>
-   <td style="text-align:left;"> visitmo </td>
-   <td style="text-align:left;"> header </td>
-   <td style="text-align:left;"> Yes </td>
-   <td style="text-align:left;"> NA </td>
-   <td style="text-align:left;"> LDNM </td>
-   <td style="text-align:left;"> NA </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> a1_visit_day </td>
-   <td style="text-align:left;"> form_a1_subject_demographics </td>
-   <td style="text-align:left;"> a1_visit_day </td>
-   <td style="text-align:left;"> form_a1_participant_demographics </td>
-   <td style="text-align:left;"> visitday </td>
-   <td style="text-align:left;"> header </td>
-   <td style="text-align:left;"> Yes </td>
-   <td style="text-align:left;"> NA </td>
-   <td style="text-align:left;"> LDNM </td>
-   <td style="text-align:left;"> NA </td>
-  </tr>
-</tbody>
-</table>
-
-<!-- rnb-htmlwidget-end -->
- <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBfIEdldCB3b3JrLWluLXByb2dyZXNzIFVEUzMgaXZwLWZ2cC10dnAgbWF0Y2hlcyAtLS0tXG51MzJfaWZ0X21hdGNoIDwtIHJlYWR4bDo6cmVhZF9leGNlbCgnV0lQX191ZHMzX2lmdF9tYXRjaGVzLnhsc3gnKSAlPiUgXG4gIHNlbGVjdChmaWVsZF9pdnAsIGZvcm1faXZwLCBcbiAgICAgICAgIGZpZWxkX2Z2cCwgZm9ybV9mdnAsXG4gICAgICAgICBmaWVsZF90dnAsIGZvcm1fdHZwKVxuYGBgIn0= --></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># _ Get work-in-progress UDS3 ivp-fvp-tvp matches ----</span>
-u32_ift_match &lt;-<span class="st"> </span>readxl<span class="op">::</span><span class="kw">read_excel</span>(<span class="st">'WIP__uds3_ift_matches.xlsx'</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">select</span>(field_ivp, form_ivp, 
-         field_fvp, form_fvp,
-         field_tvp, form_tvp)</code></pre></div>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG4tXG4vXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4ifQ== -->
-<pre><code>
--
-/
-                                                                         </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaGVhZCh1MzJfaWZ0X21hdGNoKSAlPiUgXG4gIGthYmxlKCkgJT4lIFxuICBrYWJsZV9zdHlsaW5nKFxuICAgIGJvb3RzdHJhcF9vcHRpb25zID0gYyhcInN0cmlwZWRcIiwgXCJob3ZlclwiLCBcImNvbmRlbnNlZFwiLCBcInJlc3BvbnNpdmVcIiksIFxuICAgIGZvbnRfc2l6ZSA9IDkpXG5gYGAifQ== -->
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(u32_ift_match) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">kable_styling</span>(
-    <span class="dt">bootstrap_options =</span> <span class="kw">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>, <span class="st">&quot;condensed&quot;</span>, <span class="st">&quot;responsive&quot;</span>), 
-    <span class="dt">font_size =</span> <span class="dv">9</span>)</code></pre></div>
-<!-- rnb-source-end -->
 
 <!-- rnb-htmlwidget-begin eyJkZXBlbmRlbmNpZXMiOlt7ImFsbF9maWxlcyI6dHJ1ZSwiYXR0YWNobWVudCI6W10sImhlYWQiOltdLCJtZXRhIjpbXSwibmFtZSI6ImpxdWVyeSIsInBhY2thZ2UiOltdLCJzY3JpcHQiOiJqcXVlcnkubWluLmpzIiwic3JjIjp7ImZpbGUiOiIvdXNyL2xvY2FsL0NlbGxhci9yLzMuNS4yXzEvbGliL1IvbGlicmFyeS9ybWFya2Rvd24vcm1kL2gvanF1ZXJ5In0sInN0eWxlc2hlZXQiOltdLCJ2ZXJzaW9uIjoiMS4xMS4zIn0seyJhbGxfZmlsZXMiOnRydWUsImF0dGFjaG1lbnQiOltdLCJoZWFkIjpbXSwibWV0YSI6eyJ2aWV3cG9ydCI6IndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xIn0sIm5hbWUiOiJib290c3RyYXAiLCJwYWNrYWdlIjpbXSwic2NyaXB0IjpbImpzL2Jvb3RzdHJhcC5taW4uanMiLCJzaGltL2h0bWw1c2hpdi5taW4uanMiLCJzaGltL3Jlc3BvbmQubWluLmpzIl0sInNyYyI6eyJmaWxlIjoiL3Vzci9sb2NhbC9DZWxsYXIvci8zLjUuMl8xL2xpYi9SL2xpYnJhcnkvcm1hcmtkb3duL3JtZC9oL2Jvb3RzdHJhcCJ9LCJzdHlsZXNoZWV0IjoiY3NzL3NpbXBsZXgubWluLmNzcyIsInZlcnNpb24iOiIzLjMuNSJ9LHsiYWxsX2ZpbGVzIjp0cnVlLCJhdHRhY2htZW50IjpbXSwiaGVhZCI6W10sIm1ldGEiOltdLCJuYW1lIjoia2VQcmludCIsInBhY2thZ2UiOltdLCJzY3JpcHQiOiJrZVByaW50LmpzIiwic3JjIjp7ImZpbGUiOiIvdXNyL2xvY2FsL0NlbGxhci9yLzMuNS4yXzEvbGliL1IvbGlicmFyeS9rYWJsZUV4dHJhL2tlUHJpbnQtMC4wLjEifSwic3R5bGVzaGVldCI6W10sInZlcnNpb24iOiIwLjAuMSJ9XSwibWV0YWRhdGEiOnsiY2xhc3NlcyI6WyJzaGlueS50YWcubGlzdCIsImxpc3QiXSwic2l6aW5nUG9saWN5IjpbXX19 -->
 
@@ -1124,20 +912,6 @@ df_u31_ift &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(df_u3
 <h3>Set up the empty df</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBfIEJ1aWxkIHN0YW5kYXJkIG5hbWVzIGRmIC0tLS1cbiMjIFNldCB1cCBlbXB0eSBkZlxuc3RkX25hbWVzX2RmIDwtIGRhdGEuZnJhbWUobWF0cml4KGRhdGEgPSBOQV9jaGFyYWN0ZXJfLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIG5yb3cgPSAwLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIG5jb2wgPSAyKSxcbiAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cmluZ3NBc0ZhY3RvcnMgPSBGQUxTRSlcbm5hbWVzKHN0ZF9uYW1lc19kZikgPC0gYygnc3RkX3NvdXJjZScsICdzdGRfZmllbGQnKVxuaGVhZChzdGRfbmFtZXNfZGYpICU+JSBcbiAga2FibGUoKSAlPiUgXG4gIGthYmxlX3N0eWxpbmcoXG4gICAgYm9vdHN0cmFwX29wdGlvbnMgPSBjKFwic3RyaXBlZFwiLCBcImhvdmVyXCIsIFwiY29uZGVuc2VkXCIsIFwicmVzcG9uc2l2ZVwiKSwgXG4gICAgZm9udF9zaXplID0gOSlcbmBgYCJ9 -->
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># _ Build standard names df ----</span>
-## Set up empty df
-std_names_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">matrix</span>(<span class="dt">data =</span> <span class="ot">NA_character_</span>,
-                                  <span class="dt">nrow =</span> <span class="dv">0</span>,
-                                  <span class="dt">ncol =</span> <span class="dv">2</span>),
-                           <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
-<span class="kw">names</span>(std_names_df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">'std_source'</span>, <span class="st">'std_field'</span>)
-<span class="kw">head</span>(std_names_df) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">kable_styling</span>(
-    <span class="dt">bootstrap_options =</span> <span class="kw">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>, <span class="st">&quot;condensed&quot;</span>, <span class="st">&quot;responsive&quot;</span>), 
-    <span class="dt">font_size =</span> <span class="dv">9</span>)</code></pre></div>
-<!-- rnb-source-end -->
 
 <!-- rnb-htmlwidget-begin eyJkZXBlbmRlbmNpZXMiOlt7ImFsbF9maWxlcyI6dHJ1ZSwiYXR0YWNobWVudCI6W10sImhlYWQiOltdLCJtZXRhIjpbXSwibmFtZSI6ImpxdWVyeSIsInBhY2thZ2UiOltdLCJzY3JpcHQiOiJqcXVlcnkubWluLmpzIiwic3JjIjp7ImZpbGUiOiIvdXNyL2xvY2FsL0NlbGxhci9yLzMuNS4yXzEvbGliL1IvbGlicmFyeS9ybWFya2Rvd24vcm1kL2gvanF1ZXJ5In0sInN0eWxlc2hlZXQiOltdLCJ2ZXJzaW9uIjoiMS4xMS4zIn0seyJhbGxfZmlsZXMiOnRydWUsImF0dGFjaG1lbnQiOltdLCJoZWFkIjpbXSwibWV0YSI6eyJ2aWV3cG9ydCI6IndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xIn0sIm5hbWUiOiJib290c3RyYXAiLCJwYWNrYWdlIjpbXSwic2NyaXB0IjpbImpzL2Jvb3RzdHJhcC5taW4uanMiLCJzaGltL2h0bWw1c2hpdi5taW4uanMiLCJzaGltL3Jlc3BvbmQubWluLmpzIl0sInNyYyI6eyJmaWxlIjoiL3Vzci9sb2NhbC9DZWxsYXIvci8zLjUuMl8xL2xpYi9SL2xpYnJhcnkvcm1hcmtkb3duL3JtZC9oL2Jvb3RzdHJhcCJ9LCJzdHlsZXNoZWV0IjoiY3NzL3NpbXBsZXgubWluLmNzcyIsInZlcnNpb24iOiIzLjMuNSJ9LHsiYWxsX2ZpbGVzIjp0cnVlLCJhdHRhY2htZW50IjpbXSwiaGVhZCI6W10sIm1ldGEiOltdLCJuYW1lIjoia2VQcmludCIsInBhY2thZ2UiOltdLCJzY3JpcHQiOiJrZVByaW50LmpzIiwic3JjIjp7ImZpbGUiOiIvdXNyL2xvY2FsL0NlbGxhci9yLzMuNS4yXzEvbGliL1IvbGlicmFyeS9rYWJsZUV4dHJhL2tlUHJpbnQtMC4wLjEifSwic3R5bGVzaGVldCI6W10sInZlcnNpb24iOiIwLjAuMSJ9XSwibWV0YWRhdGEiOnsiY2xhc3NlcyI6WyJzaGlueS50YWcubGlzdCIsImxpc3QiXSwic2l6aW5nUG9saWN5IjpbXX19 -->
 
@@ -1150,7 +924,28 @@ std_names_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<s
  </thead>
 <tbody>
   <tr>
-
+   <td style="text-align:left;"> field_u32 </td>
+   <td style="text-align:left;"> ptid </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> field_u31 </td>
+   <td style="text-align:left;"> a1pkt_type </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> field_u32 </td>
+   <td style="text-align:left;"> formver </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> field_u32 </td>
+   <td style="text-align:left;"> form_date </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> field_u32 </td>
+   <td style="text-align:left;"> visitmo </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> field_u32 </td>
+   <td style="text-align:left;"> visitday </td>
   </tr>
 </tbody>
 </table>
@@ -1166,27 +961,6 @@ std_names_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<s
 <p>From this process is born the standard translation dictionary, <code>trans_dict_std</code>.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyMgTG9vcCB0aHJvdWdoIHJvd3Mgb2YgYHRyYW5zX2RpY3RgXG5mb3IgKGkgaW4gc2VxX2xlbihucm93KHRyYW5zX2RpY3QpKSkge1xuICBcbiAgIyMgU3RkIGZpZWxkIG5hbWUgaXMgZnJvbSBVRFMgMyAobmV3KSwgdGhlbiBVRFMgMyAob2xkKSwgdGhlbiBVRFMgMlxuICBpZiAoIWlzLm5hKHRyYW5zX2RpY3RbaSwgJ2ZpZWxkX3UzMiddKSkge1xuICAgIHN0ZF9uYW1lc19kZltpLCBdIDwtIGxpc3QoJ2ZpZWxkX3UzMicsIHRyYW5zX2RpY3RbW2ksICdmaWVsZF91MzInXV0pXG4gIH0gZWxzZSBpZiAoIWlzLm5hKHRyYW5zX2RpY3RbaSwgJ2ZpZWxkX3UzMSddKSkge1xuICAgIHN0ZF9uYW1lc19kZltpLCBdIDwtIGxpc3QoJ2ZpZWxkX3UzMScsIHRyYW5zX2RpY3RbW2ksICdmaWVsZF91MzEnXV0pXG4gIH0gZWxzZSBpZiAoIWlzLm5hKHRyYW5zX2RpY3RbaSwgJ2ZpZWxkX3UyJ10pKSB7XG4gICAgc3RkX25hbWVzX2RmW2ksIF0gPC0gbGlzdCgnZmllbGRfdTInLCB0cmFuc19kaWN0W1tpLCAnZmllbGRfdTInXV0pXG4gIH1cbiAgXG59XG50cmFuc19kaWN0X3N0ZCA8LSBjYmluZCh0cmFuc19kaWN0LCBzdGRfbmFtZXNfZGYpXG5oZWFkKHRyYW5zX2RpY3Rfc3RkKSAlPiUgXG4gIGthYmxlKCkgJT4lIFxuICBrYWJsZV9zdHlsaW5nKFxuICAgIGJvb3RzdHJhcF9vcHRpb25zID0gYyhcInN0cmlwZWRcIiwgXCJob3ZlclwiLCBcImNvbmRlbnNlZFwiLCBcInJlc3BvbnNpdmVcIiksIFxuICAgIGZvbnRfc2l6ZSA9IDkpXG5gYGAifQ== -->
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Loop through rows of `trans_dict`
-<span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq_len</span>(<span class="kw">nrow</span>(trans_dict))) {
-  
-  ## Std field name is from UDS 3 (new), then UDS 3 (old), then UDS 2
-  <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(trans_dict[i, <span class="st">'field_u32'</span>])) {
-    std_names_df[i, ] &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">'field_u32'</span>, trans_dict[[i, <span class="st">'field_u32'</span>]])
-  } <span class="cf">else</span> <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(trans_dict[i, <span class="st">'field_u31'</span>])) {
-    std_names_df[i, ] &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">'field_u31'</span>, trans_dict[[i, <span class="st">'field_u31'</span>]])
-  } <span class="cf">else</span> <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(trans_dict[i, <span class="st">'field_u2'</span>])) {
-    std_names_df[i, ] &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">'field_u2'</span>, trans_dict[[i, <span class="st">'field_u2'</span>]])
-  }
-  
-}
-trans_dict_std &lt;-<span class="st"> </span><span class="kw">cbind</span>(trans_dict, std_names_df)
-<span class="kw">head</span>(trans_dict_std) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">kable_styling</span>(
-    <span class="dt">bootstrap_options =</span> <span class="kw">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>, <span class="st">&quot;condensed&quot;</span>, <span class="st">&quot;responsive&quot;</span>), 
-    <span class="dt">font_size =</span> <span class="dv">9</span>)</code></pre></div>
-<!-- rnb-source-end -->
 
 <!-- rnb-htmlwidget-begin eyJkZXBlbmRlbmNpZXMiOlt7ImFsbF9maWxlcyI6dHJ1ZSwiYXR0YWNobWVudCI6W10sImhlYWQiOltdLCJtZXRhIjpbXSwibmFtZSI6ImpxdWVyeSIsInBhY2thZ2UiOltdLCJzY3JpcHQiOiJqcXVlcnkubWluLmpzIiwic3JjIjp7ImZpbGUiOiIvdXNyL2xvY2FsL0NlbGxhci9yLzMuNS4yXzEvbGliL1IvbGlicmFyeS9ybWFya2Rvd24vcm1kL2gvanF1ZXJ5In0sInN0eWxlc2hlZXQiOltdLCJ2ZXJzaW9uIjoiMS4xMS4zIn0seyJhbGxfZmlsZXMiOnRydWUsImF0dGFjaG1lbnQiOltdLCJoZWFkIjpbXSwibWV0YSI6eyJ2aWV3cG9ydCI6IndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xIn0sIm5hbWUiOiJib290c3RyYXAiLCJwYWNrYWdlIjpbXSwic2NyaXB0IjpbImpzL2Jvb3RzdHJhcC5taW4uanMiLCJzaGltL2h0bWw1c2hpdi5taW4uanMiLCJzaGltL3Jlc3BvbmQubWluLmpzIl0sInNyYyI6eyJmaWxlIjoiL3Vzci9sb2NhbC9DZWxsYXIvci8zLjUuMl8xL2xpYi9SL2xpYnJhcnkvcm1hcmtkb3duL3JtZC9oL2Jvb3RzdHJhcCJ9LCJzdHlsZXNoZWV0IjoiY3NzL3NpbXBsZXgubWluLmNzcyIsInZlcnNpb24iOiIzLjMuNSJ9LHsiYWxsX2ZpbGVzIjp0cnVlLCJhdHRhY2htZW50IjpbXSwiaGVhZCI6W10sIm1ldGEiOltdLCJuYW1lIjoia2VQcmludCIsInBhY2thZ2UiOltdLCJzY3JpcHQiOiJrZVByaW50LmpzIiwic3JjIjp7ImZpbGUiOiIvdXNyL2xvY2FsL0NlbGxhci9yLzMuNS4yXzEvbGliL1IvbGlicmFyeS9rYWJsZUV4dHJhL2tlUHJpbnQtMC4wLjEifSwic3R5bGVzaGVldCI6W10sInZlcnNpb24iOiIwLjAuMSJ9XSwibWV0YWRhdGEiOnsiY2xhc3NlcyI6WyJzaGlueS50YWcubGlzdCIsImxpc3QiXSwic2l6aW5nUG9saWN5IjpbXX19 -->
 
