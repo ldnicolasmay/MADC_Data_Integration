@@ -4,6 +4,9 @@ author: "Nicolas May"
 date: "1/7/2019"
 output: 
   html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
     theme: cerulean
     highlight: zenburn
 ---
@@ -236,10 +239,10 @@ if (get_api_data) {
   )
 }
 df_u2 <- jsonlite::fromJSON(json_u2) %>% na_if('')
-# Clean out '___1' from field some field names -- May need to generalize later
-names(df_u2) <- str_replace(names(df_u2), 
-                            pattern = "___1", 
-                            replacement = "")
+# # Clean out '___1' from field some field names -- Generalize later
+# names(df_u2) <- str_replace(names(df_u2), 
+#                             pattern = "___1", 
+#                             replacement = "")
 ```
 
 ### UDS 3 Old
@@ -286,6 +289,10 @@ if (get_api_data) {
   )
 }
 df_u32 <- jsonlite::fromJSON(json_u32) %>% na_if('')
+
+# Clean out Double Data Entry (DDE) records ending in "--1" or "--2"
+df_u32 <- df_u32 %>% 
+  filter(!(str_detect(ptid, "--1$|--2$")))
 ```
 
 ## Write Raw Data To CSV
@@ -371,7 +378,7 @@ df_u31_ift <- bind_rows(df_u31_i, df_u31_f, df_u31_t)
 
 # Stitch Data Together
 
-Based on the translation dictionary (`WIP__translation_diction.xlsx`), we'll stitch together all the UDS data into one harmonized dataset.
+Based on the translation dictionary (`WIP__translation_dictionary.xlsx`), we'll stitch together all the UDS data into one harmonized dataset.
 
 ## Build Standard Names DF (`std_names_df`)
 
@@ -392,7 +399,7 @@ head(std_names_df) %>%
     font_size = 9)
 ```
 
-### Loop through rows of `trans_dict` to standardize field names
+### Loop over rows of `trans_dict` to standardize field names
 
 `trans_dict` is just a df of the spreadsheet `WIP__translation_dictionary.xlsx`. From this, we'll grab first the UDS 3 New field name; if that doesn't exist, we'll grab the UDS 3 Old field name; if that doesn't exist, it'll be the UDS 2 field name.
 
@@ -701,27 +708,29 @@ df_data_dict <- bind_rows(df_data_dict_u2,
                           df_data_dict_u32)
 df_data_dict_form <- df_data_dict %>% 
   arrange(form_name, field_name)
-df_data_dict_field <- df_data_dict %>% 
-  arrange(field_name)
-
-head(df_data_dict_field) %>% 
-  kable() %>% 
-  kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
-    font_size = 9)
+# df_data_dict_field <- df_data_dict %>% 
+#   arrange(field_name)
 
 head(df_data_dict_form) %>% 
+  select(field_name, form_name, section_header, field_type, field_label,
+         select_choices_or_calculations, field_note) %>% 
   kable() %>% 
   kable_styling(
     bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
     font_size = 9)
+
+# head(df_data_dict_field) %>% 
+#   kable() %>% 
+#   kable_styling(
+#     bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
+#     font_size = 9)
 ```
 
-## Write Harmonized Data Dictionary To CSV
+## Write Harmonized Unified Data Dictionary To CSV
 
 ```{r}
 readr::write_csv(df_data_dict_form, 'df_data_dict_form.csv', na = '')
-readr::write_csv(df_data_dict_field, 'df_data_dict_field.csv', na = '')
+# readr::write_csv(df_data_dict_field, 'df_data_dict_field.csv', na = '')
 ```
 
 
