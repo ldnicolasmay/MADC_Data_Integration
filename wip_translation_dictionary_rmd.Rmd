@@ -70,6 +70,8 @@ if (get_api_data) {
 }
 export_fields_u2_df <- jsonlite::fromJSON(export_fields_u2_json) %>% 
   na_if('')
+readr::write_csv(export_fields_u2_df, 
+                 "Export Fields/export_fields_u2_df.csv", na = "")
 head(export_fields_u2_df) %>% 
   kable() %>% 
   kable_styling(
@@ -92,6 +94,8 @@ if (get_api_data) {
 }
 export_fields_u31_df <- jsonlite::fromJSON(export_fields_u31_json) %>% 
   na_if('')
+readr::write_csv(export_fields_u31_df, 
+                 "Export Fields/export_fields_u31_df.csv", na = "")
 head(export_fields_u31_df) %>% 
   kable() %>% 
   kable_styling(
@@ -114,6 +118,8 @@ if (get_api_data) {
 }
 export_fields_u32_df <- jsonlite::fromJSON(export_fields_u32_json) %>% 
   na_if('')
+readr::write_csv(export_fields_u32_df, 
+                 "Export Fields/export_fields_u32_df.csv", na = "")
 head(export_fields_u32_df) %>% 
   kable() %>% 
   kable_styling(
