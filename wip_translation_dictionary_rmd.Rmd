@@ -46,8 +46,8 @@ get_api_data <- TRUE
 ```{r}
 # USEFUL HELPER FUNCTIONS ----
 remove_NAs <- function(x) {
-  if (is.vector(x)) return(x[!is.na(x)])
-  stop('x is not a vector')
+  if (!is.vector(x)) { stop('x is not a vector') }
+  x[!is.na(x)]
 }
 ```
 
@@ -86,7 +86,7 @@ head(export_fields_u2_df) %>%
 if (get_api_data) {
   export_fields_u3a_json <- RCurl::postForm(
     uri=REDCAP_API_URI,
-    token=REDCAP_API_TOKEN_UDS3o,
+    token=REDCAP_API_TOKEN_UDS3a,
     content='exportFieldNames',
     format='json',
     returnFormat='json'#,
@@ -143,6 +143,8 @@ if (get_api_data) {
 }
 export_fields_ms_df <- jsonlite::fromJSON(export_fields_ms_json) %>% 
   na_if('')
+readr::write_csv(export_fields_ms_df,
+                 "Export Fields/export_fields_ms_df.csv", na = "")
 head(export_fields_ms_df) %>% 
   kable() %>% 
   kable_styling(
@@ -244,6 +246,7 @@ if (get_api_data) {
     returnFormat='json'#,
     # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
+  json_u2 <- str_replace_all(json_u2, "\r\n", " ")
 }
 df_u2 <- jsonlite::fromJSON(json_u2) %>% na_if('')
 # # Clean out '___1' from field some field names -- Generalize later
@@ -258,7 +261,7 @@ df_u2 <- jsonlite::fromJSON(json_u2) %>% na_if('')
 if (get_api_data) {
   json_u3a <- RCurl::postForm(
     uri=REDCAP_API_URI,
-    token=REDCAP_API_TOKEN_UDS31,
+    token=REDCAP_API_TOKEN_UDS3a,
     content='record',
     format='json',
     type='flat',
@@ -271,6 +274,7 @@ if (get_api_data) {
     returnFormat='json'#,
     # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
+  json_u3a <- str_replace_all(json_u3a, "\r\n", " ")
 }
 df_u3a <- jsonlite::fromJSON(json_u3a) %>% na_if('')
 ```
@@ -294,6 +298,7 @@ if (get_api_data) {
     returnFormat='json'#,
     # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
+  json_u3n <- str_replace_all(json_u3n, "\r\n", " ")
 }
 df_u3n <- jsonlite::fromJSON(json_u3n) %>% na_if('')
 
@@ -681,7 +686,7 @@ df_data_dict_u2 <- df_data_dict_u2_all %>%
 ```{r}
 json_data_dict_u3a <- RCurl::postForm(
   uri=REDCAP_API_URI,
-  token=REDCAP_API_TOKEN_UDS31,
+  token=REDCAP_API_TOKEN_UDS3a,
   content='metadata',
   format='json',
   returnFormat='json'
@@ -701,7 +706,7 @@ json_data_dict_u3n <- RCurl::postForm(
   returnFormat='json'
 )
 df_data_dict_u3n_all <- jsonlite::fromJSON(json_data_dict_u3n)
-df_data_dict_u3n <- df_data_dict_u3a_all %>% 
+df_data_dict_u3n <- df_data_dict_u3n_all %>% 
   filter(field_name %in% data_dict_fields_u3n_raw)
 ```
 
