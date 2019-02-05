@@ -35,6 +35,7 @@ library(kableExtra)
 source('~/Desktop/config.R')
 rm(BOX_CLIENT_ID); rm(BOX_CLIENT_SECRET); rm(BOX_REDIRECT_URI)
 rm(REDCAP_DATA_REQUESTS_TOKEN)
+source('~/Desktop/helpers.R')
 
 ## switch to access API (TRUE) or not (FALSE)
 get_api_data <- TRUE
@@ -46,7 +47,7 @@ get_api_data <- TRUE
 # USEFUL HELPER FUNCTIONS ----
 remove_NAs <- function(x) {
   if (is.vector(x)) return(x[!is.na(x)])
-  else stop('x is not a vector')
+  stop('x is not a vector')
 }
 ```
 
@@ -79,24 +80,24 @@ head(export_fields_u2_df) %>%
     font_size = 9)
 ```
 
-### UDS 3 Old
+### UDS 3 Archive
 ```{r}
-# _ UDS 3 (old) ----
+# _ UDS 3 (Archive) ----
 if (get_api_data) {
-  export_fields_u31_json <- RCurl::postForm(
+  export_fields_u3a_json <- RCurl::postForm(
     uri=REDCAP_API_URI,
-    token=REDCAP_API_TOKEN_UDS31,
+    token=REDCAP_API_TOKEN_UDS3o,
     content='exportFieldNames',
     format='json',
     returnFormat='json'#,
     # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
-export_fields_u31_df <- jsonlite::fromJSON(export_fields_u31_json) %>% 
+export_fields_u3a_df <- jsonlite::fromJSON(export_fields_u3a_json) %>% 
   na_if('')
-readr::write_csv(export_fields_u31_df, 
-                 "Export Fields/export_fields_u31_df.csv", na = "")
-head(export_fields_u31_df) %>% 
+readr::write_csv(export_fields_u3a_df, 
+                 "Export Fields/export_fields_u3a_df.csv", na = "")
+head(export_fields_u3a_df) %>% 
   kable() %>% 
   kable_styling(
     bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
@@ -105,22 +106,22 @@ head(export_fields_u31_df) %>%
 
 ### UDS 3 New
 ```{r}
-# _ UDS 3 (new) ----
+# _ UDS 3 (New) ----
 if (get_api_data) {
-  export_fields_u32_json <- RCurl::postForm(
+  export_fields_u3n_json <- RCurl::postForm(
     uri=REDCAP_API_URI,
-    token=REDCAP_API_TOKEN_UDS3,
+    token=REDCAP_API_TOKEN_UDS3n,
     content='exportFieldNames',
     format='json',
     returnFormat='json'#,
     # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
-export_fields_u32_df <- jsonlite::fromJSON(export_fields_u32_json) %>% 
+export_fields_u3n_df <- jsonlite::fromJSON(export_fields_u3n_json) %>% 
   na_if('')
-readr::write_csv(export_fields_u32_df, 
-                 "Export Fields/export_fields_u32_df.csv", na = "")
-head(export_fields_u32_df) %>% 
+readr::write_csv(export_fields_u3n_df, 
+                 "Export Fields/export_fields_u3n_df.csv", na = "")
+head(export_fields_u3n_df) %>% 
   kable() %>% 
   kable_styling(
     bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
@@ -163,11 +164,11 @@ head(trans_dict) %>%
     font_size = 9)
 
 # _ Get work-in-progress UDS3 ivp-fvp-tvp matches ----
-u32_ift_match <- readxl::read_excel('WIP__uds3_ift_matches.xlsx') %>% 
+u3n_ift_match <- readxl::read_excel('WIP__uds3_ift_matches.xlsx') %>% 
   select(field_ivp, form_ivp, 
          field_fvp, form_fvp,
          field_tvp, form_tvp)
-head(u32_ift_match) %>% 
+head(u3n_ift_match) %>% 
   kable() %>% 
   kable_styling(
     bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
@@ -184,12 +185,12 @@ fields_u2_raw <- remove_NAs(fields_u2_raw)
 fields_u2 <- fields_u2_raw %>% paste(collapse = ',')
 ```
 
-### UDS 3 Old
+### UDS 3 Archive
 ```{r}
-# _ UDS 3 (old) ----
-fields_u31_raw <- trans_dict$field_u31
-fields_u31_raw <- remove_NAs(fields_u31_raw)
-fields_u31 <- fields_u31_raw %>% paste(collapse = ',')
+# _ UDS 3 (Archive) ----
+fields_u3a_raw <- trans_dict$field_u3a
+fields_u3a_raw <- remove_NAs(fields_u3a_raw)
+fields_u3a <- fields_u3a_raw %>% paste(collapse = ',')
 ```
 
 ### UDS 3 New
@@ -201,25 +202,25 @@ The fields for UDS 3 (New) require a little more work because there are three pa
 3. telephone visit, TVP
 
 ```{r}
-# _ UDS 3 (new) ----
+# _ UDS 3 (New) ----
 # _ _ IVP
-fields_u32_raw_i <- trans_dict$field_u32
+fields_u3n_raw_i <- trans_dict$field_u3n
 # _ _ FVP
-fields_u32_raw_fu <- u32_ift_match %>% 
-  filter(field_ivp %in% fields_u32_raw_i) %>% 
+fields_u3n_raw_fu <- u3n_ift_match %>% 
+  filter(field_ivp %in% fields_u3n_raw_i) %>% 
   filter(!is.na(field_fvp)) %>% 
   pull(field_fvp)
 # _ _ TVP
-fields_u32_raw_tele <- u32_ift_match %>% 
-  filter(field_ivp %in% fields_u32_raw_i) %>% 
+fields_u3n_raw_tele <- u3n_ift_match %>% 
+  filter(field_ivp %in% fields_u3n_raw_i) %>% 
   filter(!is.na(field_tvp)) %>%
   pull(field_tvp)
 # _ _ IVP + FVP + TVP
-fields_u32_raw <- c(fields_u32_raw_i
-                    , fields_u32_raw_fu
-                    , fields_u32_raw_tele)
-fields_u32_raw <- remove_NAs(fields_u32_raw) # remove NAs
-fields_u32 <- fields_u32_raw %>% paste(collapse = ',') 
+fields_u3n_raw <- c(fields_u3n_raw_i
+                    , fields_u3n_raw_fu
+                    , fields_u3n_raw_tele)
+fields_u3n_raw <- remove_NAs(fields_u3n_raw) # remove NAs
+fields_u3n <- fields_u3n_raw %>% paste(collapse = ',') 
 ```
 
 ## REDCap API Data Retrieval
@@ -251,17 +252,17 @@ df_u2 <- jsonlite::fromJSON(json_u2) %>% na_if('')
 #                             replacement = "")
 ```
 
-### UDS 3 Old
+### UDS 3 Archive
 ```{r}
-# _ UDS 3 (old) ----
+# _ UDS 3 (Archive) ----
 if (get_api_data) {
-  json_u31 <- RCurl::postForm(
+  json_u3a <- RCurl::postForm(
     uri=REDCAP_API_URI,
     token=REDCAP_API_TOKEN_UDS31,
     content='record',
     format='json',
     type='flat',
-    fields=fields_u31,
+    fields=fields_u3a,
     rawOrLabel='raw',
     rawOrLabelHeaders='raw',
     exportCheckboxLabel='false',
@@ -271,20 +272,20 @@ if (get_api_data) {
     # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
-df_u31 <- jsonlite::fromJSON(json_u31) %>% na_if('')
+df_u3a <- jsonlite::fromJSON(json_u3a) %>% na_if('')
 ```
 
 ### UDS 3 New
 ```{r}
-# _ UDS 3 (new) ----
+# _ UDS 3 (New) ----
 if (get_api_data) {
-  json_u32 <- RCurl::postForm(
+  json_u3n <- RCurl::postForm(
     uri=REDCAP_API_URI,
-    token=REDCAP_API_TOKEN_UDS3,
+    token=REDCAP_API_TOKEN_UDS3n,
     content='record',
     format='json',
     type='flat',
-    fields=fields_u32,
+    fields=fields_u3n,
     rawOrLabel='raw',
     rawOrLabelHeaders='raw',
     exportCheckboxLabel='false',
@@ -294,10 +295,10 @@ if (get_api_data) {
     # .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
-df_u32 <- jsonlite::fromJSON(json_u32) %>% na_if('')
+df_u3n <- jsonlite::fromJSON(json_u3n) %>% na_if('')
 
 # Clean out Double Data Entry (DDE) records ending in "--1" or "--2"
-df_u32 <- df_u32 %>% 
+df_u3n <- df_u3n %>% 
   filter(!(str_detect(ptid, "--1$|--2$")))
 ```
 
@@ -307,29 +308,29 @@ This comes in handy when diagnosising and resolving possible code errors.
 
 ```{r}
 readr::write_csv(df_u2, './Raw Data/df_u2.csv', na = '')
-readr::write_csv(df_u31, './Raw Data/df_u31.csv', na = '')
-readr::write_csv(df_u32, './Raw Data/df_u32.csv', na = '')
+readr::write_csv(df_u3a, './Raw Data/df_u3a.csv', na = '')
+readr::write_csv(df_u3n, './Raw Data/df_u3n.csv', na = '')
 ```
 
 
 # Restructure Data
 
-Since the UDS 3 (New) strcuture will be the standard template for all unified MADC UDS data, both UDS 2 and UDS 3 (Old) need to be restructured to match the structure of UDS 3 (New), viz., the IVP/FVP/TVP format.
+Since the UDS 3 (New) strcuture will be the standard template for all unified MADC UDS data, both UDS 2 and UDS 3 (Archive) need to be restructured to match the structure of UDS 3 (New), viz., the IVP/FVP/TVP format.
 
 ## UDS 3 (New) Data Structure As Standard
 
 ### UDS 2
 ```{r}
-# IVP/FVP/TVP TRANSFORM (UDS 2, UDS 3 old) ----
+# IVP/FVP/TVP TRANSFORM (UDS 2, UDS 3 Archive) ----
 
 # _ UDS 2 ----
 # _ _ UDS 2 IVP ----
 df_u2_i <- df_u2 %>% 
   filter(a1pkt_type == 'I')
 # _ _ UDS 2 FVP ----
-u32_fvp_vars <- str_replace(fields_u32_raw_fu, '^fu_|^fu', '')
+u3n_fvp_vars <- str_replace(fields_u3n_raw_fu, '^fu_|^fu', '')
 u2_fvp_vars <- trans_dict %>% 
-  filter(field_u32 %in% u32_fvp_vars) %>% 
+  filter(field_u3n %in% u3n_fvp_vars) %>% 
   pull(field_u2) %>% 
   remove_NAs(.)
 df_u2_f <- df_u2 %>%
@@ -337,9 +338,9 @@ df_u2_f <- df_u2 %>%
   rename_at(.vars = vars(one_of(u2_fvp_vars)),
             .funs = funs(str_replace(., '(.*)', 'fu_\\1')))
 # _ _ UDS 2 TVP ----
-u32_tvp_vars <- str_replace(fields_u32_raw_tele, 'tele_', '')
+u3n_tvp_vars <- str_replace(fields_u3n_raw_tele, 'tele_', '')
 u2_tvp_vars <- trans_dict %>% 
-  filter(field_u32 %in% u32_tvp_vars) %>% 
+  filter(field_u3n %in% u3n_tvp_vars) %>% 
   pull(field_u2) %>% 
   remove_NAs(.)
 df_u2_t <- df_u2 %>% 
@@ -350,36 +351,36 @@ df_u2_t <- df_u2 %>%
 df_u2_ift <- bind_rows(df_u2_i, df_u2_f, df_u2_t)
 ```
 
-### UDS 3 (Old)
+### UDS 3 (Archive)
 ```{r}
-# IVP/FVP/TVP TRANSFORM (UDS 2, UDS 3 old) ----
+# IVP/FVP/TVP TRANSFORM (UDS 2, UDS 3 Archive) ----
 
-# _ UDS 3 (old) ----
-# _ _ UDS 3 (old) IVP ----
-df_u31_i <- df_u31 %>% 
+# _ UDS 3 (Archive) ----
+# _ _ UDS 3 (Archive) IVP ----
+df_u3a_i <- df_u3a %>% 
   filter(a1pkt_type == 'I')
-# _ _ UDS 3 (old) FVP ----
-u32_fvp_vars <- str_replace(fields_u32_raw_fu, 'fu_', '')
-u31_fvp_vars <- trans_dict %>% 
-  filter(field_u32 %in% u32_fvp_vars) %>% 
-  pull(field_u31) %>% 
+# _ _ UDS 3 (Archive) FVP ----
+u3n_fvp_vars <- str_replace(fields_u3n_raw_fu, 'fu_', '')
+u3a_fvp_vars <- trans_dict %>% 
+  filter(field_u3n %in% u3n_fvp_vars) %>% 
+  pull(field_u3a) %>% 
   remove_NAs(.)
-df_u31_f <- df_u31 %>% 
+df_u3a_f <- df_u3a %>% 
   filter(a1pkt_type == 'F') %>% 
-  rename_at(.vars = vars(one_of(u31_fvp_vars)),
+  rename_at(.vars = vars(one_of(u3a_fvp_vars)),
             .funs = funs(str_replace(., '(.*)', 'fu_')))
-# _ _ UDS 3 (old) TVP ----
-u32_tvp_vars <- str_replace(fields_u32_raw_tele, 'tele_', '')
-u31_tvp_vars <- trans_dict %>% 
-  filter(field_u32 %in% u32_tvp_vars) %>% 
-  pull(field_u31) %>% 
+# _ _ UDS 3 (Archive) TVP ----
+u3n_tvp_vars <- str_replace(fields_u3n_raw_tele, 'tele_', '')
+u3a_tvp_vars <- trans_dict %>% 
+  filter(field_u3n %in% u3n_tvp_vars) %>% 
+  pull(field_u3a) %>% 
   remove_NAs(.)
-df_u31_t <- df_u31 %>% 
+df_u3a_t <- df_u3a %>% 
   filter(a1pkt_type == 'T') %>% 
-  rename_at(.vars = vars(one_of(u31_tvp_vars)),
+  rename_at(.vars = vars(one_of(u3a_tvp_vars)),
             .funs = funs(str_replace(., '(.*)', 'tele_')))
-# _ _ Row bind UDS 3 (old) I+F+T ----
-df_u31_ift <- bind_rows(df_u31_i, df_u31_f, df_u31_t)
+# _ _ Row bind UDS 3 (Archive) I+F+T ----
+df_u3a_ift <- bind_rows(df_u3a_i, df_u3a_f, df_u3a_t)
 ```
 
 # Stitch Data Together
@@ -407,7 +408,7 @@ head(std_names_df) %>%
 
 ### Loop over rows of `trans_dict` to standardize field names
 
-`trans_dict` is just a df of the spreadsheet `WIP__translation_dictionary.xlsx`. From this, we'll grab first the UDS 3 New field name; if that doesn't exist, we'll grab the UDS 3 Old field name; if that doesn't exist, it'll be the UDS 2 field name.
+`trans_dict` is just a df of the spreadsheet `WIP__translation_dictionary.xlsx`. From this, we'll grab first the UDS 3 New field name; if that doesn't exist, we'll grab the UDS 3 Archive field name; if that doesn't exist, it'll be the UDS 2 field name.
 
 From this process is born the standard translation dictionary, `trans_dict_std`.
 
@@ -415,11 +416,11 @@ From this process is born the standard translation dictionary, `trans_dict_std`.
 ## Loop through rows of `trans_dict`
 for (i in seq_len(nrow(trans_dict))) {
   
-  ## Std field name is from UDS 3 (new), then UDS 3 (old), then UDS 2
-  if (!is.na(trans_dict[i, 'field_u32'])) {
-    std_names_df[i, ] <- list('field_u32', trans_dict[[i, 'field_u32']])
-  } else if (!is.na(trans_dict[i, 'field_u31'])) {
-    std_names_df[i, ] <- list('field_u31', trans_dict[[i, 'field_u31']])
+  ## Std field name is from UDS 3 (New), then UDS 3 (Archive), then UDS 2
+  if (!is.na(trans_dict[i, 'field_u3n'])) {
+    std_names_df[i, ] <- list('field_u3n', trans_dict[[i, 'field_u3n']])
+  } else if (!is.na(trans_dict[i, 'field_u3a'])) {
+    std_names_df[i, ] <- list('field_u3a', trans_dict[[i, 'field_u3a']])
   } else if (!is.na(trans_dict[i, 'field_u2'])) {
     std_names_df[i, ] <- list('field_u2', trans_dict[[i, 'field_u2']])
   }
@@ -439,12 +440,12 @@ This chunk uses data from human-created/-maintained `WIP__uds3_ift_matches.xlsx`
 
 ```{r}
 ## Append `fu_*` fields ----
-u32_ift_match_f <- u32_ift_match %>%
+u3n_ift_match_f <- u3n_ift_match %>%
   filter(!is.na(field_fvp)) %>%
-  filter(field_ivp %in% u32_fvp_vars) %>%
+  filter(field_ivp %in% u3n_fvp_vars) %>%
   pull(field_ivp)
-for (i in seq_along(u32_ift_match_f)) {
-  # cat(paste(i, u32_ift_match_f[i], '\n'))
+for (i in seq_along(u3n_ift_match_f)) {
+  # cat(paste(i, u3n_ift_match_f[i], '\n'))
   # cat(paste(i, nrow(trans_dict_std)+i, '\n'))
   curr_row <- nrow(trans_dict_std) + 1
   ## Add `fu_*` field from within trans_dict_std to end of trans_dict_std
@@ -452,32 +453,32 @@ for (i in seq_along(u32_ift_match_f)) {
   trans_dict_std[curr_row, 'field_u2'] <-
     paste0('fu_',
            trans_dict_std[[
-             which(trans_dict_std$field_u32 == u32_ift_match_f[i]), 'field_u2'
+             which(trans_dict_std$field_u3n == u3n_ift_match_f[i]), 'field_u2'
              ]])
-  # UDS 3 (old)
-  trans_dict_std[curr_row, 'field_u31'] <-
+  # UDS 3 (Archive)
+  trans_dict_std[curr_row, 'field_u3a'] <-
     paste0('fu_',
            trans_dict_std[[
-             which(trans_dict_std$field_u32 == u32_ift_match_f[i]), 'field_u31'
+             which(trans_dict_std$field_u3n == u3n_ift_match_f[i]), 'field_u3a'
              ]])
-  # UDS 3 (new)
-  trans_dict_std[curr_row, 'field_u32'] <-
+  # UDS 3 (New)
+  trans_dict_std[curr_row, 'field_u3n'] <-
     paste0('fu_',
            trans_dict_std[[
-             which(trans_dict_std$field_u32 == u32_ift_match_f[i]), 'field_u32'
+             which(trans_dict_std$field_u3n == u3n_ift_match_f[i]), 'field_u3n'
              ]])
-  trans_dict_std[curr_row, 'form_u32'] <-
+  trans_dict_std[curr_row, 'form_u3n'] <-
     str_replace(
       trans_dict_std[[
-        which(trans_dict_std$field_u32 == u32_ift_match_f[i]), 'form_u32'
+        which(trans_dict_std$field_u3n == u3n_ift_match_f[i]), 'form_u3n'
         ]],
       pattern = 'ivp_',
       replacement = 'fvp_')
   trans_dict_std[curr_row, 'Notes'] <-
-    '__ synthetic field in UDS 2, UDS 3 (old) __'
-  trans_dict_std[curr_row, 'std_source'] <- 'field_u32'
+    '__ synthetic field in UDS 2, UDS 3 (Archive) __'
+  trans_dict_std[curr_row, 'std_source'] <- 'field_u3n'
   trans_dict_std[curr_row, 'std_field'] <-
-    trans_dict_std[[curr_row, 'field_u32']]
+    trans_dict_std[[curr_row, 'field_u3n']]
 }
 tail(trans_dict_std) %>% 
   kable() %>% 
@@ -488,12 +489,12 @@ tail(trans_dict_std) %>%
 
 ```{r}
 ## Append `tele_*` fields ----
-u32_ift_match_t <- u32_ift_match %>%
+u3n_ift_match_t <- u3n_ift_match %>%
   filter(!is.na(field_tvp)) %>%
-  filter(field_ivp %in% u32_tvp_vars) %>%
+  filter(field_ivp %in% u3n_tvp_vars) %>%
   pull(field_ivp)
-for (i in seq_along(u32_ift_match_t)) {
-  # cat(paste(i, u32_ift_match_t[i], '\n'))
+for (i in seq_along(u3n_ift_match_t)) {
+  # cat(paste(i, u3n_ift_match_t[i], '\n'))
   # cat(paste(i, nrow(trans_dict_std)+i, '\n'))
   curr_row <- nrow(trans_dict_std) + 1
   ## Add `tele_*` field from within trans_dict_std to end of trans_dict_std
@@ -501,32 +502,32 @@ for (i in seq_along(u32_ift_match_t)) {
   trans_dict_std[curr_row, 'field_u2'] <-
     paste0('tele_',
            trans_dict_std[[
-             which(trans_dict_std$field_u32 == u32_ift_match_t[i]), 'field_u2'
+             which(trans_dict_std$field_u3n == u3n_ift_match_t[i]), 'field_u2'
              ]])
-  # UDS 3 (old)
-  trans_dict_std[curr_row, 'field_u31'] <-
+  # UDS 3 (Archive)
+  trans_dict_std[curr_row, 'field_u3a'] <-
     paste0('tele_',
            trans_dict_std[[
-             which(trans_dict_std$field_u32 == u32_ift_match_t[i]), 'field_u31'
+             which(trans_dict_std$field_u3n == u3n_ift_match_t[i]), 'field_u3a'
              ]])
-  # UDS 3 (new)
-  trans_dict_std[curr_row, 'field_u32'] <-
+  # UDS 3 (New)
+  trans_dict_std[curr_row, 'field_u3n'] <-
     paste0('tele_',
            trans_dict_std[[
-             which(trans_dict_std$field_u32 == u32_ift_match_t[i]), 'field_u32'
+             which(trans_dict_std$field_u3n == u3n_ift_match_t[i]), 'field_u3n'
              ]])
-  trans_dict_std[curr_row, 'form_u32'] <-
+  trans_dict_std[curr_row, 'form_u3n'] <-
     str_replace(
       trans_dict_std[[
-        which(trans_dict_std$field_u32 == u32_ift_match_t[i]), 'form_u32'
+        which(trans_dict_std$field_u3n == u3n_ift_match_t[i]), 'form_u3n'
         ]],
       pattern = 'ivp_',
       replacement = 'tvp_')
   trans_dict_std[curr_row, 'Notes'] <-
-    '__ synthetic field in UDS 2, UDS 3 (old) __'
-  trans_dict_std[curr_row, 'std_source'] <- 'field_u32'
+    '__ synthetic field in UDS 2, UDS 3 (Archive) __'
+  trans_dict_std[curr_row, 'std_source'] <- 'field_u3n'
   trans_dict_std[curr_row, 'std_field'] <-
-    trans_dict_std[[curr_row, 'field_u32']]
+    trans_dict_std[[curr_row, 'field_u3n']]
 }
 tail(trans_dict_std) %>% 
   kable() %>% 
@@ -550,29 +551,29 @@ tail(trans_dict_std) %>%
     font_size = 9)
 ```
 
-## Build Stitched DF (`df_u2_u31_u32`)
+## Build Stitched DF (`df_u2_u3a_u3n`)
 
 ### Create empty df
 
 ```{r}
 # _ Build stitched data df ----
-## Stitched df is `df_u2_u31_u32`
-df_u2_u31_u32 <- data.frame(matrix(data = NA_character_,
+## Stitched df is `df_u2_u3a_u3n`
+df_u2_u3a_u3n <- data.frame(matrix(data = NA_character_,
                                    nrow = sum(nrow(df_u2_ift),
-                                              nrow(df_u31_ift),
-                                              nrow(df_u32)),
+                                              nrow(df_u3a_ift),
+                                              nrow(df_u3n)),
                                    ncol = nrow(trans_dict_std)))
-names(df_u2_u31_u32) <- trans_dict_std$std_field
+names(df_u2_u3a_u3n) <- trans_dict_std$std_field
 ```
 
-### Build `df_u2_u31_u32`
+### Build `df_u2_u3a_u3n`
 
-To accomplish this, we iterate over the rows of `trans_dict_std` and build `df_u2_u31_u32` column by column.
+To accomplish this, we iterate over the rows of `trans_dict_std` and build `df_u2_u3a_u3n` column by column.
 
 ```{r}
 # Loop through `trans_dict_std` rows to build stitched df column by column
-## ... using df_u2_ift, df_u31_ift, df_u32
-cat("Number of columns in df_u2_u31_u32 df:\n")
+## ... using df_u2_ift, df_u3a_ift, df_u3n
+cat("Number of columns in df_u2_u3a_u3n df:\n")
 for (i in seq_len(nrow(trans_dict_std))) {
   # for (i in 1:601) {
   cat(paste(i, ' '))
@@ -585,47 +586,47 @@ for (i in seq_len(nrow(trans_dict_std))) {
     temp_u2_vec <- rep(NA_character_, times = nrow(df_u2_ift))
   }
   
-  ## Build temp UDS 3 (old) vector
-  if (!is.na(trans_dict_std[i, 'field_u31']) &&
-      !is.null(df_u31_ift[[trans_dict_std[i, 'field_u31']]])) {
-    temp_u31_vec <- df_u31_ift[[trans_dict_std[i, 'field_u31']]]
+  ## Build temp UDS 3 (Archive) vector
+  if (!is.na(trans_dict_std[i, 'field_u3a']) &&
+      !is.null(df_u3a_ift[[trans_dict_std[i, 'field_u3a']]])) {
+    temp_u3a_vec <- df_u3a_ift[[trans_dict_std[i, 'field_u3a']]]
   } else {
-    temp_u31_vec <- rep(NA_character_, times = nrow(df_u31_ift))
+    temp_u3a_vec <- rep(NA_character_, times = nrow(df_u3a_ift))
   }
   
-  ## Build temp UDS 3 (new) vector
-  if (!is.na(trans_dict_std[i, 'field_u32']) &&
-      !is.null(df_u32[[trans_dict_std[i, 'field_u32']]])) {
-    temp_u32_vec <- df_u32[[trans_dict_std[i, 'field_u32']]]
+  ## Build temp UDS 3 (New) vector
+  if (!is.na(trans_dict_std[i, 'field_u3n']) &&
+      !is.null(df_u3n[[trans_dict_std[i, 'field_u3n']]])) {
+    temp_u3n_vec <- df_u3n[[trans_dict_std[i, 'field_u3n']]]
   } else {
-    temp_u32_vec <- rep(NA_character_, times = nrow(df_u32))
+    temp_u3n_vec <- rep(NA_character_, times = nrow(df_u3n))
   }
   
   ## Concat `temp_*_vec` vectors
-  temp_u2_u31_u32_vec <- c(temp_u2_vec, temp_u31_vec, temp_u32_vec)
-  # print(length(temp_u2_u31_u32_vec))
+  temp_u2_u3a_u3n_vec <- c(temp_u2_vec, temp_u3a_vec, temp_u3n_vec)
+  # print(length(temp_u2_u3a_u3n_vec))
   
   ## Lay concat'd `temp_*_vec` vectors into stitched df column
-  df_u2_u31_u32[, i] <- temp_u2_u31_u32_vec
+  df_u2_u3a_u3n[, i] <- temp_u2_u3a_u3n_vec
 }
 ```
 
-### Reduce the size of `df_u2_u31_u32` by guessing column data types
+### Reduce the size of `df_u2_u3a_u3n` by guessing column data types
 
 ```{r}
-print(object.size(df_u2_u31_u32), units = 'auto')
+print(object.size(df_u2_u3a_u3n), units = 'auto')
 # _ Guess column types
-df_u2_u31_u32 <- suppressMessages( readr::type_convert(df_u2_u31_u32) )
-print(object.size(df_u2_u31_u32), units = 'auto')
+df_u2_u3a_u3n <- suppressMessages( readr::type_convert(df_u2_u3a_u3n) )
+print(object.size(df_u2_u3a_u3n), units = 'auto')
 ```
 
 ## Write Harmonized Data To CSV
 
-Write the resulting harmonized dataset `df_u2_u31_u32` to a CSV file of the same name.
+Write the resulting harmonized dataset `df_u2_u3a_u3n` to a CSV file of the same name.
 
 ```{r}
 # WRITE TO CSV ----
-readr::write_csv(df_u2_u31_u32, 'df_u2_u31_u32.csv', na = '')
+readr::write_csv(df_u2_u3a_u3n, 'df_u2_u3a_u3n.csv', na = '')
 ```
 
 
@@ -642,21 +643,21 @@ data_dict_fields_u2_raw <- trans_dict_std %>%
   pull(std_field)
 ```
 
-### UDS 3 Old
+### UDS 3 Archive
 ```{r}
-# UDS 3 (Old)
-data_dict_fields_u31_raw <- trans_dict_std %>% 
+# UDS 3 (Archive)
+data_dict_fields_u3a_raw <- trans_dict_std %>% 
   select(std_source, std_field) %>% 
-  filter(std_source == 'field_u31') %>% 
+  filter(std_source == 'field_u3a') %>% 
   pull(std_field)
 ```
 
 ### UDS 3 New
 ```{r}
 # UDS 3 (New)
-data_dict_fields_u32_raw <- trans_dict_std %>% 
+data_dict_fields_u3n_raw <- trans_dict_std %>% 
   select(std_source, std_field) %>% 
-  filter(std_source == 'field_u32') %>% 
+  filter(std_source == 'field_u3n') %>% 
   pull(std_field)
 ```
 
@@ -676,32 +677,32 @@ df_data_dict_u2 <- df_data_dict_u2_all %>%
   filter(field_name %in% data_dict_fields_u2_raw)
 ```
 
-### UDS 3 (Old)
+### UDS 3 (Archive)
 ```{r}
-json_data_dict_u31 <- RCurl::postForm(
+json_data_dict_u3a <- RCurl::postForm(
   uri=REDCAP_API_URI,
   token=REDCAP_API_TOKEN_UDS31,
   content='metadata',
   format='json',
   returnFormat='json'
 )
-df_data_dict_u31_all <- jsonlite::fromJSON(json_data_dict_u31)
-df_data_dict_u31 <- df_data_dict_u31_all %>% 
-  filter(field_name %in% data_dict_fields_u31_raw)
+df_data_dict_u3a_all <- jsonlite::fromJSON(json_data_dict_u3a)
+df_data_dict_u3a <- df_data_dict_u3a_all %>% 
+  filter(field_name %in% data_dict_fields_u3a_raw)
 ```
 
 ### UDS 3 (New)
 ```{r}
-json_data_dict_u32 <- RCurl::postForm(
+json_data_dict_u3n <- RCurl::postForm(
   uri=REDCAP_API_URI,
-  token=REDCAP_API_TOKEN_UDS3,
+  token=REDCAP_API_TOKEN_UDS3n,
   content='metadata',
   format='json',
   returnFormat='json'
 )
-df_data_dict_u32_all <- jsonlite::fromJSON(json_data_dict_u32)
-df_data_dict_u32 <- df_data_dict_u31_all %>% 
-  filter(field_name %in% data_dict_fields_u32_raw)
+df_data_dict_u3n_all <- jsonlite::fromJSON(json_data_dict_u3n)
+df_data_dict_u3n <- df_data_dict_u3a_all %>% 
+  filter(field_name %in% data_dict_fields_u3n_raw)
 ```
 
 ## Rowbind Data Dictionaries & Order
@@ -710,8 +711,8 @@ Order by form name, then field name.
 
 ```{r}
 df_data_dict <- bind_rows(df_data_dict_u2,
-                          df_data_dict_u31,
-                          df_data_dict_u32)
+                          df_data_dict_u3a,
+                          df_data_dict_u3n)
 df_data_dict_form <- df_data_dict %>% 
   arrange(form_name, field_name)
 # df_data_dict_field <- df_data_dict %>% 
