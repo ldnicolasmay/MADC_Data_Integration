@@ -7,7 +7,7 @@ output:
     toc: true
     toc_depth: 2
     toc_float: true
-    theme: cerulean
+    theme: sandstone
     highlight: zenburn
 ---
 
@@ -432,7 +432,11 @@ for (i in seq_len(nrow(trans_dict))) {
   
 }
 trans_dict_std <- cbind(trans_dict, std_names_df)
-head(trans_dict_std) %>% 
+trans_dict_std %>% 
+  select(-form_u2, -form_u3a, -form_u3n, 
+         -Accounted_For, -Flag, -Matcher,
+         -std_field) %>% 
+  head() %>% 
   kable() %>% 
   kable_styling(
     bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
@@ -746,7 +750,7 @@ readr::write_csv(df_data_dict_form, 'df_data_dict_form.csv', na = '')
 ```
 
 
-```
+```{r echo=FALSE}
 ###@    #==--  :  --==#    @##==---==##@##==---==##@    #==--  :  --==#    @###
 #==##@    #==-- --==#    @##==---==##@   @##==---==##@    #==-- --==#    @##==#
 #--==##@    #==-==#    @##==---==##@   #   @##==---==##@    #==-==#    @##==--#
