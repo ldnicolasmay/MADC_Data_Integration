@@ -31,14 +31,13 @@ library(kableExtra)
 
 ```{r}
 # USEFUL VARS ----
-`%>%` <- `%>%`
-source('~/Desktop/config.R')
+source('~/Box Sync/Documents/R_helpers/config.R')
 rm(BOX_CLIENT_ID); rm(BOX_CLIENT_SECRET); rm(BOX_REDIRECT_URI)
 rm(REDCAP_DATA_REQUESTS_TOKEN)
-source('~/Desktop/helpers.R')
+source('~/Box Sync/Documents/R_helpers/helpers.R')
 
 ## switch to access API (TRUE) or not (FALSE)
-get_api_data <- TRUE
+GET_API_DATA <- TRUE
 ```
 
 ## Load Useful Helper Functions
@@ -59,14 +58,14 @@ remove_NAs <- function(x) {
 ### UDS 2
 ```{r}
 # _ UDS 2 ----
-if (get_api_data) {
+if (GET_API_DATA) {
   export_fields_u2_json <- RCurl::postForm(
     uri=REDCAP_API_URI,
     token=REDCAP_API_TOKEN_UDS2,
     content='exportFieldNames',
     format='json',
-    returnFormat='json'#,
-    # .opts = list(ssl.verifypeer = FALSE) # using linux
+    returnFormat='json',
+    .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
 export_fields_u2_df <- jsonlite::fromJSON(export_fields_u2_json) %>% 
@@ -83,14 +82,14 @@ head(export_fields_u2_df) %>%
 ### UDS 3 Archive
 ```{r}
 # _ UDS 3 (Archive) ----
-if (get_api_data) {
+if (GET_API_DATA) {
   export_fields_u3a_json <- RCurl::postForm(
     uri=REDCAP_API_URI,
     token=REDCAP_API_TOKEN_UDS3a,
     content='exportFieldNames',
     format='json',
-    returnFormat='json'#,
-    # .opts = list(ssl.verifypeer = FALSE) # using linux
+    returnFormat='json',
+    .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
 export_fields_u3a_df <- jsonlite::fromJSON(export_fields_u3a_json) %>% 
@@ -107,14 +106,14 @@ head(export_fields_u3a_df) %>%
 ### UDS 3 New
 ```{r}
 # _ UDS 3 (New) ----
-if (get_api_data) {
+if (GET_API_DATA) {
   export_fields_u3n_json <- RCurl::postForm(
     uri=REDCAP_API_URI,
     token=REDCAP_API_TOKEN_UDS3n,
     content='exportFieldNames',
     format='json',
-    returnFormat='json'#,
-    # .opts = list(ssl.verifypeer = FALSE) # using linux
+    returnFormat='json',
+    .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
 export_fields_u3n_df <- jsonlite::fromJSON(export_fields_u3n_json) %>% 
@@ -131,14 +130,14 @@ head(export_fields_u3n_df) %>%
 ### MiNDSet Registry
 ```{r}
 # _ MiNDSet ----
-if (get_api_data) {
+if (GET_API_DATA) {
   export_fields_ms_json <- RCurl::postForm(
     uri=REDCAP_API_URI,
     token=REDCAP_API_TOKEN_MINDSET,
     content='exportFieldNames',
     format='json',
-    returnFormat='json'#,
-    # .opts = list(ssl.verifypeer = FALSE) # using linux
+    returnFormat='json',
+    .opts = list(ssl.verifypeer = FALSE) # using linux
   )
 }
 export_fields_ms_df <- jsonlite::fromJSON(export_fields_ms_json) %>% 
@@ -230,7 +229,7 @@ fields_u3n <- fields_u3n_raw %>% paste(collapse = ',')
 ### UDS 2
 ```{r}
 # _ UDS 2 ----
-if (get_api_data) {
+if (GET_API_DATA) {
   json_u2 <- RCurl::postForm(
     uri=REDCAP_API_URI,
     token=REDCAP_API_TOKEN_UDS2,
@@ -243,8 +242,8 @@ if (get_api_data) {
     exportCheckboxLabel='false',
     exportSurveyFields='false',
     exportDataAccessGroups='false',
-    returnFormat='json'#,
-    # .opts = list(ssl.verifypeer = FALSE) # using linux
+    returnFormat='json',
+    .opts = list(ssl.verifypeer = FALSE) # using linux
   )
   json_u2 <- str_replace_all(json_u2, "\r\n", " ")
 }
@@ -258,7 +257,7 @@ df_u2 <- jsonlite::fromJSON(json_u2) %>% na_if('')
 ### UDS 3 Archive
 ```{r}
 # _ UDS 3 (Archive) ----
-if (get_api_data) {
+if (GET_API_DATA) {
   json_u3a <- RCurl::postForm(
     uri=REDCAP_API_URI,
     token=REDCAP_API_TOKEN_UDS3a,
@@ -271,8 +270,8 @@ if (get_api_data) {
     exportCheckboxLabel='false',
     exportSurveyFields='false',
     exportDataAccessGroups='false',
-    returnFormat='json'#,
-    # .opts = list(ssl.verifypeer = FALSE) # using linux
+    returnFormat='json',
+    .opts = list(ssl.verifypeer = FALSE) # using linux
   )
   json_u3a <- str_replace_all(json_u3a, "\r\n", " ")
 }
@@ -282,7 +281,7 @@ df_u3a <- jsonlite::fromJSON(json_u3a) %>% na_if('')
 ### UDS 3 New
 ```{r}
 # _ UDS 3 (New) ----
-if (get_api_data) {
+if (GET_API_DATA) {
   json_u3n <- RCurl::postForm(
     uri=REDCAP_API_URI,
     token=REDCAP_API_TOKEN_UDS3n,
@@ -295,8 +294,8 @@ if (get_api_data) {
     exportCheckboxLabel='false',
     exportSurveyFields='false',
     exportDataAccessGroups='false',
-    returnFormat='json'#,
-    # .opts = list(ssl.verifypeer = FALSE) # using linux
+    returnFormat='json',
+    .opts = list(ssl.verifypeer = FALSE) # using linux
   )
   json_u3n <- str_replace_all(json_u3n, "\r\n", " ")
 }
@@ -679,7 +678,8 @@ json_data_dict_u2 <- RCurl::postForm(
   token=REDCAP_API_TOKEN_UDS2,
   content='metadata',
   format='json',
-  returnFormat='json'
+  returnFormat='json',
+  .opts = list(ssl.verifypeer = FALSE) # using linux
 )
 df_data_dict_u2_all <- jsonlite::fromJSON(json_data_dict_u2)
 df_data_dict_u2 <- df_data_dict_u2_all %>% 
@@ -693,7 +693,8 @@ json_data_dict_u3a <- RCurl::postForm(
   token=REDCAP_API_TOKEN_UDS3a,
   content='metadata',
   format='json',
-  returnFormat='json'
+  returnFormat='json',
+  .opts = list(ssl.verifypeer = FALSE) # using linux
 )
 df_data_dict_u3a_all <- jsonlite::fromJSON(json_data_dict_u3a)
 df_data_dict_u3a <- df_data_dict_u3a_all %>% 
@@ -707,7 +708,8 @@ json_data_dict_u3n <- RCurl::postForm(
   token=REDCAP_API_TOKEN_UDS3n,
   content='metadata',
   format='json',
-  returnFormat='json'
+  returnFormat='json',
+  .opts = list(ssl.verifypeer = FALSE) # using linux
 )
 df_data_dict_u3n_all <- jsonlite::fromJSON(json_data_dict_u3n)
 df_data_dict_u3n <- df_data_dict_u3n_all %>% 
