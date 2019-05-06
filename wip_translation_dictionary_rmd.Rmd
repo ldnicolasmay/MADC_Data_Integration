@@ -433,8 +433,7 @@ for (i in seq_len(nrow(trans_dict))) {
 trans_dict_std <- cbind(trans_dict, std_names_df)
 trans_dict_std %>% 
   select(-form_u2, -form_u3a, -form_u3n, 
-         -Accounted_For, -Flag, -Matcher,
-         -std_field) %>% 
+         -Accounted_For, -Flag, -std_field) %>% 
   head() %>% 
   kable() %>% 
   kable_styling(
@@ -618,6 +617,25 @@ for (i in seq_len(nrow(trans_dict_std))) {
   df_u2_u3a_u3n[, i] <- temp_u2_u3a_u3n_vec
 }
 ```
+
+Convert any date strings like _*MM/DD/YYYY*_ to _*YYYY-MM-DD*_.
+
+```{r}
+df_u2_u3a_u3n <- df_u2_u3a_u3n %>% 
+  purrr::map_df(~ str_replace(.x,
+                              "^(\\d{1})/(\\d{1})/(\\d{4})$",
+                              "\\3-0\\1-0\\2")) %>% 
+  purrr::map_df(~ str_replace(.x,
+                              "^(\\d{1})/(\\d{2})/(\\d{4})$",
+                              "\\3-0\\1-\\2")) %>% 
+  purrr::map_df(~ str_replace(.x,
+                              "^(\\d{2})/(\\d{1})/(\\d{4})$",
+                              "\\3-\\1-0\\2")) %>%
+  purrr::map_df(~ str_replace(.x,
+                              "^(\\d{2})/(\\d{2})/(\\d{4})$",
+                              "\\3-\\1-\\2"))
+```
+
 
 ### Reduce the size of `df_u2_u3a_u3n` by guessing column data types
 
