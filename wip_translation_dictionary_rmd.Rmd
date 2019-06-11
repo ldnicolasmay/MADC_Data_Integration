@@ -19,12 +19,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Load Useful Libraries
 
-```{r}
+```{r load_libs}
 # USEFUL LIBRARIES ----
-library(dplyr)
-library(stringr)
-library(knitr)
-library(kableExtra)
+suppressMessages( library(dplyr) )
+suppressMessages( library(stringr) )
+suppressMessages( library(knitr) )
+suppressMessages( library(kableExtra) )
 ```
 
 ## Load Useful Variables
@@ -37,16 +37,25 @@ rm(REDCAP_DATA_REQUESTS_TOKEN)
 source('~/Box Sync/Documents/R_helpers/helpers.R')
 
 ## switch to access API (TRUE) or not (FALSE)
-GET_API_DATA <- TRUE
+GET_API_DATA <- FALSE
 ```
 
 ## Load Useful Helper Functions
 
 ```{r}
 # USEFUL HELPER FUNCTIONS ----
+
 remove_NAs <- function(x) {
   if (!is.vector(x)) { stop('x is not a vector') }
   x[!is.na(x)]
+}
+
+pretty_print_df <- function(df) {
+  df %>% 
+    kable() %>%
+    kable_styling(
+      bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+      font_size = 9)
 }
 ```
 
@@ -69,14 +78,11 @@ if (GET_API_DATA) {
   )
 }
 export_fields_u2_df <- jsonlite::fromJSON(export_fields_u2_json) %>% 
+  as_tibble() %>% 
   na_if('')
 readr::write_csv(export_fields_u2_df, 
                  "Export Fields/export_fields_u2_df.csv", na = "")
-head(export_fields_u2_df) %>% 
-  kable() %>% 
-  kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
-    font_size = 9)
+head(export_fields_u2_df) # %>% pretty_print_df()
 ```
 
 ### UDS 3 Archive
@@ -93,14 +99,11 @@ if (GET_API_DATA) {
   )
 }
 export_fields_u3a_df <- jsonlite::fromJSON(export_fields_u3a_json) %>% 
+  as_tibble() %>% 
   na_if('')
 readr::write_csv(export_fields_u3a_df, 
                  "Export Fields/export_fields_u3a_df.csv", na = "")
-head(export_fields_u3a_df) %>% 
-  kable() %>% 
-  kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
-    font_size = 9)
+head(export_fields_u3a_df) # %>% pretty_print_df()
 ```
 
 ### UDS 3 New
@@ -117,14 +120,11 @@ if (GET_API_DATA) {
   )
 }
 export_fields_u3n_df <- jsonlite::fromJSON(export_fields_u3n_json) %>% 
+  as_tibble() %>% 
   na_if('')
 readr::write_csv(export_fields_u3n_df, 
                  "Export Fields/export_fields_u3n_df.csv", na = "")
-head(export_fields_u3n_df) %>% 
-  kable() %>% 
-  kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
-    font_size = 9)
+head(export_fields_u3n_df) # %>% pretty_print_df()
 ```
 
 ### MiNDSet Registry
@@ -141,15 +141,100 @@ if (GET_API_DATA) {
   )
 }
 export_fields_ms_df <- jsonlite::fromJSON(export_fields_ms_json) %>% 
+  as_tibble() %>% 
   na_if('')
 readr::write_csv(export_fields_ms_df,
                  "Export Fields/export_fields_ms_df.csv", na = "")
-head(export_fields_ms_df) %>% 
-  kable() %>% 
-  kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
-    font_size = 9)
+head(export_fields_ms_df) # %>% pretty_print_df()
 ```
+
+
+## Get REDCap Project Data Dictionaries
+
+### UDS 2
+```{r}
+# _ UDS 2 ----
+if (GET_API_DATA) {
+  data_dict_u2_json <- RCurl::postForm(
+    uri=REDCAP_API_URI,
+    token=REDCAP_API_TOKEN_UDS2,
+    content='metadata',
+    format='json',
+    returnFormat='json',
+    .opts = list(ssl.verifypeer = FALSE) # using linux
+  )
+}
+data_dict_u2_df <- jsonlite::fromJSON(data_dict_u2_json) %>% 
+  as_tibble() %>% 
+  na_if('')
+readr::write_csv(data_dict_u2_df, 
+                 "Data Dictionaries/data_dict_u2_df.csv", na = "")
+head(data_dict_u2_df) # %>% pretty_print_df()
+```
+
+### UDS 3 Archive
+```{r}
+# _ UDS 3 (Archive) ----
+if (GET_API_DATA) {
+  data_dict_u3a_json <- RCurl::postForm(
+    uri=REDCAP_API_URI,
+    token=REDCAP_API_TOKEN_UDS3a,
+    content='metadata',
+    format='json',
+    returnFormat='json',
+    .opts = list(ssl.verifypeer = FALSE) # using linux
+  )
+}
+data_dict_u3a_df <- jsonlite::fromJSON(data_dict_u3a_json) %>% 
+  as_tibble() %>% 
+  na_if('')
+readr::write_csv(data_dict_u3a_df, 
+                 "Data Dictionaries/data_dict_u3a_df.csv", na = "")
+head(data_dict_u3a_df) # %>% pretty_print_df()
+```
+
+### UDS 3 New
+```{r}
+# _ UDS 3 (New) ----
+if (GET_API_DATA) {
+  data_dict_u3n_json <- RCurl::postForm(
+    uri=REDCAP_API_URI,
+    token=REDCAP_API_TOKEN_UDS3n,
+    content='metadata',
+    format='json',
+    returnFormat='json',
+    .opts = list(ssl.verifypeer = FALSE) # using linux
+  )
+}
+data_dict_u3n_df <- jsonlite::fromJSON(data_dict_u3n_json) %>% 
+  as_tibble() %>% 
+  na_if('')
+readr::write_csv(data_dict_u3n_df, 
+                 "Data Dictionaries/data_dict_u3n_df.csv", na = "")
+head(data_dict_u3n_df) # %>% pretty_print_df()
+```
+
+### MiNDSet Registry
+```{r}
+# _ UDS 3 (Archive) ----
+if (GET_API_DATA) {
+  data_dict_ms_json <- RCurl::postForm(
+    uri=REDCAP_API_URI,
+    token=REDCAP_API_TOKEN_MINDSET,
+    content='metadata',
+    format='json',
+    returnFormat='json',
+    .opts = list(ssl.verifypeer = FALSE) # using linux
+  )
+}
+data_dict_ms_df <- jsonlite::fromJSON(data_dict_ms_json) %>% 
+  as_tibble() %>% 
+  na_if('')
+readr::write_csv(data_dict_ms_df, 
+                 "Data Dictionaries/data_dict_ms_df.csv", na = "")
+head(data_dict_ms_df) # %>% pretty_print_df()
+```
+
 
 ## Get Human-Resolved Fields 
 
@@ -158,23 +243,16 @@ Because there are asystematic mismatches between the three UDS datsets that MADC
 ```{r}
 # _ Get work-in-progress translation dictionary ----
 trans_dict <- readxl::read_excel('WIP__translation_dictionary.xlsx')
-head(trans_dict) %>% 
-  kable() %>% 
-  kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
-    font_size = 9)
+head(trans_dict) # %>% pretty_print_df()
 
 # _ Get work-in-progress UDS3 ivp-fvp-tvp matches ----
 u3n_ift_match <- readxl::read_excel('WIP__uds3_ift_matches.xlsx') %>% 
   select(field_ivp, form_ivp, 
          field_fvp, form_fvp,
          field_tvp, form_tvp)
-head(u3n_ift_match) %>% 
-  kable() %>% 
-  kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
-    font_size = 9)
+head(u3n_ift_match) # %>% pretty_print_df()
 ```
+
 
 ## Process Dataset Fields
 
@@ -247,7 +325,9 @@ if (GET_API_DATA) {
   )
   json_u2 <- str_replace_all(json_u2, "\r\n", " ")
 }
-df_u2 <- jsonlite::fromJSON(json_u2) %>% na_if('')
+df_u2 <- jsonlite::fromJSON(json_u2) %>% 
+  as_tibble() %>% 
+  na_if('')
 # # Clean out '___1' from field some field names -- Generalize later
 # names(df_u2) <- str_replace(names(df_u2), 
 #                             pattern = "___1", 
@@ -275,7 +355,9 @@ if (GET_API_DATA) {
   )
   json_u3a <- str_replace_all(json_u3a, "\r\n", " ")
 }
-df_u3a <- jsonlite::fromJSON(json_u3a) %>% na_if('')
+df_u3a <- jsonlite::fromJSON(json_u3a) %>% 
+  as_tibble() %>% 
+  na_if('')
 ```
 
 ### UDS 3 New
@@ -299,11 +381,14 @@ if (GET_API_DATA) {
   )
   json_u3n <- str_replace_all(json_u3n, "\r\n", " ")
 }
-df_u3n <- jsonlite::fromJSON(json_u3n) %>% na_if('')
+df_u3n <- jsonlite::fromJSON(json_u3n) %>% 
+  as_tibble() %>% 
+  na_if('')
 
 # Clean out Double Data Entry (DDE) records ending in "--1" or "--2"
 df_u3n <- df_u3n %>% 
-  filter(!(str_detect(ptid, "--1$|--2$")))
+  # filter(!(str_detect(ptid, "--1$|--2$")))
+  filter(str_detect(ptid, "^UM\\d{8}$"))
 ```
 
 ## Write Raw Data To CSV
@@ -340,7 +425,8 @@ u2_fvp_vars <- trans_dict %>%
 df_u2_f <- df_u2 %>%
   filter(a1pkt_type == 'F') %>%
   rename_at(.vars = vars(one_of(u2_fvp_vars)),
-            .funs = funs(str_replace(., '(.*)', 'fu_\\1')))
+            # .funs = funs(str_replace(., '(.*)', 'fu_\\1')))
+            .funs = list(~str_replace(., '(.*)', 'fu_\\1')))
 # _ _ UDS 2 TVP ----
 u3n_tvp_vars <- str_replace(fields_u3n_raw_tele, 'tele_', '')
 u2_tvp_vars <- trans_dict %>% 
@@ -350,7 +436,8 @@ u2_tvp_vars <- trans_dict %>%
 df_u2_t <- df_u2 %>% 
   filter(a1pkt_type == 'T') %>% 
   rename_at(.vars = vars(one_of(u2_tvp_vars)),
-            .funs = funs(str_replace(., '(.*)', 'tele_\\1')))
+            # .funs = funs(str_replace(., '(.*)', 'tele_\\1')))
+            .funs = list(~str_replace(., '(.*)', 'tele_\\1')))
 # _ _ Row bind UDS 2 I+F+T ----
 df_u2_ift <- bind_rows(df_u2_i, df_u2_f, df_u2_t)
 ```
@@ -372,7 +459,8 @@ u3a_fvp_vars <- trans_dict %>%
 df_u3a_f <- df_u3a %>% 
   filter(a1pkt_type == 'F') %>% 
   rename_at(.vars = vars(one_of(u3a_fvp_vars)),
-            .funs = funs(str_replace(., '(.*)', 'fu_')))
+            # .funs = funs(str_replace(., '(.*)', 'fu_')))
+            .funs = list(~str_replace(., '(.*)', 'fu_')))
 # _ _ UDS 3 (Archive) TVP ----
 u3n_tvp_vars <- str_replace(fields_u3n_raw_tele, 'tele_', '')
 u3a_tvp_vars <- trans_dict %>% 
@@ -382,7 +470,8 @@ u3a_tvp_vars <- trans_dict %>%
 df_u3a_t <- df_u3a %>% 
   filter(a1pkt_type == 'T') %>% 
   rename_at(.vars = vars(one_of(u3a_tvp_vars)),
-            .funs = funs(str_replace(., '(.*)', 'tele_')))
+            # .funs = funs(str_replace(., '(.*)', 'tele_')))
+            .funs = list(~str_replace(., '(.*)', 'tele_')))
 # _ _ Row bind UDS 3 (Archive) I+F+T ----
 df_u3a_ift <- bind_rows(df_u3a_i, df_u3a_f, df_u3a_t)
 ```
@@ -401,13 +490,10 @@ Based on the translation dictionary (`WIP__translation_dictionary.xlsx`), we'll 
 std_names_df <- data.frame(matrix(data = NA_character_,
                                   nrow = 0,
                                   ncol = 2),
-                           stringsAsFactors = FALSE)
+                           stringsAsFactors = FALSE) %>% 
+  as_tibble()
 names(std_names_df) <- c('std_source', 'std_field')
-head(std_names_df) %>% 
-  kable() %>% 
-  kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
-    font_size = 9)
+head(std_names_df) # %>% pretty_print_df()
 ```
 
 ### Loop over rows of `trans_dict` to standardize field names
@@ -434,11 +520,7 @@ trans_dict_std <- cbind(trans_dict, std_names_df)
 trans_dict_std %>% 
   select(-form_u2, -form_u3a, -form_u3n, 
          -Accounted_For, -Flag, -std_field) %>% 
-  head() %>% 
-  kable() %>% 
-  kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
-    font_size = 9)
+  head() # %>% pretty_print_df()
 ```
 
 ### Append `fu_*` and `tele_*` fields to bottom of Standard Translation Dictionary
@@ -487,11 +569,7 @@ for (i in seq_along(u3n_ift_match_f)) {
   trans_dict_std[curr_row, 'std_field'] <-
     trans_dict_std[[curr_row, 'field_u3n']]
 }
-tail(trans_dict_std) %>% 
-  kable() %>% 
-  kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
-    font_size = 9)
+tail(trans_dict_std) # %>% pretty_print_df()
 ```
 
 ```{r}
@@ -536,11 +614,7 @@ for (i in seq_along(u3n_ift_match_t)) {
   trans_dict_std[curr_row, 'std_field'] <-
     trans_dict_std[[curr_row, 'field_u3n']]
 }
-tail(trans_dict_std) %>% 
-  kable() %>% 
-  kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
-    font_size = 9)
+tail(trans_dict_std) # %>% pretty_print_df()
 ```
 
 Now remove any instances of non-existing field names after `fu_*` and `tele_*` preprends.
@@ -551,12 +625,78 @@ trans_dict_std <- trans_dict_std %>% na_if('fu_NA')
 trans_dict_std <- trans_dict_std %>% na_if('tele_NA')
 trans_dict_std <- trans_dict_std %>% na_if('fu_')
 trans_dict_std <- trans_dict_std %>% na_if('tele_')
-tail(trans_dict_std) %>% 
-  kable() %>% 
-  kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
-    font_size = 9)
+tail(trans_dict_std) # %>% pretty_print_df()
 ```
+
+Whatever export fields that aren't included in the standardized translation dictionary (`trans_dict_std`) need to be included in this standardized translation dictionary. Otherwise, these fields won't be included in the integrated dataset.
+
+UDS 2 fields in `export_fields_u2_df` but NOT in `trans_dict`
+```{r}
+export_fields_data_dict_u2_df <-
+  left_join(export_fields_u2_df, 
+            data_dict_u2_df[, c("field_name", "form_name")],
+            by = c("original_field_name" = "field_name")) %>% 
+  mutate(form_name = case_when(
+    str_detect(export_field_name, "_complete$") ~ 
+      str_replace(export_field_name, pattern = "_complete$", ""),
+    TRUE ~ form_name
+  ))
+missing_fields_u2_df <- export_fields_data_dict_u2_df %>% 
+  filter(!(export_field_name %in% trans_dict_std$field_u2)) %>% 
+  select(field_u2 = export_field_name,
+         form_u2 = form_name) %>% 
+  mutate(std_source = "field_u2",
+         std_field = field_u2)
+```
+
+UDS 3 Archive fields in `export_fields_u3a_df` but NOT in `trans_dict`
+```{r}
+export_fields_data_dict_u3a_df <-
+  left_join(export_fields_u3a_df, 
+            data_dict_u3a_df[, c("field_name", "form_name")],
+            by = c("original_field_name" = "field_name")) %>% 
+  mutate(form_name = case_when(
+    str_detect(export_field_name, "_complete$") ~ 
+      str_replace(export_field_name, pattern = "_complete$", ""),
+    TRUE ~ form_name
+  ))
+missing_fields_u3a_df <- export_fields_data_dict_u3a_df %>% 
+  filter(!(export_field_name %in% trans_dict_std$field_u3a)) %>% 
+  select(field_u3a = export_field_name,
+         form_u3a = form_name) %>% 
+  mutate(std_source = "field_u3a",
+         std_field = field_u3a)
+```
+
+UDS 3 New fields in `export_fields_u3n_df` but NOT in `trans_dict`
+```{r}
+export_fields_data_dict_u3n_df <-
+  left_join(export_fields_u3n_df, 
+            data_dict_u3n_df[, c("field_name", "form_name")],
+            by = c("original_field_name" = "field_name")) %>% 
+  mutate(form_name = case_when(
+    str_detect(export_field_name, "_complete$") ~ 
+      str_replace(export_field_name, pattern = "_complete$", ""),
+    TRUE ~ form_name
+  ))
+missing_fields_u3n_df <- export_fields_data_dict_u3n_df %>% 
+  filter(!(export_field_name %in% trans_dict_std$field_u3n)) %>% 
+  select(field_u3n = export_field_name, 
+         form_u3n = form_name) %>% 
+  mutate(std_source = "field_u3n",
+         std_field = field_u3n)
+```
+
+Row-bind missing fields to `trans_dict_std`
+```{r}
+trans_dict_std <-
+  bind_rows(trans_dict_std,
+            missing_fields_u2_df,
+            missing_fields_u3a_df,
+            missing_fields_u3n_df)
+```
+
+
 
 ## Build Stitched DF (`df_u2_u3a_u3n`)
 
@@ -569,7 +709,8 @@ df_u2_u3a_u3n <- data.frame(matrix(data = NA_character_,
                                    nrow = sum(nrow(df_u2_ift),
                                               nrow(df_u3a_ift),
                                               nrow(df_u3n)),
-                                   ncol = nrow(trans_dict_std)))
+                                   ncol = nrow(trans_dict_std))) %>% 
+  as_tibble()
 names(df_u2_u3a_u3n) <- trans_dict_std$std_field
 ```
 
@@ -691,14 +832,16 @@ data_dict_fields_u3n_raw <- trans_dict_std %>%
 
 ### UDS 2
 ```{r}
-json_data_dict_u2 <- RCurl::postForm(
-  uri=REDCAP_API_URI,
-  token=REDCAP_API_TOKEN_UDS2,
-  content='metadata',
-  format='json',
-  returnFormat='json',
-  .opts = list(ssl.verifypeer = FALSE) # using linux
-)
+if (GET_API_DATA) {
+  json_data_dict_u2 <- RCurl::postForm(
+    uri=REDCAP_API_URI,
+    token=REDCAP_API_TOKEN_UDS2,
+    content='metadata',
+    format='json',
+    returnFormat='json',
+    .opts = list(ssl.verifypeer = FALSE) # using linux
+  )
+}
 df_data_dict_u2_all <- jsonlite::fromJSON(json_data_dict_u2)
 df_data_dict_u2 <- df_data_dict_u2_all %>% 
   filter(field_name %in% data_dict_fields_u2_raw)
@@ -706,14 +849,16 @@ df_data_dict_u2 <- df_data_dict_u2_all %>%
 
 ### UDS 3 (Archive)
 ```{r}
-json_data_dict_u3a <- RCurl::postForm(
-  uri=REDCAP_API_URI,
-  token=REDCAP_API_TOKEN_UDS3a,
-  content='metadata',
-  format='json',
-  returnFormat='json',
-  .opts = list(ssl.verifypeer = FALSE) # using linux
-)
+if (GET_API_DATA) {
+  json_data_dict_u3a <- RCurl::postForm(
+    uri=REDCAP_API_URI,
+    token=REDCAP_API_TOKEN_UDS3a,
+    content='metadata',
+    format='json',
+    returnFormat='json',
+    .opts = list(ssl.verifypeer = FALSE) # using linux
+  )
+}
 df_data_dict_u3a_all <- jsonlite::fromJSON(json_data_dict_u3a)
 df_data_dict_u3a <- df_data_dict_u3a_all %>% 
   filter(field_name %in% data_dict_fields_u3a_raw)
@@ -721,14 +866,16 @@ df_data_dict_u3a <- df_data_dict_u3a_all %>%
 
 ### UDS 3 (New)
 ```{r}
-json_data_dict_u3n <- RCurl::postForm(
-  uri=REDCAP_API_URI,
-  token=REDCAP_API_TOKEN_UDS3n,
-  content='metadata',
-  format='json',
-  returnFormat='json',
-  .opts = list(ssl.verifypeer = FALSE) # using linux
-)
+if (GET_API_DATA) {
+  json_data_dict_u3n <- RCurl::postForm(
+    uri=REDCAP_API_URI,
+    token=REDCAP_API_TOKEN_UDS3n,
+    content='metadata',
+    format='json',
+    returnFormat='json',
+    .opts = list(ssl.verifypeer = FALSE) # using linux
+  )
+}
 df_data_dict_u3n_all <- jsonlite::fromJSON(json_data_dict_u3n)
 df_data_dict_u3n <- df_data_dict_u3n_all %>% 
   filter(field_name %in% data_dict_fields_u3n_raw)
@@ -749,11 +896,7 @@ df_data_dict_form <- df_data_dict %>%
 
 head(df_data_dict_form) %>% 
   select(field_name, form_name, section_header, field_type, field_label,
-         select_choices_or_calculations, field_note) %>% 
-  kable() %>% 
-  kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
-    font_size = 9)
+         select_choices_or_calculations, field_note) # %>% pretty_print_df()
 
 # head(df_data_dict_field) %>% 
 #   kable() %>% 
