@@ -23,8 +23,6 @@ knitr::opts_chunk$set(echo = TRUE)
 # USEFUL LIBRARIES ----
 suppressMessages( library(dplyr) )
 suppressMessages( library(stringr) )
-suppressMessages( library(knitr) )
-suppressMessages( library(kableExtra) )
 ```
 
 ## Load Useful Variables
@@ -37,7 +35,7 @@ rm(REDCAP_DATA_REQUESTS_TOKEN)
 source("~/Box Sync/Documents/R_helpers/helpers.R")
 
 ## switch to access API (TRUE) or not (FALSE)
-GET_API_DATA <- FALSE
+GET_API_DATA <- TRUE
 ```
 
 ## Load Useful Helper Functions
@@ -52,8 +50,8 @@ remove_NAs <- function(x) {
 
 pretty_print_df <- function(df) {
   df %>% 
-    kable() %>%
-    kable_styling(
+    knitr::kable() %>%
+    kableExtra::kable_styling(
       bootstrap_options = c("striped", "hover", "condensed", "responsive"),
       font_size = 9)
 }
@@ -644,9 +642,8 @@ tail(trans_dict_std) # %>% pretty_print_df()
 ```
 
 Whatever export fields that aren't included in the standardized translation 
-dictionary (`trans_dict_std`) need to be included in this standardized 
-translation dictionary. Otherwise, these fields won't be included in the 
-integrated dataset.
+dictionary (`trans_dict_std`) need to be included. Otherwise, these fields won't
+be included in the integrated dataset.
 
 UDS 2 fields in `export_fields_u2_df` but NOT in `trans_dict`
 ```{r}
@@ -655,8 +652,8 @@ export_fields_data_dict_u2_df <-
             data_dict_u2_df[, c("field_name", "form_name")],
             by = c("original_field_name" = "field_name")) %>% 
   mutate(form_name = case_when(
-    str_detect(export_field_name, "_complete$") ~ 
-      str_replace(export_field_name, pattern = "_complete$", ""),
+    str_detect(export_field_name, "(?<!not)_complete$") ~ # negative lookbehind
+      str_replace(export_field_name, pattern = "(?<!not)_complete$", ""),
     TRUE ~ form_name
   ))
 missing_fields_u2_df <- export_fields_data_dict_u2_df %>% 
@@ -674,8 +671,8 @@ export_fields_data_dict_u3a_df <-
             data_dict_u3a_df[, c("field_name", "form_name")],
             by = c("original_field_name" = "field_name")) %>% 
   mutate(form_name = case_when(
-    str_detect(export_field_name, "_complete$") ~ 
-      str_replace(export_field_name, pattern = "_complete$", ""),
+    str_detect(export_field_name, "(?<!not)_complete$") ~ # negative lookbehind
+      str_replace(export_field_name, pattern = "(?<!not)_complete$", ""),
     TRUE ~ form_name
   ))
 missing_fields_u3a_df <- export_fields_data_dict_u3a_df %>% 
@@ -693,8 +690,8 @@ export_fields_data_dict_u3n_df <-
             data_dict_u3n_df[, c("field_name", "form_name")],
             by = c("original_field_name" = "field_name")) %>% 
   mutate(form_name = case_when(
-    str_detect(export_field_name, "_complete$") ~ 
-      str_replace(export_field_name, pattern = "_complete$", ""),
+    str_detect(export_field_name, "(?<!not)_complete$") ~ # negative lookbehind
+      str_replace(export_field_name, pattern = "(?<!not)_complete$", ""),
     TRUE ~ form_name
   ))
 missing_fields_u3n_df <- export_fields_data_dict_u3n_df %>% 
@@ -714,6 +711,206 @@ trans_dict_std <-
             missing_fields_u3n_df)
 ```
 
+Group by forms/instruments.
+```{r}
+trans_dict_std <- trans_dict_std %>%
+  mutate(std_form = case_when(
+    # header + a1
+    form_u3n == "header" |
+      form_u3n == "ivp_a1" | form_u3n == "fvp_a1" | form_u3n == "tvp_a1" |
+      form_u3a == "registration_form" |
+      form_u3a == "form_a1_participant_demographics" |
+      form_u2 == "registration_form" |
+      form_u2 == "demographic_data" |
+      form_u2 == "form_a1_subject_demographics" ~ "header_a1",
+    # a2
+    form_u3n == "ivp_a2" | form_u3n == "fvp_a2" | form_u3n == "tvp_a2" | 
+      form_u3a == "form_a2_informant_demographics" |
+      form_u2 == "form_a2_informant_demographics" ~ "a2",
+    # a3
+    form_u3n == "ivp_a3" | form_u3n == "fvp_a3" | form_u3n == "tvp_a3" | 
+      form_u3a == "form_a3_subject_family_history" |
+      form_u2 == "form_a3_subject_family_history" ~ "a3",
+    # a4
+    form_u3n == "ivp_a4" | form_u3n == "fvp_a4" | form_u3n == "tvp_a4" | 
+      form_u3a == "form_a4_subject_medications" |
+      form_u2 == "form_a4_subject_medications" ~ "a4",
+    # a5
+    form_u3n == "ivp_a5" | form_u3n == "fvp_a5" | form_u3n == "tvp_a5" | 
+      form_u3a == "form_a5_subject_health_history" |
+      form_u2 == "form_a5_subject_health_history" ~ "a5",
+    # b1
+    form_u3n == "ivp_b1" | form_u3n == "fvp_b1" | form_u3n == "tvp_b1" | 
+      form_u3a == "form_b1_evaluation_form" |
+      form_u2 == "form_b1_evaluation_form" ~ "b1",
+    # b2
+    form_u2 == "form_b2_evaluation_form_his_and_cvd" ~ "b2",
+    # b3
+    form_u2 == "form_b3_evaluation_form_updrs_motor_exam" ~ "b3",
+    # b4
+    form_u3n == "ivp_b4" | form_u3n == "fvp_b4" | form_u3n == "tvp_b4" | 
+      form_u3a == "form_b4_cdr" |
+      form_u2 == "form_b4_cdr" ~ "b4",
+    # b5
+    form_u3n == "ivp_b5" | form_u3n == "fvp_b5" | form_u3n == "tvp_b5" | 
+      form_u3a == "form_b5_behavioral_assessment_npiq" |
+      form_u2 == "form_b5_behavioral_assessment_npi_q" ~ "b5",
+    # b6
+    form_u3n == "ivp_b6" | form_u3n == "fvp_b6" | form_u3n == "tvp_b6" | 
+      form_u3a == "form_b6_gds" |
+      form_u2 == "form_b6_gds" ~ "b6",
+    # b7
+    form_u3n == "ivp_b7" | form_u3n == "fvp_b7" | form_u3n == "tvp_b7" | 
+      form_u3a == "form_b7_functional_assessment_faq" |
+      form_u2 == "form_b7_functional_assessment_faq" ~ "b7",
+    # b8
+    form_u3n == "ivp_b8" | form_u3n == "fvp_b8" | form_u3n == "tvp_b8" | 
+      form_u3a == "form_b8_physical_neurological_exam_findings" |
+      form_u2 == "form_b8_physical_neurological_exam_findings" ~ "b8",
+    # b9
+    form_u3n == "ivp_b9" | form_u3n == "fvp_b9" | form_u3n == "tvp_b9" | 
+      form_u3a == "form_b9_clinician_judgment_of_symptoms" |
+      form_u2 == "form_b9_clinician_judgment_of_symptoms" ~ "b9",
+    # c1c2
+    form_u3n == "ivp_c2" | form_u3n == "fvp_c2" | form_u3n == "tvp_c2" | 
+      form_u3n == "fvp_c1" |
+      form_u3n == "form_c1_c2_mmse_and_npsych" |
+      form_u3a == "form_c1_c2_mmse_and_npsych" |
+      form_u2 == "form_c1_mmse_and_npsych" ~ "c1c2",
+    # d1
+    form_u3n == "ivp_d1" | form_u3n == "fvp_d1" | form_u3n == "tvp_d1" | 
+      form_u3a == "form_d1_clinician_diagnosis" |
+      form_u2 == "form_d1_clinician_diagnosis" ~ "d1",
+    # d2
+    form_u3n == "ivp_d2" | form_u3n == "fvp_d2" | form_u3n == "tvp_d2" | 
+      form_u3a == "form_d2_clinician_diagnosis" ~ "d2",
+    # e1
+    form_u2 == "form_e1_imaging_labs" ~ "e1",
+    # z1
+    form_u3n == "ivp_z1" | form_u3n == "fvp_z1" | form_u3n == "tvp_z1" | 
+      form_u3a == "form_z1_checklist" |
+      form_u2 == "form_z1_checklist" ~ "z1",
+    # m1
+    form_u3n == "m1" |
+      form_u3a == "form_milestones" |
+      form_u2 == "form_milestones" ~ "m1",
+    # caregiver
+    form_u3n == "caregiver_questionnaire" |
+      form_u3a == "caregiver_questionnaire" |
+      form_u2 == "caregiver_questionnaire" ~ "caregiver",
+    # macq
+    form_u3n == "mac_q" |
+      form_u3a == "macq_patient"  ~ "macq",
+    # adco
+    form_u3n == "adco" |
+      form_u3a == "adco" |
+      form_u2 == "adco" ~ "adco",
+    # lsns6
+    form_u3n == "lsns6" |
+      form_u3a == "lsns6" |
+      form_u2 == "lsns6" ~ "lsns6",
+    # stroop
+    form_u3a == "stroop" |
+      form_u2 == "stroop" ~ "stroop",
+    # wrat3
+    form_u3a == "wrat_3" |
+      form_u2 == "wrat_3" ~ "wrat3",
+    # toolbox
+    form_u3n == "tool_box" |
+      form_u3a == "tool_box" |
+      form_u2 == "tool_box" ~ "toolbox",
+    # cogstate
+    form_u3n == "cogstate" |
+      form_u3a == "cogstate" |
+      form_u2 == "cogstate" ~ "cogstate",
+    # ipad_toolbox
+    form_u3n == "ipad_tool_box" ~ "ipad_toolbox",
+    # t1
+    form_u2 == "form_t1_inclusion" |
+      form_u3n == "tvp_t1" ~ "t1",
+    # ftld_initial_packet_v9
+    form_u3a == "ftld_initial_packet_v9" ~ "ftld_initial_packet_v9",
+    # ftld_a3a
+    form_u3n == "ftld_a3a" ~ "ftld_a3a",
+    # ftld_b3f
+    form_u3n == "ftld_b3f" ~ "ftld_b3f",
+    # ftld_b9f
+    form_u3n == "ftld_b9f" ~ "ftld_b9f",
+    # ftld_c1f
+    form_u3n == "ftld_c1f" ~ "ftld_c1f",
+    # ftld_c2f
+    form_u3n == "ftld_c2f" ~ "ftld_c2f",
+    # ftld_c3f
+    form_u3n == "ftld_c3f" ~ "ftld_c3f",
+    # ftld_c4f
+    form_u3n == "ftld_c4f" ~ "ftld_c4f",
+    # ftld_c5f
+    form_u3n == "ftld_c5f" ~ "ftld_c5f",
+    # ftld_c6f
+    form_u3n == "ftld_c6f" ~ "ftld_c6f",
+    # ftld_e2f
+    form_u3n == "ftld_e2f" ~ "ftld_e2f",
+    # ftld_e3f
+    form_u3n == "ftld_e3f" ~ "ftld_e3f",
+    # ftld_z1f
+    form_u3n == "ftld_z1f" ~ "ftld_z1f",
+    # jolo
+    form_u3n == "jolo" ~ "jolo",
+    # hvlt
+    form_u3n == "hvlt" ~ "hvlt",
+    # emory_wcst
+    form_u3n == "emory_wcst" ~ "emory_wcst",
+    # wtar
+    form_u3n == "wtar" ~ "wtar",
+    # cowa_cfl
+    form_u3n == "cowa_cfl" ~ "cowa_cfl",
+    # fdmse
+    form_u3n == "financial_decision_making_self_efficacy_form" ~ "fdmse",
+    # lfdss
+    form_u3n == "lfdss_for_professionals" ~ "lfdss",
+    # oltt
+    form_u3n == "oltt" ~ "oltt",
+    # hol
+    form_u3n == "hol_questionnaire" ~ "hol",
+    # behav_obs
+    form_u3n == "behavioral_observations" ~ "behav_obs",
+    # b1l
+    form_u3n == "ivp_b1l" ~ "b1l",
+    # b2l
+    form_u3n == "ivp_b2l" ~ "b2l",
+    # b3l
+    form_u3n == "b3l" ~ "b3l",
+    # b4l
+    form_u3n == "ivp_b4l" ~ "b4l",
+    # b5l
+    form_u3n == "iv_b5l" ~ "b5l",
+    # b6l
+    form_u3n == "iv_b6l" ~ "b6l",
+    # b7l
+    form_u3n == "ivp_bl7" ~ "b7l",
+    # b8l
+    form_u3n == "iv_bl8" ~ "b8l",
+    # b9l
+    form_u3n == "iv_b9l" ~ "b9l",
+    # c1l
+    form_u3n == "c1l" ~ "c1l",
+    # d1l
+    form_u3n == "d1l" ~ "d1l",
+    # e1l
+    form_u3n == "ivp_e1l" ~ "e1l",
+    # e2l
+    form_u3n == "ivp_e2l" ~ "e2l",
+    # e3l
+    form_u3n == "ivp_e3l" ~ "e3l",
+    # ffi
+    form_u3n == "family_friends_interview_ffi" ~ "ffi"
+  ))
+```
+
+Write `trans_dict_std` to file.
+```{r}
+readr::write_csv(trans_dict_std, "STD__translation_dictionary.csv", na = "")
+```
 
 
 ## Build Stitched DF (`df_u2_u3a_u3n`)
@@ -806,14 +1003,65 @@ df_u2_u3a_u3n <- suppressMessages( readr::type_convert(df_u2_u3a_u3n) )
 print(object.size(df_u2_u3a_u3n), units = "auto")
 ```
 
-## Write Harmonized Data To CSV
+## Write Harmonized Data To File
 
-Write the resulting harmonized dataset `df_u2_u3a_u3n` to a CSV file of the same
-name.
+Write the resulting harmonized dataset `df_u2_u3a_u3n` to a CSV and RDS files of
+the same name.
+
+(First check that there's a dated directory in place.)
+
+```{r}
+system(paste0("if [[ ! -d \"./MDI Data/", Sys.Date(), "\" ]]; then mkdir \"./MDI Data/", Sys.Date(), "\" ; fi;"))
+```
 
 ```{r}
 # WRITE TO CSV ----
-readr::write_csv(df_u2_u3a_u3n, "df_u2_u3a_u3n.csv", na = "")
+readr::write_csv(df_u2_u3a_u3n, 
+                 paste0("MDI Data/", Sys.Date(), "/df_u2_u3a_u3n.csv"), 
+                 na = "")
+```
+
+```{r}
+# WRITE TO RDS ---
+saveRDS(df_u2_u3a_u3n, 
+        paste0("MDI Data/", Sys.Date(), "/df_u2_u3a_u3n.Rds"))
+```
+
+
+# Parse Stitched Data by "Standard" Form
+
+```{r}
+std_forms <- 
+  trans_dict_std %>% 
+  distinct(std_form) %>% 
+  pull() %>% 
+  stringi::stri_remove_empty_na()
+
+ls_dfs_u2_u3a_u3n <- list()
+
+for (sd in std_forms) {
+  cat(paste0("Processing ", sd, "...\n"))
+  
+  fields_primkey <- c("ptid", "form_date")
+  fields_rlvnt <-
+    trans_dict_std %>% 
+    filter(std_form == sd) %>% 
+    pull(std_field)
+  fields_tmp <- c(fields_primkey, fields_rlvnt) %>% unique()
+  
+  ls_dfs_u2_u3a_u3n[[sd]] <- 
+    df_u2_u3a_u3n %>% 
+    select(fields_tmp) %>% 
+    get_nonempty_records(relevant_fields = fields_rlvnt) %>%
+    get_nonempty_fields()
+}
+```
+
+## Write `ls_dfs_u2_u3a_u3n` to File
+
+```{r}
+saveRDS(ls_dfs_u2_u3a_u3n, 
+        paste0("MDI Data/", Sys.Date(), "/ls_dfs_u2_u3a_u3n.Rds"))
 ```
 
 
@@ -918,11 +1166,7 @@ head(df_data_dict_form) %>%
   select(field_name, form_name, section_header, field_type, field_label,
          select_choices_or_calculations, field_note) # %>% pretty_print_df()
 
-# head(df_data_dict_field) %>% 
-#   kable() %>% 
-#   kable_styling(
-#     bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
-#     font_size = 9)
+# head(df_data_dict_field) # %>% pretty_print_df()
 ```
 
 ## Write Harmonized Unified Data Dictionary To CSV

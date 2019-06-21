@@ -1630,10 +1630,10 @@ div.tocify {
 <div id="load-useful-variables" class="section level2">
 <h2>Load Useful Variables</h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># USEFUL VARS ----</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">source</span>(<span class="st">'~/Box Sync/Documents/R_helpers/config.R'</span>)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">source</span>(<span class="st">&quot;~/Box Sync/Documents/R_helpers/config.R&quot;</span>)</a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">rm</span>(BOX_CLIENT_ID); <span class="kw">rm</span>(BOX_CLIENT_SECRET); <span class="kw">rm</span>(BOX_REDIRECT_URI)</a>
 <a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">rm</span>(REDCAP_DATA_REQUESTS_TOKEN)</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw">source</span>(<span class="st">'~/Box Sync/Documents/R_helpers/helpers.R'</span>)</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw">source</span>(<span class="st">&quot;~/Box Sync/Documents/R_helpers/helpers.R&quot;</span>)</a>
 <a class="sourceLine" id="cb2-6" data-line-number="6"></a>
 <a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">## switch to access API (TRUE) or not (FALSE)</span></a>
 <a class="sourceLine" id="cb2-8" data-line-number="8">GET_API_DATA &lt;-<span class="st"> </span><span class="ot">TRUE</span></a></code></pre></div>
@@ -1643,7 +1643,7 @@ div.tocify {
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># USEFUL HELPER FUNCTIONS ----</span></a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">remove_NAs &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.vector</span>(x)) { <span class="kw">stop</span>(<span class="st">'x is not a vector'</span>) }</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.vector</span>(x)) { <span class="kw">stop</span>(<span class="st">&quot;x is not a vector&quot;</span>) }</a>
 <a class="sourceLine" id="cb3-5" data-line-number="5">  x[<span class="op">!</span><span class="kw">is.na</span>(x)]</a>
 <a class="sourceLine" id="cb3-6" data-line-number="6">}</a>
 <a class="sourceLine" id="cb3-7" data-line-number="7"></a>
@@ -1667,15 +1667,15 @@ div.tocify {
 <a class="sourceLine" id="cb4-3" data-line-number="3">  export_fields_u2_json &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(</a>
 <a class="sourceLine" id="cb4-4" data-line-number="4">    <span class="dt">uri=</span>REDCAP_API_URI,</a>
 <a class="sourceLine" id="cb4-5" data-line-number="5">    <span class="dt">token=</span>REDCAP_API_TOKEN_UDS2,</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">    <span class="dt">content=</span><span class="st">'exportFieldNames'</span>,</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">    <span class="dt">format=</span><span class="st">'json'</span>,</a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">    <span class="dt">returnFormat=</span><span class="st">'json'</span>,</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">    <span class="dt">content=</span><span class="st">&quot;exportFieldNames&quot;</span>,</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">    <span class="dt">format=</span><span class="st">&quot;json&quot;</span>,</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">    <span class="dt">returnFormat=</span><span class="st">&quot;json&quot;</span>,</a>
 <a class="sourceLine" id="cb4-9" data-line-number="9">    <span class="dt">.opts =</span> <span class="kw">list</span>(<span class="dt">ssl.verifypeer =</span> <span class="ot">FALSE</span>) <span class="co"># using linux</span></a>
 <a class="sourceLine" id="cb4-10" data-line-number="10">  )</a>
 <a class="sourceLine" id="cb4-11" data-line-number="11">}</a>
 <a class="sourceLine" id="cb4-12" data-line-number="12">export_fields_u2_df &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(export_fields_u2_json) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb4-13" data-line-number="13"><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">''</span>)</a>
+<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb4-15" data-line-number="15">readr<span class="op">::</span><span class="kw">write_csv</span>(export_fields_u2_df, </a>
 <a class="sourceLine" id="cb4-16" data-line-number="16">                 <span class="st">&quot;Export Fields/export_fields_u2_df.csv&quot;</span>, <span class="dt">na =</span> <span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb4-17" data-line-number="17"><span class="kw">head</span>(export_fields_u2_df) <span class="co"># %&gt;% pretty_print_df()</span></a></code></pre></div>
@@ -1696,15 +1696,15 @@ div.tocify {
 <a class="sourceLine" id="cb6-3" data-line-number="3">  export_fields_u3a_json &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(</a>
 <a class="sourceLine" id="cb6-4" data-line-number="4">    <span class="dt">uri=</span>REDCAP_API_URI,</a>
 <a class="sourceLine" id="cb6-5" data-line-number="5">    <span class="dt">token=</span>REDCAP_API_TOKEN_UDS3a,</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">    <span class="dt">content=</span><span class="st">'exportFieldNames'</span>,</a>
-<a class="sourceLine" id="cb6-7" data-line-number="7">    <span class="dt">format=</span><span class="st">'json'</span>,</a>
-<a class="sourceLine" id="cb6-8" data-line-number="8">    <span class="dt">returnFormat=</span><span class="st">'json'</span>,</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">    <span class="dt">content=</span><span class="st">&quot;exportFieldNames&quot;</span>,</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">    <span class="dt">format=</span><span class="st">&quot;json&quot;</span>,</a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">    <span class="dt">returnFormat=</span><span class="st">&quot;json&quot;</span>,</a>
 <a class="sourceLine" id="cb6-9" data-line-number="9">    <span class="dt">.opts =</span> <span class="kw">list</span>(<span class="dt">ssl.verifypeer =</span> <span class="ot">FALSE</span>) <span class="co"># using linux</span></a>
 <a class="sourceLine" id="cb6-10" data-line-number="10">  )</a>
 <a class="sourceLine" id="cb6-11" data-line-number="11">}</a>
 <a class="sourceLine" id="cb6-12" data-line-number="12">export_fields_u3a_df &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(export_fields_u3a_json) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb6-13" data-line-number="13"><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">''</span>)</a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb6-15" data-line-number="15">readr<span class="op">::</span><span class="kw">write_csv</span>(export_fields_u3a_df, </a>
 <a class="sourceLine" id="cb6-16" data-line-number="16">                 <span class="st">&quot;Export Fields/export_fields_u3a_df.csv&quot;</span>, <span class="dt">na =</span> <span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb6-17" data-line-number="17"><span class="kw">head</span>(export_fields_u3a_df) <span class="co"># %&gt;% pretty_print_df()</span></a></code></pre></div>
@@ -1725,15 +1725,15 @@ div.tocify {
 <a class="sourceLine" id="cb8-3" data-line-number="3">  export_fields_u3n_json &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(</a>
 <a class="sourceLine" id="cb8-4" data-line-number="4">    <span class="dt">uri=</span>REDCAP_API_URI,</a>
 <a class="sourceLine" id="cb8-5" data-line-number="5">    <span class="dt">token=</span>REDCAP_API_TOKEN_UDS3n,</a>
-<a class="sourceLine" id="cb8-6" data-line-number="6">    <span class="dt">content=</span><span class="st">'exportFieldNames'</span>,</a>
-<a class="sourceLine" id="cb8-7" data-line-number="7">    <span class="dt">format=</span><span class="st">'json'</span>,</a>
-<a class="sourceLine" id="cb8-8" data-line-number="8">    <span class="dt">returnFormat=</span><span class="st">'json'</span>,</a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">    <span class="dt">content=</span><span class="st">&quot;exportFieldNames&quot;</span>,</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">    <span class="dt">format=</span><span class="st">&quot;json&quot;</span>,</a>
+<a class="sourceLine" id="cb8-8" data-line-number="8">    <span class="dt">returnFormat=</span><span class="st">&quot;json&quot;</span>,</a>
 <a class="sourceLine" id="cb8-9" data-line-number="9">    <span class="dt">.opts =</span> <span class="kw">list</span>(<span class="dt">ssl.verifypeer =</span> <span class="ot">FALSE</span>) <span class="co"># using linux</span></a>
 <a class="sourceLine" id="cb8-10" data-line-number="10">  )</a>
 <a class="sourceLine" id="cb8-11" data-line-number="11">}</a>
 <a class="sourceLine" id="cb8-12" data-line-number="12">export_fields_u3n_df &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(export_fields_u3n_json) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb8-13" data-line-number="13"><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">''</span>)</a>
+<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb8-15" data-line-number="15">readr<span class="op">::</span><span class="kw">write_csv</span>(export_fields_u3n_df, </a>
 <a class="sourceLine" id="cb8-16" data-line-number="16">                 <span class="st">&quot;Export Fields/export_fields_u3n_df.csv&quot;</span>, <span class="dt">na =</span> <span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb8-17" data-line-number="17"><span class="kw">head</span>(export_fields_u3n_df) <span class="co"># %&gt;% pretty_print_df()</span></a></code></pre></div>
@@ -1754,15 +1754,15 @@ div.tocify {
 <a class="sourceLine" id="cb10-3" data-line-number="3">  export_fields_ms_json &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(</a>
 <a class="sourceLine" id="cb10-4" data-line-number="4">    <span class="dt">uri=</span>REDCAP_API_URI,</a>
 <a class="sourceLine" id="cb10-5" data-line-number="5">    <span class="dt">token=</span>REDCAP_API_TOKEN_MINDSET,</a>
-<a class="sourceLine" id="cb10-6" data-line-number="6">    <span class="dt">content=</span><span class="st">'exportFieldNames'</span>,</a>
-<a class="sourceLine" id="cb10-7" data-line-number="7">    <span class="dt">format=</span><span class="st">'json'</span>,</a>
-<a class="sourceLine" id="cb10-8" data-line-number="8">    <span class="dt">returnFormat=</span><span class="st">'json'</span>,</a>
+<a class="sourceLine" id="cb10-6" data-line-number="6">    <span class="dt">content=</span><span class="st">&quot;exportFieldNames&quot;</span>,</a>
+<a class="sourceLine" id="cb10-7" data-line-number="7">    <span class="dt">format=</span><span class="st">&quot;json&quot;</span>,</a>
+<a class="sourceLine" id="cb10-8" data-line-number="8">    <span class="dt">returnFormat=</span><span class="st">&quot;json&quot;</span>,</a>
 <a class="sourceLine" id="cb10-9" data-line-number="9">    <span class="dt">.opts =</span> <span class="kw">list</span>(<span class="dt">ssl.verifypeer =</span> <span class="ot">FALSE</span>) <span class="co"># using linux</span></a>
 <a class="sourceLine" id="cb10-10" data-line-number="10">  )</a>
 <a class="sourceLine" id="cb10-11" data-line-number="11">}</a>
 <a class="sourceLine" id="cb10-12" data-line-number="12">export_fields_ms_df &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(export_fields_ms_json) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb10-13" data-line-number="13"><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">''</span>)</a>
+<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb10-15" data-line-number="15">readr<span class="op">::</span><span class="kw">write_csv</span>(export_fields_ms_df,</a>
 <a class="sourceLine" id="cb10-16" data-line-number="16">                 <span class="st">&quot;Export Fields/export_fields_ms_df.csv&quot;</span>, <span class="dt">na =</span> <span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb10-17" data-line-number="17"><span class="kw">head</span>(export_fields_ms_df) <span class="co"># %&gt;% pretty_print_df()</span></a></code></pre></div>
@@ -1786,15 +1786,15 @@ div.tocify {
 <a class="sourceLine" id="cb12-3" data-line-number="3">  data_dict_u2_json &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(</a>
 <a class="sourceLine" id="cb12-4" data-line-number="4">    <span class="dt">uri=</span>REDCAP_API_URI,</a>
 <a class="sourceLine" id="cb12-5" data-line-number="5">    <span class="dt">token=</span>REDCAP_API_TOKEN_UDS2,</a>
-<a class="sourceLine" id="cb12-6" data-line-number="6">    <span class="dt">content=</span><span class="st">'metadata'</span>,</a>
-<a class="sourceLine" id="cb12-7" data-line-number="7">    <span class="dt">format=</span><span class="st">'json'</span>,</a>
-<a class="sourceLine" id="cb12-8" data-line-number="8">    <span class="dt">returnFormat=</span><span class="st">'json'</span>,</a>
+<a class="sourceLine" id="cb12-6" data-line-number="6">    <span class="dt">content=</span><span class="st">&quot;metadata&quot;</span>,</a>
+<a class="sourceLine" id="cb12-7" data-line-number="7">    <span class="dt">format=</span><span class="st">&quot;json&quot;</span>,</a>
+<a class="sourceLine" id="cb12-8" data-line-number="8">    <span class="dt">returnFormat=</span><span class="st">&quot;json&quot;</span>,</a>
 <a class="sourceLine" id="cb12-9" data-line-number="9">    <span class="dt">.opts =</span> <span class="kw">list</span>(<span class="dt">ssl.verifypeer =</span> <span class="ot">FALSE</span>) <span class="co"># using linux</span></a>
 <a class="sourceLine" id="cb12-10" data-line-number="10">  )</a>
 <a class="sourceLine" id="cb12-11" data-line-number="11">}</a>
 <a class="sourceLine" id="cb12-12" data-line-number="12">data_dict_u2_df &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(data_dict_u2_json) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb12-13" data-line-number="13"><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb12-14" data-line-number="14"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">''</span>)</a>
+<a class="sourceLine" id="cb12-14" data-line-number="14"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb12-15" data-line-number="15">readr<span class="op">::</span><span class="kw">write_csv</span>(data_dict_u2_df, </a>
 <a class="sourceLine" id="cb12-16" data-line-number="16">                 <span class="st">&quot;Data Dictionaries/data_dict_u2_df.csv&quot;</span>, <span class="dt">na =</span> <span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb12-17" data-line-number="17"><span class="kw">head</span>(data_dict_u2_df) <span class="co"># %&gt;% pretty_print_df()</span></a></code></pre></div>
@@ -1821,15 +1821,15 @@ div.tocify {
 <a class="sourceLine" id="cb14-3" data-line-number="3">  data_dict_u3a_json &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(</a>
 <a class="sourceLine" id="cb14-4" data-line-number="4">    <span class="dt">uri=</span>REDCAP_API_URI,</a>
 <a class="sourceLine" id="cb14-5" data-line-number="5">    <span class="dt">token=</span>REDCAP_API_TOKEN_UDS3a,</a>
-<a class="sourceLine" id="cb14-6" data-line-number="6">    <span class="dt">content=</span><span class="st">'metadata'</span>,</a>
-<a class="sourceLine" id="cb14-7" data-line-number="7">    <span class="dt">format=</span><span class="st">'json'</span>,</a>
-<a class="sourceLine" id="cb14-8" data-line-number="8">    <span class="dt">returnFormat=</span><span class="st">'json'</span>,</a>
+<a class="sourceLine" id="cb14-6" data-line-number="6">    <span class="dt">content=</span><span class="st">&quot;metadata&quot;</span>,</a>
+<a class="sourceLine" id="cb14-7" data-line-number="7">    <span class="dt">format=</span><span class="st">&quot;json&quot;</span>,</a>
+<a class="sourceLine" id="cb14-8" data-line-number="8">    <span class="dt">returnFormat=</span><span class="st">&quot;json&quot;</span>,</a>
 <a class="sourceLine" id="cb14-9" data-line-number="9">    <span class="dt">.opts =</span> <span class="kw">list</span>(<span class="dt">ssl.verifypeer =</span> <span class="ot">FALSE</span>) <span class="co"># using linux</span></a>
 <a class="sourceLine" id="cb14-10" data-line-number="10">  )</a>
 <a class="sourceLine" id="cb14-11" data-line-number="11">}</a>
 <a class="sourceLine" id="cb14-12" data-line-number="12">data_dict_u3a_df &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(data_dict_u3a_json) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb14-13" data-line-number="13"><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb14-14" data-line-number="14"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">''</span>)</a>
+<a class="sourceLine" id="cb14-14" data-line-number="14"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb14-15" data-line-number="15">readr<span class="op">::</span><span class="kw">write_csv</span>(data_dict_u3a_df, </a>
 <a class="sourceLine" id="cb14-16" data-line-number="16">                 <span class="st">&quot;Data Dictionaries/data_dict_u3a_df.csv&quot;</span>, <span class="dt">na =</span> <span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb14-17" data-line-number="17"><span class="kw">head</span>(data_dict_u3a_df) <span class="co"># %&gt;% pretty_print_df()</span></a></code></pre></div>
@@ -1856,15 +1856,15 @@ div.tocify {
 <a class="sourceLine" id="cb16-3" data-line-number="3">  data_dict_u3n_json &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(</a>
 <a class="sourceLine" id="cb16-4" data-line-number="4">    <span class="dt">uri=</span>REDCAP_API_URI,</a>
 <a class="sourceLine" id="cb16-5" data-line-number="5">    <span class="dt">token=</span>REDCAP_API_TOKEN_UDS3n,</a>
-<a class="sourceLine" id="cb16-6" data-line-number="6">    <span class="dt">content=</span><span class="st">'metadata'</span>,</a>
-<a class="sourceLine" id="cb16-7" data-line-number="7">    <span class="dt">format=</span><span class="st">'json'</span>,</a>
-<a class="sourceLine" id="cb16-8" data-line-number="8">    <span class="dt">returnFormat=</span><span class="st">'json'</span>,</a>
+<a class="sourceLine" id="cb16-6" data-line-number="6">    <span class="dt">content=</span><span class="st">&quot;metadata&quot;</span>,</a>
+<a class="sourceLine" id="cb16-7" data-line-number="7">    <span class="dt">format=</span><span class="st">&quot;json&quot;</span>,</a>
+<a class="sourceLine" id="cb16-8" data-line-number="8">    <span class="dt">returnFormat=</span><span class="st">&quot;json&quot;</span>,</a>
 <a class="sourceLine" id="cb16-9" data-line-number="9">    <span class="dt">.opts =</span> <span class="kw">list</span>(<span class="dt">ssl.verifypeer =</span> <span class="ot">FALSE</span>) <span class="co"># using linux</span></a>
 <a class="sourceLine" id="cb16-10" data-line-number="10">  )</a>
 <a class="sourceLine" id="cb16-11" data-line-number="11">}</a>
 <a class="sourceLine" id="cb16-12" data-line-number="12">data_dict_u3n_df &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(data_dict_u3n_json) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb16-13" data-line-number="13"><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb16-14" data-line-number="14"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">''</span>)</a>
+<a class="sourceLine" id="cb16-14" data-line-number="14"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb16-15" data-line-number="15">readr<span class="op">::</span><span class="kw">write_csv</span>(data_dict_u3n_df, </a>
 <a class="sourceLine" id="cb16-16" data-line-number="16">                 <span class="st">&quot;Data Dictionaries/data_dict_u3n_df.csv&quot;</span>, <span class="dt">na =</span> <span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb16-17" data-line-number="17"><span class="kw">head</span>(data_dict_u3n_df) <span class="co"># %&gt;% pretty_print_df()</span></a></code></pre></div>
@@ -1891,15 +1891,15 @@ div.tocify {
 <a class="sourceLine" id="cb18-3" data-line-number="3">  data_dict_ms_json &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(</a>
 <a class="sourceLine" id="cb18-4" data-line-number="4">    <span class="dt">uri=</span>REDCAP_API_URI,</a>
 <a class="sourceLine" id="cb18-5" data-line-number="5">    <span class="dt">token=</span>REDCAP_API_TOKEN_MINDSET,</a>
-<a class="sourceLine" id="cb18-6" data-line-number="6">    <span class="dt">content=</span><span class="st">'metadata'</span>,</a>
-<a class="sourceLine" id="cb18-7" data-line-number="7">    <span class="dt">format=</span><span class="st">'json'</span>,</a>
-<a class="sourceLine" id="cb18-8" data-line-number="8">    <span class="dt">returnFormat=</span><span class="st">'json'</span>,</a>
+<a class="sourceLine" id="cb18-6" data-line-number="6">    <span class="dt">content=</span><span class="st">&quot;metadata&quot;</span>,</a>
+<a class="sourceLine" id="cb18-7" data-line-number="7">    <span class="dt">format=</span><span class="st">&quot;json&quot;</span>,</a>
+<a class="sourceLine" id="cb18-8" data-line-number="8">    <span class="dt">returnFormat=</span><span class="st">&quot;json&quot;</span>,</a>
 <a class="sourceLine" id="cb18-9" data-line-number="9">    <span class="dt">.opts =</span> <span class="kw">list</span>(<span class="dt">ssl.verifypeer =</span> <span class="ot">FALSE</span>) <span class="co"># using linux</span></a>
 <a class="sourceLine" id="cb18-10" data-line-number="10">  )</a>
 <a class="sourceLine" id="cb18-11" data-line-number="11">}</a>
 <a class="sourceLine" id="cb18-12" data-line-number="12">data_dict_ms_df &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(data_dict_ms_json) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb18-13" data-line-number="13"><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb18-14" data-line-number="14"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">''</span>)</a>
+<a class="sourceLine" id="cb18-14" data-line-number="14"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb18-15" data-line-number="15">readr<span class="op">::</span><span class="kw">write_csv</span>(data_dict_ms_df, </a>
 <a class="sourceLine" id="cb18-16" data-line-number="16">                 <span class="st">&quot;Data Dictionaries/data_dict_ms_df.csv&quot;</span>, <span class="dt">na =</span> <span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb18-17" data-line-number="17"><span class="kw">head</span>(data_dict_ms_df) <span class="co"># %&gt;% pretty_print_df()</span></a></code></pre></div>
@@ -1924,7 +1924,7 @@ div.tocify {
 <h2>Get Human-Resolved Fields</h2>
 <p>Because there are asystematic mismatches between the three UDS datsets that MADC has stored in REDCap, there are two XLSX files that require human creation/maintenance. Loading and processing the data in the files makes it possible to resolve field name mismatches in order to harmonize and unify the data.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># _ Get work-in-progress translation dictionary ----</span></a>
-<a class="sourceLine" id="cb20-2" data-line-number="2">trans_dict &lt;-<span class="st"> </span>readxl<span class="op">::</span><span class="kw">read_excel</span>(<span class="st">'WIP__translation_dictionary.xlsx'</span>)</a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">trans_dict &lt;-<span class="st"> </span>readxl<span class="op">::</span><span class="kw">read_excel</span>(<span class="st">&quot;WIP__translation_dictionary.xlsx&quot;</span>)</a>
 <a class="sourceLine" id="cb20-3" data-line-number="3"><span class="kw">head</span>(trans_dict) <span class="co"># %&gt;% pretty_print_df()</span></a></code></pre></div>
 <pre><code>## # A tibble: 6 x 9
 ##   field_u2 form_u2 field_u3a form_u3a field_u3n form_u3n Accounted_For
@@ -1937,7 +1937,7 @@ div.tocify {
 ## 6 cues_id  regist… &lt;NA&gt;      &lt;NA&gt;     cues_id   header   Yes          
 ## # … with 2 more variables: Flag &lt;chr&gt;, Notes &lt;chr&gt;</code></pre>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co"># _ Get work-in-progress UDS3 ivp-fvp-tvp matches ----</span></a>
-<a class="sourceLine" id="cb22-2" data-line-number="2">u3n_ift_match &lt;-<span class="st"> </span>readxl<span class="op">::</span><span class="kw">read_excel</span>(<span class="st">'WIP__uds3_ift_matches.xlsx'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb22-2" data-line-number="2">u3n_ift_match &lt;-<span class="st"> </span>readxl<span class="op">::</span><span class="kw">read_excel</span>(<span class="st">&quot;WIP__uds3_ift_matches.xlsx&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb22-3" data-line-number="3"><span class="st">  </span><span class="kw">select</span>(field_ivp, form_ivp, </a>
 <a class="sourceLine" id="cb22-4" data-line-number="4">         field_fvp, form_fvp,</a>
 <a class="sourceLine" id="cb22-5" data-line-number="5">         field_tvp, form_tvp)</a>
@@ -1959,14 +1959,14 @@ div.tocify {
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="co"># _ UDS 2 ----</span></a>
 <a class="sourceLine" id="cb24-2" data-line-number="2">fields_u2_raw &lt;-<span class="st"> </span>trans_dict<span class="op">$</span>field_u2</a>
 <a class="sourceLine" id="cb24-3" data-line-number="3">fields_u2_raw &lt;-<span class="st"> </span><span class="kw">remove_NAs</span>(fields_u2_raw)</a>
-<a class="sourceLine" id="cb24-4" data-line-number="4">fields_u2 &lt;-<span class="st"> </span>fields_u2_raw <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">paste</span>(<span class="dt">collapse =</span> <span class="st">','</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb24-4" data-line-number="4">fields_u2 &lt;-<span class="st"> </span>fields_u2_raw <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">paste</span>(<span class="dt">collapse =</span> <span class="st">&quot;,&quot;</span>)</a></code></pre></div>
 </div>
 <div id="uds-3-archive-2" class="section level3">
 <h3>UDS 3 Archive</h3>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co"># _ UDS 3 (Archive) ----</span></a>
 <a class="sourceLine" id="cb25-2" data-line-number="2">fields_u3a_raw &lt;-<span class="st"> </span>trans_dict<span class="op">$</span>field_u3a</a>
 <a class="sourceLine" id="cb25-3" data-line-number="3">fields_u3a_raw &lt;-<span class="st"> </span><span class="kw">remove_NAs</span>(fields_u3a_raw)</a>
-<a class="sourceLine" id="cb25-4" data-line-number="4">fields_u3a &lt;-<span class="st"> </span>fields_u3a_raw <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">paste</span>(<span class="dt">collapse =</span> <span class="st">','</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb25-4" data-line-number="4">fields_u3a &lt;-<span class="st"> </span>fields_u3a_raw <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">paste</span>(<span class="dt">collapse =</span> <span class="st">&quot;,&quot;</span>)</a></code></pre></div>
 </div>
 <div id="uds-3-new-2" class="section level3">
 <h3>UDS 3 New</h3>
@@ -1994,7 +1994,7 @@ div.tocify {
 <a class="sourceLine" id="cb26-16" data-line-number="16">                    , fields_u3n_raw_fu</a>
 <a class="sourceLine" id="cb26-17" data-line-number="17">                    , fields_u3n_raw_tele)</a>
 <a class="sourceLine" id="cb26-18" data-line-number="18">fields_u3n_raw &lt;-<span class="st"> </span><span class="kw">remove_NAs</span>(fields_u3n_raw) <span class="co"># remove NAs</span></a>
-<a class="sourceLine" id="cb26-19" data-line-number="19">fields_u3n &lt;-<span class="st"> </span>fields_u3n_raw <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">paste</span>(<span class="dt">collapse =</span> <span class="st">','</span>) </a></code></pre></div>
+<a class="sourceLine" id="cb26-19" data-line-number="19">fields_u3n &lt;-<span class="st"> </span>fields_u3n_raw <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">paste</span>(<span class="dt">collapse =</span> <span class="st">&quot;,&quot;</span>) </a></code></pre></div>
 </div>
 </div>
 <div id="redcap-api-data-retrieval" class="section level2">
@@ -2006,24 +2006,24 @@ div.tocify {
 <a class="sourceLine" id="cb27-3" data-line-number="3">  json_u2 &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(</a>
 <a class="sourceLine" id="cb27-4" data-line-number="4">    <span class="dt">uri=</span>REDCAP_API_URI,</a>
 <a class="sourceLine" id="cb27-5" data-line-number="5">    <span class="dt">token=</span>REDCAP_API_TOKEN_UDS2,</a>
-<a class="sourceLine" id="cb27-6" data-line-number="6">    <span class="dt">content=</span><span class="st">'record'</span>,</a>
-<a class="sourceLine" id="cb27-7" data-line-number="7">    <span class="dt">format=</span><span class="st">'json'</span>,</a>
-<a class="sourceLine" id="cb27-8" data-line-number="8">    <span class="dt">type=</span><span class="st">'flat'</span>,</a>
+<a class="sourceLine" id="cb27-6" data-line-number="6">    <span class="dt">content=</span><span class="st">&quot;record&quot;</span>,</a>
+<a class="sourceLine" id="cb27-7" data-line-number="7">    <span class="dt">format=</span><span class="st">&quot;json&quot;</span>,</a>
+<a class="sourceLine" id="cb27-8" data-line-number="8">    <span class="dt">type=</span><span class="st">&quot;flat&quot;</span>,</a>
 <a class="sourceLine" id="cb27-9" data-line-number="9">    <span class="dt">fields=</span>fields_u2,</a>
-<a class="sourceLine" id="cb27-10" data-line-number="10">    <span class="dt">rawOrLabel=</span><span class="st">'raw'</span>,</a>
-<a class="sourceLine" id="cb27-11" data-line-number="11">    <span class="dt">rawOrLabelHeaders=</span><span class="st">'raw'</span>,</a>
-<a class="sourceLine" id="cb27-12" data-line-number="12">    <span class="dt">exportCheckboxLabel=</span><span class="st">'false'</span>,</a>
-<a class="sourceLine" id="cb27-13" data-line-number="13">    <span class="dt">exportSurveyFields=</span><span class="st">'false'</span>,</a>
-<a class="sourceLine" id="cb27-14" data-line-number="14">    <span class="dt">exportDataAccessGroups=</span><span class="st">'false'</span>,</a>
-<a class="sourceLine" id="cb27-15" data-line-number="15">    <span class="dt">returnFormat=</span><span class="st">'json'</span>,</a>
+<a class="sourceLine" id="cb27-10" data-line-number="10">    <span class="dt">rawOrLabel=</span><span class="st">&quot;raw&quot;</span>,</a>
+<a class="sourceLine" id="cb27-11" data-line-number="11">    <span class="dt">rawOrLabelHeaders=</span><span class="st">&quot;raw&quot;</span>,</a>
+<a class="sourceLine" id="cb27-12" data-line-number="12">    <span class="dt">exportCheckboxLabel=</span><span class="st">&quot;false&quot;</span>,</a>
+<a class="sourceLine" id="cb27-13" data-line-number="13">    <span class="dt">exportSurveyFields=</span><span class="st">&quot;false&quot;</span>,</a>
+<a class="sourceLine" id="cb27-14" data-line-number="14">    <span class="dt">exportDataAccessGroups=</span><span class="st">&quot;false&quot;</span>,</a>
+<a class="sourceLine" id="cb27-15" data-line-number="15">    <span class="dt">returnFormat=</span><span class="st">&quot;json&quot;</span>,</a>
 <a class="sourceLine" id="cb27-16" data-line-number="16">    <span class="dt">.opts =</span> <span class="kw">list</span>(<span class="dt">ssl.verifypeer =</span> <span class="ot">FALSE</span>) <span class="co"># using linux</span></a>
 <a class="sourceLine" id="cb27-17" data-line-number="17">  )</a>
 <a class="sourceLine" id="cb27-18" data-line-number="18">  json_u2 &lt;-<span class="st"> </span><span class="kw">str_replace_all</span>(json_u2, <span class="st">&quot;</span><span class="ch">\r\n</span><span class="st">&quot;</span>, <span class="st">&quot; &quot;</span>)</a>
 <a class="sourceLine" id="cb27-19" data-line-number="19">}</a>
 <a class="sourceLine" id="cb27-20" data-line-number="20">df_u2 &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(json_u2) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb27-21" data-line-number="21"><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb27-22" data-line-number="22"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">''</span>)</a>
-<a class="sourceLine" id="cb27-23" data-line-number="23"><span class="co"># # Clean out '___1' from field some field names -- Generalize later</span></a>
+<a class="sourceLine" id="cb27-22" data-line-number="22"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb27-23" data-line-number="23"><span class="co"># # Clean out &quot;___1&quot; from field some field names -- Generalize later</span></a>
 <a class="sourceLine" id="cb27-24" data-line-number="24"><span class="co"># names(df_u2) &lt;- str_replace(names(df_u2), </span></a>
 <a class="sourceLine" id="cb27-25" data-line-number="25"><span class="co">#                             pattern = &quot;___1&quot;, </span></a>
 <a class="sourceLine" id="cb27-26" data-line-number="26"><span class="co">#                             replacement = &quot;&quot;)</span></a></code></pre></div>
@@ -2035,23 +2035,23 @@ div.tocify {
 <a class="sourceLine" id="cb28-3" data-line-number="3">  json_u3a &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(</a>
 <a class="sourceLine" id="cb28-4" data-line-number="4">    <span class="dt">uri=</span>REDCAP_API_URI,</a>
 <a class="sourceLine" id="cb28-5" data-line-number="5">    <span class="dt">token=</span>REDCAP_API_TOKEN_UDS3a,</a>
-<a class="sourceLine" id="cb28-6" data-line-number="6">    <span class="dt">content=</span><span class="st">'record'</span>,</a>
-<a class="sourceLine" id="cb28-7" data-line-number="7">    <span class="dt">format=</span><span class="st">'json'</span>,</a>
-<a class="sourceLine" id="cb28-8" data-line-number="8">    <span class="dt">type=</span><span class="st">'flat'</span>,</a>
+<a class="sourceLine" id="cb28-6" data-line-number="6">    <span class="dt">content=</span><span class="st">&quot;record&quot;</span>,</a>
+<a class="sourceLine" id="cb28-7" data-line-number="7">    <span class="dt">format=</span><span class="st">&quot;json&quot;</span>,</a>
+<a class="sourceLine" id="cb28-8" data-line-number="8">    <span class="dt">type=</span><span class="st">&quot;flat&quot;</span>,</a>
 <a class="sourceLine" id="cb28-9" data-line-number="9">    <span class="dt">fields=</span>fields_u3a,</a>
-<a class="sourceLine" id="cb28-10" data-line-number="10">    <span class="dt">rawOrLabel=</span><span class="st">'raw'</span>,</a>
-<a class="sourceLine" id="cb28-11" data-line-number="11">    <span class="dt">rawOrLabelHeaders=</span><span class="st">'raw'</span>,</a>
-<a class="sourceLine" id="cb28-12" data-line-number="12">    <span class="dt">exportCheckboxLabel=</span><span class="st">'false'</span>,</a>
-<a class="sourceLine" id="cb28-13" data-line-number="13">    <span class="dt">exportSurveyFields=</span><span class="st">'false'</span>,</a>
-<a class="sourceLine" id="cb28-14" data-line-number="14">    <span class="dt">exportDataAccessGroups=</span><span class="st">'false'</span>,</a>
-<a class="sourceLine" id="cb28-15" data-line-number="15">    <span class="dt">returnFormat=</span><span class="st">'json'</span>,</a>
+<a class="sourceLine" id="cb28-10" data-line-number="10">    <span class="dt">rawOrLabel=</span><span class="st">&quot;raw&quot;</span>,</a>
+<a class="sourceLine" id="cb28-11" data-line-number="11">    <span class="dt">rawOrLabelHeaders=</span><span class="st">&quot;raw&quot;</span>,</a>
+<a class="sourceLine" id="cb28-12" data-line-number="12">    <span class="dt">exportCheckboxLabel=</span><span class="st">&quot;false&quot;</span>,</a>
+<a class="sourceLine" id="cb28-13" data-line-number="13">    <span class="dt">exportSurveyFields=</span><span class="st">&quot;false&quot;</span>,</a>
+<a class="sourceLine" id="cb28-14" data-line-number="14">    <span class="dt">exportDataAccessGroups=</span><span class="st">&quot;false&quot;</span>,</a>
+<a class="sourceLine" id="cb28-15" data-line-number="15">    <span class="dt">returnFormat=</span><span class="st">&quot;json&quot;</span>,</a>
 <a class="sourceLine" id="cb28-16" data-line-number="16">    <span class="dt">.opts =</span> <span class="kw">list</span>(<span class="dt">ssl.verifypeer =</span> <span class="ot">FALSE</span>) <span class="co"># using linux</span></a>
 <a class="sourceLine" id="cb28-17" data-line-number="17">  )</a>
 <a class="sourceLine" id="cb28-18" data-line-number="18">  json_u3a &lt;-<span class="st"> </span><span class="kw">str_replace_all</span>(json_u3a, <span class="st">&quot;</span><span class="ch">\r\n</span><span class="st">&quot;</span>, <span class="st">&quot; &quot;</span>)</a>
 <a class="sourceLine" id="cb28-19" data-line-number="19">}</a>
 <a class="sourceLine" id="cb28-20" data-line-number="20">df_u3a &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(json_u3a) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb28-21" data-line-number="21"><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb28-22" data-line-number="22"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">''</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb28-22" data-line-number="22"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">&quot;&quot;</span>)</a></code></pre></div>
 </div>
 <div id="uds-3-new-3" class="section level3">
 <h3>UDS 3 New</h3>
@@ -2060,23 +2060,23 @@ div.tocify {
 <a class="sourceLine" id="cb29-3" data-line-number="3">  json_u3n &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(</a>
 <a class="sourceLine" id="cb29-4" data-line-number="4">    <span class="dt">uri=</span>REDCAP_API_URI,</a>
 <a class="sourceLine" id="cb29-5" data-line-number="5">    <span class="dt">token=</span>REDCAP_API_TOKEN_UDS3n,</a>
-<a class="sourceLine" id="cb29-6" data-line-number="6">    <span class="dt">content=</span><span class="st">'record'</span>,</a>
-<a class="sourceLine" id="cb29-7" data-line-number="7">    <span class="dt">format=</span><span class="st">'json'</span>,</a>
-<a class="sourceLine" id="cb29-8" data-line-number="8">    <span class="dt">type=</span><span class="st">'flat'</span>,</a>
+<a class="sourceLine" id="cb29-6" data-line-number="6">    <span class="dt">content=</span><span class="st">&quot;record&quot;</span>,</a>
+<a class="sourceLine" id="cb29-7" data-line-number="7">    <span class="dt">format=</span><span class="st">&quot;json&quot;</span>,</a>
+<a class="sourceLine" id="cb29-8" data-line-number="8">    <span class="dt">type=</span><span class="st">&quot;flat&quot;</span>,</a>
 <a class="sourceLine" id="cb29-9" data-line-number="9">    <span class="dt">fields=</span>fields_u3n,</a>
-<a class="sourceLine" id="cb29-10" data-line-number="10">    <span class="dt">rawOrLabel=</span><span class="st">'raw'</span>,</a>
-<a class="sourceLine" id="cb29-11" data-line-number="11">    <span class="dt">rawOrLabelHeaders=</span><span class="st">'raw'</span>,</a>
-<a class="sourceLine" id="cb29-12" data-line-number="12">    <span class="dt">exportCheckboxLabel=</span><span class="st">'false'</span>,</a>
-<a class="sourceLine" id="cb29-13" data-line-number="13">    <span class="dt">exportSurveyFields=</span><span class="st">'false'</span>,</a>
-<a class="sourceLine" id="cb29-14" data-line-number="14">    <span class="dt">exportDataAccessGroups=</span><span class="st">'false'</span>,</a>
-<a class="sourceLine" id="cb29-15" data-line-number="15">    <span class="dt">returnFormat=</span><span class="st">'json'</span>,</a>
+<a class="sourceLine" id="cb29-10" data-line-number="10">    <span class="dt">rawOrLabel=</span><span class="st">&quot;raw&quot;</span>,</a>
+<a class="sourceLine" id="cb29-11" data-line-number="11">    <span class="dt">rawOrLabelHeaders=</span><span class="st">&quot;raw&quot;</span>,</a>
+<a class="sourceLine" id="cb29-12" data-line-number="12">    <span class="dt">exportCheckboxLabel=</span><span class="st">&quot;false&quot;</span>,</a>
+<a class="sourceLine" id="cb29-13" data-line-number="13">    <span class="dt">exportSurveyFields=</span><span class="st">&quot;false&quot;</span>,</a>
+<a class="sourceLine" id="cb29-14" data-line-number="14">    <span class="dt">exportDataAccessGroups=</span><span class="st">&quot;false&quot;</span>,</a>
+<a class="sourceLine" id="cb29-15" data-line-number="15">    <span class="dt">returnFormat=</span><span class="st">&quot;json&quot;</span>,</a>
 <a class="sourceLine" id="cb29-16" data-line-number="16">    <span class="dt">.opts =</span> <span class="kw">list</span>(<span class="dt">ssl.verifypeer =</span> <span class="ot">FALSE</span>) <span class="co"># using linux</span></a>
 <a class="sourceLine" id="cb29-17" data-line-number="17">  )</a>
 <a class="sourceLine" id="cb29-18" data-line-number="18">  json_u3n &lt;-<span class="st"> </span><span class="kw">str_replace_all</span>(json_u3n, <span class="st">&quot;</span><span class="ch">\r\n</span><span class="st">&quot;</span>, <span class="st">&quot; &quot;</span>)</a>
 <a class="sourceLine" id="cb29-19" data-line-number="19">}</a>
 <a class="sourceLine" id="cb29-20" data-line-number="20">df_u3n &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(json_u3n) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb29-21" data-line-number="21"><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb29-22" data-line-number="22"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">''</span>)</a>
+<a class="sourceLine" id="cb29-22" data-line-number="22"><span class="st">  </span><span class="kw">na_if</span>(<span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb29-23" data-line-number="23"></a>
 <a class="sourceLine" id="cb29-24" data-line-number="24"><span class="co"># Clean out Double Data Entry (DDE) records ending in &quot;--1&quot; or &quot;--2&quot;</span></a>
 <a class="sourceLine" id="cb29-25" data-line-number="25">df_u3n &lt;-<span class="st"> </span>df_u3n <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -2087,9 +2087,9 @@ div.tocify {
 <div id="write-raw-data-to-csv" class="section level2">
 <h2>Write Raw Data To CSV</h2>
 <p>This comes in handy when diagnosising and resolving possible code errors.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1">readr<span class="op">::</span><span class="kw">write_csv</span>(df_u2, <span class="st">'./Raw Data/df_u2.csv'</span>, <span class="dt">na =</span> <span class="st">''</span>)</a>
-<a class="sourceLine" id="cb30-2" data-line-number="2">readr<span class="op">::</span><span class="kw">write_csv</span>(df_u3a, <span class="st">'./Raw Data/df_u3a.csv'</span>, <span class="dt">na =</span> <span class="st">''</span>)</a>
-<a class="sourceLine" id="cb30-3" data-line-number="3">readr<span class="op">::</span><span class="kw">write_csv</span>(df_u3n, <span class="st">'./Raw Data/df_u3n.csv'</span>, <span class="dt">na =</span> <span class="st">''</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1">readr<span class="op">::</span><span class="kw">write_csv</span>(df_u2, <span class="st">&quot;./Raw Data/df_u2.csv&quot;</span>, <span class="dt">na =</span> <span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb30-2" data-line-number="2">readr<span class="op">::</span><span class="kw">write_csv</span>(df_u3a, <span class="st">&quot;./Raw Data/df_u3a.csv&quot;</span>, <span class="dt">na =</span> <span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb30-3" data-line-number="3">readr<span class="op">::</span><span class="kw">write_csv</span>(df_u3n, <span class="st">&quot;./Raw Data/df_u3n.csv&quot;</span>, <span class="dt">na =</span> <span class="st">&quot;&quot;</span>)</a></code></pre></div>
 </div>
 </div>
 <div id="restructure-data" class="section level1">
@@ -2104,29 +2104,29 @@ div.tocify {
 <a class="sourceLine" id="cb31-3" data-line-number="3"><span class="co"># _ UDS 2 ----</span></a>
 <a class="sourceLine" id="cb31-4" data-line-number="4"><span class="co"># _ _ UDS 2 IVP ----</span></a>
 <a class="sourceLine" id="cb31-5" data-line-number="5">df_u2_i &lt;-<span class="st"> </span>df_u2 <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb31-6" data-line-number="6"><span class="st">  </span><span class="kw">filter</span>(a1pkt_type <span class="op">==</span><span class="st"> 'I'</span>)</a>
+<a class="sourceLine" id="cb31-6" data-line-number="6"><span class="st">  </span><span class="kw">filter</span>(a1pkt_type <span class="op">==</span><span class="st"> &quot;I&quot;</span>)</a>
 <a class="sourceLine" id="cb31-7" data-line-number="7"><span class="co"># _ _ UDS 2 FVP ----</span></a>
-<a class="sourceLine" id="cb31-8" data-line-number="8">u3n_fvp_vars &lt;-<span class="st"> </span><span class="kw">str_replace</span>(fields_u3n_raw_fu, <span class="st">'^fu_|^fu'</span>, <span class="st">''</span>)</a>
+<a class="sourceLine" id="cb31-8" data-line-number="8">u3n_fvp_vars &lt;-<span class="st"> </span><span class="kw">str_replace</span>(fields_u3n_raw_fu, <span class="st">&quot;^fu_|^fu&quot;</span>, <span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb31-9" data-line-number="9">u2_fvp_vars &lt;-<span class="st"> </span>trans_dict <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb31-10" data-line-number="10"><span class="st">  </span><span class="kw">filter</span>(field_u3n <span class="op">%in%</span><span class="st"> </span>u3n_fvp_vars) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb31-11" data-line-number="11"><span class="st">  </span><span class="kw">pull</span>(field_u2) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb31-12" data-line-number="12"><span class="st">  </span><span class="kw">remove_NAs</span>(.)</a>
 <a class="sourceLine" id="cb31-13" data-line-number="13">df_u2_f &lt;-<span class="st"> </span>df_u2 <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb31-14" data-line-number="14"><span class="st">  </span><span class="kw">filter</span>(a1pkt_type <span class="op">==</span><span class="st"> 'F'</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb31-14" data-line-number="14"><span class="st">  </span><span class="kw">filter</span>(a1pkt_type <span class="op">==</span><span class="st"> &quot;F&quot;</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb31-15" data-line-number="15"><span class="st">  </span><span class="kw">rename_at</span>(<span class="dt">.vars =</span> <span class="kw">vars</span>(<span class="kw">one_of</span>(u2_fvp_vars)),</a>
-<a class="sourceLine" id="cb31-16" data-line-number="16">            <span class="co"># .funs = funs(str_replace(., '(.*)', 'fu_\\1')))</span></a>
-<a class="sourceLine" id="cb31-17" data-line-number="17">            <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="kw">str_replace</span>(., <span class="st">'(.*)'</span>, <span class="st">'fu_</span><span class="ch">\\</span><span class="st">1'</span>)))</a>
+<a class="sourceLine" id="cb31-16" data-line-number="16">            <span class="co"># .funs = funs(str_replace(., &quot;(.*)&quot;, &quot;fu_\\1&quot;)))</span></a>
+<a class="sourceLine" id="cb31-17" data-line-number="17">            <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="kw">str_replace</span>(., <span class="st">&quot;(.*)&quot;</span>, <span class="st">&quot;fu_</span><span class="ch">\\</span><span class="st">1&quot;</span>)))</a>
 <a class="sourceLine" id="cb31-18" data-line-number="18"><span class="co"># _ _ UDS 2 TVP ----</span></a>
-<a class="sourceLine" id="cb31-19" data-line-number="19">u3n_tvp_vars &lt;-<span class="st"> </span><span class="kw">str_replace</span>(fields_u3n_raw_tele, <span class="st">'tele_'</span>, <span class="st">''</span>)</a>
+<a class="sourceLine" id="cb31-19" data-line-number="19">u3n_tvp_vars &lt;-<span class="st"> </span><span class="kw">str_replace</span>(fields_u3n_raw_tele, <span class="st">&quot;tele_&quot;</span>, <span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb31-20" data-line-number="20">u2_tvp_vars &lt;-<span class="st"> </span>trans_dict <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb31-21" data-line-number="21"><span class="st">  </span><span class="kw">filter</span>(field_u3n <span class="op">%in%</span><span class="st"> </span>u3n_tvp_vars) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb31-22" data-line-number="22"><span class="st">  </span><span class="kw">pull</span>(field_u2) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb31-23" data-line-number="23"><span class="st">  </span><span class="kw">remove_NAs</span>(.)</a>
 <a class="sourceLine" id="cb31-24" data-line-number="24">df_u2_t &lt;-<span class="st"> </span>df_u2 <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb31-25" data-line-number="25"><span class="st">  </span><span class="kw">filter</span>(a1pkt_type <span class="op">==</span><span class="st"> 'T'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb31-25" data-line-number="25"><span class="st">  </span><span class="kw">filter</span>(a1pkt_type <span class="op">==</span><span class="st"> &quot;T&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb31-26" data-line-number="26"><span class="st">  </span><span class="kw">rename_at</span>(<span class="dt">.vars =</span> <span class="kw">vars</span>(<span class="kw">one_of</span>(u2_tvp_vars)),</a>
-<a class="sourceLine" id="cb31-27" data-line-number="27">            <span class="co"># .funs = funs(str_replace(., '(.*)', 'tele_\\1')))</span></a>
-<a class="sourceLine" id="cb31-28" data-line-number="28">            <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="kw">str_replace</span>(., <span class="st">'(.*)'</span>, <span class="st">'tele_</span><span class="ch">\\</span><span class="st">1'</span>)))</a>
+<a class="sourceLine" id="cb31-27" data-line-number="27">            <span class="co"># .funs = funs(str_replace(., &quot;(.*)&quot;, &quot;tele_\\1&quot;)))</span></a>
+<a class="sourceLine" id="cb31-28" data-line-number="28">            <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="kw">str_replace</span>(., <span class="st">&quot;(.*)&quot;</span>, <span class="st">&quot;tele_</span><span class="ch">\\</span><span class="st">1&quot;</span>)))</a>
 <a class="sourceLine" id="cb31-29" data-line-number="29"><span class="co"># _ _ Row bind UDS 2 I+F+T ----</span></a>
 <a class="sourceLine" id="cb31-30" data-line-number="30">df_u2_ift &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(df_u2_i, df_u2_f, df_u2_t)</a></code></pre></div>
 </div>
@@ -2137,29 +2137,29 @@ div.tocify {
 <a class="sourceLine" id="cb32-3" data-line-number="3"><span class="co"># _ UDS 3 (Archive) ----</span></a>
 <a class="sourceLine" id="cb32-4" data-line-number="4"><span class="co"># _ _ UDS 3 (Archive) IVP ----</span></a>
 <a class="sourceLine" id="cb32-5" data-line-number="5">df_u3a_i &lt;-<span class="st"> </span>df_u3a <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb32-6" data-line-number="6"><span class="st">  </span><span class="kw">filter</span>(a1pkt_type <span class="op">==</span><span class="st"> 'I'</span>)</a>
+<a class="sourceLine" id="cb32-6" data-line-number="6"><span class="st">  </span><span class="kw">filter</span>(a1pkt_type <span class="op">==</span><span class="st"> &quot;I&quot;</span>)</a>
 <a class="sourceLine" id="cb32-7" data-line-number="7"><span class="co"># _ _ UDS 3 (Archive) FVP ----</span></a>
-<a class="sourceLine" id="cb32-8" data-line-number="8">u3n_fvp_vars &lt;-<span class="st"> </span><span class="kw">str_replace</span>(fields_u3n_raw_fu, <span class="st">'fu_'</span>, <span class="st">''</span>)</a>
+<a class="sourceLine" id="cb32-8" data-line-number="8">u3n_fvp_vars &lt;-<span class="st"> </span><span class="kw">str_replace</span>(fields_u3n_raw_fu, <span class="st">&quot;fu_&quot;</span>, <span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb32-9" data-line-number="9">u3a_fvp_vars &lt;-<span class="st"> </span>trans_dict <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb32-10" data-line-number="10"><span class="st">  </span><span class="kw">filter</span>(field_u3n <span class="op">%in%</span><span class="st"> </span>u3n_fvp_vars) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb32-11" data-line-number="11"><span class="st">  </span><span class="kw">pull</span>(field_u3a) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb32-12" data-line-number="12"><span class="st">  </span><span class="kw">remove_NAs</span>(.)</a>
 <a class="sourceLine" id="cb32-13" data-line-number="13">df_u3a_f &lt;-<span class="st"> </span>df_u3a <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb32-14" data-line-number="14"><span class="st">  </span><span class="kw">filter</span>(a1pkt_type <span class="op">==</span><span class="st"> 'F'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb32-14" data-line-number="14"><span class="st">  </span><span class="kw">filter</span>(a1pkt_type <span class="op">==</span><span class="st"> &quot;F&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb32-15" data-line-number="15"><span class="st">  </span><span class="kw">rename_at</span>(<span class="dt">.vars =</span> <span class="kw">vars</span>(<span class="kw">one_of</span>(u3a_fvp_vars)),</a>
-<a class="sourceLine" id="cb32-16" data-line-number="16">            <span class="co"># .funs = funs(str_replace(., '(.*)', 'fu_')))</span></a>
-<a class="sourceLine" id="cb32-17" data-line-number="17">            <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="kw">str_replace</span>(., <span class="st">'(.*)'</span>, <span class="st">'fu_'</span>)))</a>
+<a class="sourceLine" id="cb32-16" data-line-number="16">            <span class="co"># .funs = funs(str_replace(., &quot;(.*)&quot;, &quot;fu_&quot;)))</span></a>
+<a class="sourceLine" id="cb32-17" data-line-number="17">            <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="kw">str_replace</span>(., <span class="st">&quot;(.*)&quot;</span>, <span class="st">&quot;fu_&quot;</span>)))</a>
 <a class="sourceLine" id="cb32-18" data-line-number="18"><span class="co"># _ _ UDS 3 (Archive) TVP ----</span></a>
-<a class="sourceLine" id="cb32-19" data-line-number="19">u3n_tvp_vars &lt;-<span class="st"> </span><span class="kw">str_replace</span>(fields_u3n_raw_tele, <span class="st">'tele_'</span>, <span class="st">''</span>)</a>
+<a class="sourceLine" id="cb32-19" data-line-number="19">u3n_tvp_vars &lt;-<span class="st"> </span><span class="kw">str_replace</span>(fields_u3n_raw_tele, <span class="st">&quot;tele_&quot;</span>, <span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb32-20" data-line-number="20">u3a_tvp_vars &lt;-<span class="st"> </span>trans_dict <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb32-21" data-line-number="21"><span class="st">  </span><span class="kw">filter</span>(field_u3n <span class="op">%in%</span><span class="st"> </span>u3n_tvp_vars) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb32-22" data-line-number="22"><span class="st">  </span><span class="kw">pull</span>(field_u3a) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb32-23" data-line-number="23"><span class="st">  </span><span class="kw">remove_NAs</span>(.)</a>
 <a class="sourceLine" id="cb32-24" data-line-number="24">df_u3a_t &lt;-<span class="st"> </span>df_u3a <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb32-25" data-line-number="25"><span class="st">  </span><span class="kw">filter</span>(a1pkt_type <span class="op">==</span><span class="st"> 'T'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb32-25" data-line-number="25"><span class="st">  </span><span class="kw">filter</span>(a1pkt_type <span class="op">==</span><span class="st"> &quot;T&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb32-26" data-line-number="26"><span class="st">  </span><span class="kw">rename_at</span>(<span class="dt">.vars =</span> <span class="kw">vars</span>(<span class="kw">one_of</span>(u3a_tvp_vars)),</a>
-<a class="sourceLine" id="cb32-27" data-line-number="27">            <span class="co"># .funs = funs(str_replace(., '(.*)', 'tele_')))</span></a>
-<a class="sourceLine" id="cb32-28" data-line-number="28">            <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="kw">str_replace</span>(., <span class="st">'(.*)'</span>, <span class="st">'tele_'</span>)))</a>
+<a class="sourceLine" id="cb32-27" data-line-number="27">            <span class="co"># .funs = funs(str_replace(., &quot;(.*)&quot;, &quot;tele_&quot;)))</span></a>
+<a class="sourceLine" id="cb32-28" data-line-number="28">            <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="kw">str_replace</span>(., <span class="st">&quot;(.*)&quot;</span>, <span class="st">&quot;tele_&quot;</span>)))</a>
 <a class="sourceLine" id="cb32-29" data-line-number="29"><span class="co"># _ _ Row bind UDS 3 (Archive) I+F+T ----</span></a>
 <a class="sourceLine" id="cb32-30" data-line-number="30">df_u3a_ift &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(df_u3a_i, df_u3a_f, df_u3a_t)</a></code></pre></div>
 </div>
@@ -2177,11 +2177,12 @@ div.tocify {
 <a class="sourceLine" id="cb33-3" data-line-number="3">std_names_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">matrix</span>(<span class="dt">data =</span> <span class="ot">NA_character_</span>,</a>
 <a class="sourceLine" id="cb33-4" data-line-number="4">                                  <span class="dt">nrow =</span> <span class="dv">0</span>,</a>
 <a class="sourceLine" id="cb33-5" data-line-number="5">                                  <span class="dt">ncol =</span> <span class="dv">2</span>),</a>
-<a class="sourceLine" id="cb33-6" data-line-number="6">                           <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb33-7" data-line-number="7"><span class="kw">names</span>(std_names_df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">'std_source'</span>, <span class="st">'std_field'</span>)</a>
-<a class="sourceLine" id="cb33-8" data-line-number="8"><span class="kw">head</span>(std_names_df) <span class="co"># %&gt;% pretty_print_df()</span></a></code></pre></div>
-<pre><code>## [1] std_source std_field 
-## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+<a class="sourceLine" id="cb33-6" data-line-number="6">                           <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb33-7" data-line-number="7"><span class="st">  </span><span class="kw">as_tibble</span>()</a>
+<a class="sourceLine" id="cb33-8" data-line-number="8"><span class="kw">names</span>(std_names_df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;std_source&quot;</span>, <span class="st">&quot;std_field&quot;</span>)</a>
+<a class="sourceLine" id="cb33-9" data-line-number="9"><span class="kw">head</span>(std_names_df) <span class="co"># %&gt;% pretty_print_df()</span></a></code></pre></div>
+<pre><code>## # A tibble: 0 x 2
+## # … with 2 variables: std_source &lt;chr&gt;, std_field &lt;chr&gt;</code></pre>
 </div>
 <div id="loop-over-rows-of-trans_dict-to-standardize-field-names" class="section level3">
 <h3>Loop over rows of <code>trans_dict</code> to standardize field names</h3>
@@ -2191,12 +2192,12 @@ div.tocify {
 <a class="sourceLine" id="cb35-2" data-line-number="2"><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq_len</span>(<span class="kw">nrow</span>(trans_dict))) {</a>
 <a class="sourceLine" id="cb35-3" data-line-number="3">  </a>
 <a class="sourceLine" id="cb35-4" data-line-number="4">  <span class="co">## Std field name is from UDS 3 (New), then UDS 3 (Archive), then UDS 2</span></a>
-<a class="sourceLine" id="cb35-5" data-line-number="5">  <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(trans_dict[i, <span class="st">'field_u3n'</span>])) {</a>
-<a class="sourceLine" id="cb35-6" data-line-number="6">    std_names_df[i, ] &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">'field_u3n'</span>, trans_dict[[i, <span class="st">'field_u3n'</span>]])</a>
-<a class="sourceLine" id="cb35-7" data-line-number="7">  } <span class="cf">else</span> <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(trans_dict[i, <span class="st">'field_u3a'</span>])) {</a>
-<a class="sourceLine" id="cb35-8" data-line-number="8">    std_names_df[i, ] &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">'field_u3a'</span>, trans_dict[[i, <span class="st">'field_u3a'</span>]])</a>
-<a class="sourceLine" id="cb35-9" data-line-number="9">  } <span class="cf">else</span> <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(trans_dict[i, <span class="st">'field_u2'</span>])) {</a>
-<a class="sourceLine" id="cb35-10" data-line-number="10">    std_names_df[i, ] &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">'field_u2'</span>, trans_dict[[i, <span class="st">'field_u2'</span>]])</a>
+<a class="sourceLine" id="cb35-5" data-line-number="5">  <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(trans_dict[i, <span class="st">&quot;field_u3n&quot;</span>])) {</a>
+<a class="sourceLine" id="cb35-6" data-line-number="6">    std_names_df[i, ] &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;field_u3n&quot;</span>, trans_dict[[i, <span class="st">&quot;field_u3n&quot;</span>]])</a>
+<a class="sourceLine" id="cb35-7" data-line-number="7">  } <span class="cf">else</span> <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(trans_dict[i, <span class="st">&quot;field_u3a&quot;</span>])) {</a>
+<a class="sourceLine" id="cb35-8" data-line-number="8">    std_names_df[i, ] &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;field_u3a&quot;</span>, trans_dict[[i, <span class="st">&quot;field_u3a&quot;</span>]])</a>
+<a class="sourceLine" id="cb35-9" data-line-number="9">  } <span class="cf">else</span> <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(trans_dict[i, <span class="st">&quot;field_u2&quot;</span>])) {</a>
+<a class="sourceLine" id="cb35-10" data-line-number="10">    std_names_df[i, ] &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;field_u2&quot;</span>, trans_dict[[i, <span class="st">&quot;field_u2&quot;</span>]])</a>
 <a class="sourceLine" id="cb35-11" data-line-number="11">  }</a>
 <a class="sourceLine" id="cb35-12" data-line-number="12">  </a>
 <a class="sourceLine" id="cb35-13" data-line-number="13">}</a>
@@ -2222,40 +2223,40 @@ div.tocify {
 <a class="sourceLine" id="cb37-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(field_ivp <span class="op">%in%</span><span class="st"> </span>u3n_fvp_vars) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb37-5" data-line-number="5"><span class="st">  </span><span class="kw">pull</span>(field_ivp)</a>
 <a class="sourceLine" id="cb37-6" data-line-number="6"><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq_along</span>(u3n_ift_match_f)) {</a>
-<a class="sourceLine" id="cb37-7" data-line-number="7">  <span class="co"># cat(paste(i, u3n_ift_match_f[i], '\n'))</span></a>
-<a class="sourceLine" id="cb37-8" data-line-number="8">  <span class="co"># cat(paste(i, nrow(trans_dict_std)+i, '\n'))</span></a>
+<a class="sourceLine" id="cb37-7" data-line-number="7">  <span class="co"># cat(paste(i, u3n_ift_match_f[i], &quot;\n&quot;))</span></a>
+<a class="sourceLine" id="cb37-8" data-line-number="8">  <span class="co"># cat(paste(i, nrow(trans_dict_std)+i, &quot;\n&quot;))</span></a>
 <a class="sourceLine" id="cb37-9" data-line-number="9">  curr_row &lt;-<span class="st"> </span><span class="kw">nrow</span>(trans_dict_std) <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
 <a class="sourceLine" id="cb37-10" data-line-number="10">  <span class="co">## Add `fu_*` field from within trans_dict_std to end of trans_dict_std</span></a>
 <a class="sourceLine" id="cb37-11" data-line-number="11">  <span class="co">## UDS 2</span></a>
-<a class="sourceLine" id="cb37-12" data-line-number="12">  trans_dict_std[curr_row, <span class="st">'field_u2'</span>] &lt;-</a>
-<a class="sourceLine" id="cb37-13" data-line-number="13"><span class="st">    </span><span class="kw">paste0</span>(<span class="st">'fu_'</span>,</a>
+<a class="sourceLine" id="cb37-12" data-line-number="12">  trans_dict_std[curr_row, <span class="st">&quot;field_u2&quot;</span>] &lt;-</a>
+<a class="sourceLine" id="cb37-13" data-line-number="13"><span class="st">    </span><span class="kw">paste0</span>(<span class="st">&quot;fu_&quot;</span>,</a>
 <a class="sourceLine" id="cb37-14" data-line-number="14">           trans_dict_std[[</a>
-<a class="sourceLine" id="cb37-15" data-line-number="15">             <span class="kw">which</span>(trans_dict_std<span class="op">$</span>field_u3n <span class="op">==</span><span class="st"> </span>u3n_ift_match_f[i]), <span class="st">'field_u2'</span></a>
+<a class="sourceLine" id="cb37-15" data-line-number="15">             <span class="kw">which</span>(trans_dict_std<span class="op">$</span>field_u3n <span class="op">==</span><span class="st"> </span>u3n_ift_match_f[i]), <span class="st">&quot;field_u2&quot;</span></a>
 <a class="sourceLine" id="cb37-16" data-line-number="16">             ]])</a>
 <a class="sourceLine" id="cb37-17" data-line-number="17">  <span class="co"># UDS 3 (Archive)</span></a>
-<a class="sourceLine" id="cb37-18" data-line-number="18">  trans_dict_std[curr_row, <span class="st">'field_u3a'</span>] &lt;-</a>
-<a class="sourceLine" id="cb37-19" data-line-number="19"><span class="st">    </span><span class="kw">paste0</span>(<span class="st">'fu_'</span>,</a>
+<a class="sourceLine" id="cb37-18" data-line-number="18">  trans_dict_std[curr_row, <span class="st">&quot;field_u3a&quot;</span>] &lt;-</a>
+<a class="sourceLine" id="cb37-19" data-line-number="19"><span class="st">    </span><span class="kw">paste0</span>(<span class="st">&quot;fu_&quot;</span>,</a>
 <a class="sourceLine" id="cb37-20" data-line-number="20">           trans_dict_std[[</a>
-<a class="sourceLine" id="cb37-21" data-line-number="21">             <span class="kw">which</span>(trans_dict_std<span class="op">$</span>field_u3n <span class="op">==</span><span class="st"> </span>u3n_ift_match_f[i]), <span class="st">'field_u3a'</span></a>
+<a class="sourceLine" id="cb37-21" data-line-number="21">             <span class="kw">which</span>(trans_dict_std<span class="op">$</span>field_u3n <span class="op">==</span><span class="st"> </span>u3n_ift_match_f[i]), <span class="st">&quot;field_u3a&quot;</span></a>
 <a class="sourceLine" id="cb37-22" data-line-number="22">             ]])</a>
 <a class="sourceLine" id="cb37-23" data-line-number="23">  <span class="co"># UDS 3 (New)</span></a>
-<a class="sourceLine" id="cb37-24" data-line-number="24">  trans_dict_std[curr_row, <span class="st">'field_u3n'</span>] &lt;-</a>
-<a class="sourceLine" id="cb37-25" data-line-number="25"><span class="st">    </span><span class="kw">paste0</span>(<span class="st">'fu_'</span>,</a>
+<a class="sourceLine" id="cb37-24" data-line-number="24">  trans_dict_std[curr_row, <span class="st">&quot;field_u3n&quot;</span>] &lt;-</a>
+<a class="sourceLine" id="cb37-25" data-line-number="25"><span class="st">    </span><span class="kw">paste0</span>(<span class="st">&quot;fu_&quot;</span>,</a>
 <a class="sourceLine" id="cb37-26" data-line-number="26">           trans_dict_std[[</a>
-<a class="sourceLine" id="cb37-27" data-line-number="27">             <span class="kw">which</span>(trans_dict_std<span class="op">$</span>field_u3n <span class="op">==</span><span class="st"> </span>u3n_ift_match_f[i]), <span class="st">'field_u3n'</span></a>
+<a class="sourceLine" id="cb37-27" data-line-number="27">             <span class="kw">which</span>(trans_dict_std<span class="op">$</span>field_u3n <span class="op">==</span><span class="st"> </span>u3n_ift_match_f[i]), <span class="st">&quot;field_u3n&quot;</span></a>
 <a class="sourceLine" id="cb37-28" data-line-number="28">             ]])</a>
-<a class="sourceLine" id="cb37-29" data-line-number="29">  trans_dict_std[curr_row, <span class="st">'form_u3n'</span>] &lt;-</a>
+<a class="sourceLine" id="cb37-29" data-line-number="29">  trans_dict_std[curr_row, <span class="st">&quot;form_u3n&quot;</span>] &lt;-</a>
 <a class="sourceLine" id="cb37-30" data-line-number="30"><span class="st">    </span><span class="kw">str_replace</span>(</a>
 <a class="sourceLine" id="cb37-31" data-line-number="31">      trans_dict_std[[</a>
-<a class="sourceLine" id="cb37-32" data-line-number="32">        <span class="kw">which</span>(trans_dict_std<span class="op">$</span>field_u3n <span class="op">==</span><span class="st"> </span>u3n_ift_match_f[i]), <span class="st">'form_u3n'</span></a>
+<a class="sourceLine" id="cb37-32" data-line-number="32">        <span class="kw">which</span>(trans_dict_std<span class="op">$</span>field_u3n <span class="op">==</span><span class="st"> </span>u3n_ift_match_f[i]), <span class="st">&quot;form_u3n&quot;</span></a>
 <a class="sourceLine" id="cb37-33" data-line-number="33">        ]],</a>
-<a class="sourceLine" id="cb37-34" data-line-number="34">      <span class="dt">pattern =</span> <span class="st">'ivp_'</span>,</a>
-<a class="sourceLine" id="cb37-35" data-line-number="35">      <span class="dt">replacement =</span> <span class="st">'fvp_'</span>)</a>
-<a class="sourceLine" id="cb37-36" data-line-number="36">  trans_dict_std[curr_row, <span class="st">'Notes'</span>] &lt;-</a>
-<a class="sourceLine" id="cb37-37" data-line-number="37"><span class="st">    '__ synthetic field in UDS 2, UDS 3 (Archive) __'</span></a>
-<a class="sourceLine" id="cb37-38" data-line-number="38">  trans_dict_std[curr_row, <span class="st">'std_source'</span>] &lt;-<span class="st"> 'field_u3n'</span></a>
-<a class="sourceLine" id="cb37-39" data-line-number="39">  trans_dict_std[curr_row, <span class="st">'std_field'</span>] &lt;-</a>
-<a class="sourceLine" id="cb37-40" data-line-number="40"><span class="st">    </span>trans_dict_std[[curr_row, <span class="st">'field_u3n'</span>]]</a>
+<a class="sourceLine" id="cb37-34" data-line-number="34">      <span class="dt">pattern =</span> <span class="st">&quot;ivp_&quot;</span>,</a>
+<a class="sourceLine" id="cb37-35" data-line-number="35">      <span class="dt">replacement =</span> <span class="st">&quot;fvp_&quot;</span>)</a>
+<a class="sourceLine" id="cb37-36" data-line-number="36">  trans_dict_std[curr_row, <span class="st">&quot;Notes&quot;</span>] &lt;-</a>
+<a class="sourceLine" id="cb37-37" data-line-number="37"><span class="st">    &quot;__ synthetic field in UDS 2, UDS 3 (Archive) __&quot;</span></a>
+<a class="sourceLine" id="cb37-38" data-line-number="38">  trans_dict_std[curr_row, <span class="st">&quot;std_source&quot;</span>] &lt;-<span class="st"> &quot;field_u3n&quot;</span></a>
+<a class="sourceLine" id="cb37-39" data-line-number="39">  trans_dict_std[curr_row, <span class="st">&quot;std_field&quot;</span>] &lt;-</a>
+<a class="sourceLine" id="cb37-40" data-line-number="40"><span class="st">    </span>trans_dict_std[[curr_row, <span class="st">&quot;field_u3n&quot;</span>]]</a>
 <a class="sourceLine" id="cb37-41" data-line-number="41">}</a>
 <a class="sourceLine" id="cb37-42" data-line-number="42"><span class="kw">tail</span>(trans_dict_std) <span class="co"># %&gt;% pretty_print_df()</span></a></code></pre></div>
 <pre><code>##      field_u2 form_u2 field_u3a form_u3a  field_u3n form_u3n Accounted_For
@@ -2285,40 +2286,40 @@ div.tocify {
 <a class="sourceLine" id="cb39-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(field_ivp <span class="op">%in%</span><span class="st"> </span>u3n_tvp_vars) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb39-5" data-line-number="5"><span class="st">  </span><span class="kw">pull</span>(field_ivp)</a>
 <a class="sourceLine" id="cb39-6" data-line-number="6"><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq_along</span>(u3n_ift_match_t)) {</a>
-<a class="sourceLine" id="cb39-7" data-line-number="7">  <span class="co"># cat(paste(i, u3n_ift_match_t[i], '\n'))</span></a>
-<a class="sourceLine" id="cb39-8" data-line-number="8">  <span class="co"># cat(paste(i, nrow(trans_dict_std)+i, '\n'))</span></a>
+<a class="sourceLine" id="cb39-7" data-line-number="7">  <span class="co"># cat(paste(i, u3n_ift_match_t[i], &quot;\n&quot;))</span></a>
+<a class="sourceLine" id="cb39-8" data-line-number="8">  <span class="co"># cat(paste(i, nrow(trans_dict_std)+i, &quot;\n&quot;))</span></a>
 <a class="sourceLine" id="cb39-9" data-line-number="9">  curr_row &lt;-<span class="st"> </span><span class="kw">nrow</span>(trans_dict_std) <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
 <a class="sourceLine" id="cb39-10" data-line-number="10">  <span class="co">## Add `tele_*` field from within trans_dict_std to end of trans_dict_std</span></a>
 <a class="sourceLine" id="cb39-11" data-line-number="11">  <span class="co">## UDS 2</span></a>
-<a class="sourceLine" id="cb39-12" data-line-number="12">  trans_dict_std[curr_row, <span class="st">'field_u2'</span>] &lt;-</a>
-<a class="sourceLine" id="cb39-13" data-line-number="13"><span class="st">    </span><span class="kw">paste0</span>(<span class="st">'tele_'</span>,</a>
+<a class="sourceLine" id="cb39-12" data-line-number="12">  trans_dict_std[curr_row, <span class="st">&quot;field_u2&quot;</span>] &lt;-</a>
+<a class="sourceLine" id="cb39-13" data-line-number="13"><span class="st">    </span><span class="kw">paste0</span>(<span class="st">&quot;tele_&quot;</span>,</a>
 <a class="sourceLine" id="cb39-14" data-line-number="14">           trans_dict_std[[</a>
-<a class="sourceLine" id="cb39-15" data-line-number="15">             <span class="kw">which</span>(trans_dict_std<span class="op">$</span>field_u3n <span class="op">==</span><span class="st"> </span>u3n_ift_match_t[i]), <span class="st">'field_u2'</span></a>
+<a class="sourceLine" id="cb39-15" data-line-number="15">             <span class="kw">which</span>(trans_dict_std<span class="op">$</span>field_u3n <span class="op">==</span><span class="st"> </span>u3n_ift_match_t[i]), <span class="st">&quot;field_u2&quot;</span></a>
 <a class="sourceLine" id="cb39-16" data-line-number="16">             ]])</a>
 <a class="sourceLine" id="cb39-17" data-line-number="17">  <span class="co"># UDS 3 (Archive)</span></a>
-<a class="sourceLine" id="cb39-18" data-line-number="18">  trans_dict_std[curr_row, <span class="st">'field_u3a'</span>] &lt;-</a>
-<a class="sourceLine" id="cb39-19" data-line-number="19"><span class="st">    </span><span class="kw">paste0</span>(<span class="st">'tele_'</span>,</a>
+<a class="sourceLine" id="cb39-18" data-line-number="18">  trans_dict_std[curr_row, <span class="st">&quot;field_u3a&quot;</span>] &lt;-</a>
+<a class="sourceLine" id="cb39-19" data-line-number="19"><span class="st">    </span><span class="kw">paste0</span>(<span class="st">&quot;tele_&quot;</span>,</a>
 <a class="sourceLine" id="cb39-20" data-line-number="20">           trans_dict_std[[</a>
-<a class="sourceLine" id="cb39-21" data-line-number="21">             <span class="kw">which</span>(trans_dict_std<span class="op">$</span>field_u3n <span class="op">==</span><span class="st"> </span>u3n_ift_match_t[i]), <span class="st">'field_u3a'</span></a>
+<a class="sourceLine" id="cb39-21" data-line-number="21">             <span class="kw">which</span>(trans_dict_std<span class="op">$</span>field_u3n <span class="op">==</span><span class="st"> </span>u3n_ift_match_t[i]), <span class="st">&quot;field_u3a&quot;</span></a>
 <a class="sourceLine" id="cb39-22" data-line-number="22">             ]])</a>
 <a class="sourceLine" id="cb39-23" data-line-number="23">  <span class="co"># UDS 3 (New)</span></a>
-<a class="sourceLine" id="cb39-24" data-line-number="24">  trans_dict_std[curr_row, <span class="st">'field_u3n'</span>] &lt;-</a>
-<a class="sourceLine" id="cb39-25" data-line-number="25"><span class="st">    </span><span class="kw">paste0</span>(<span class="st">'tele_'</span>,</a>
+<a class="sourceLine" id="cb39-24" data-line-number="24">  trans_dict_std[curr_row, <span class="st">&quot;field_u3n&quot;</span>] &lt;-</a>
+<a class="sourceLine" id="cb39-25" data-line-number="25"><span class="st">    </span><span class="kw">paste0</span>(<span class="st">&quot;tele_&quot;</span>,</a>
 <a class="sourceLine" id="cb39-26" data-line-number="26">           trans_dict_std[[</a>
-<a class="sourceLine" id="cb39-27" data-line-number="27">             <span class="kw">which</span>(trans_dict_std<span class="op">$</span>field_u3n <span class="op">==</span><span class="st"> </span>u3n_ift_match_t[i]), <span class="st">'field_u3n'</span></a>
+<a class="sourceLine" id="cb39-27" data-line-number="27">             <span class="kw">which</span>(trans_dict_std<span class="op">$</span>field_u3n <span class="op">==</span><span class="st"> </span>u3n_ift_match_t[i]), <span class="st">&quot;field_u3n&quot;</span></a>
 <a class="sourceLine" id="cb39-28" data-line-number="28">             ]])</a>
-<a class="sourceLine" id="cb39-29" data-line-number="29">  trans_dict_std[curr_row, <span class="st">'form_u3n'</span>] &lt;-</a>
+<a class="sourceLine" id="cb39-29" data-line-number="29">  trans_dict_std[curr_row, <span class="st">&quot;form_u3n&quot;</span>] &lt;-</a>
 <a class="sourceLine" id="cb39-30" data-line-number="30"><span class="st">    </span><span class="kw">str_replace</span>(</a>
 <a class="sourceLine" id="cb39-31" data-line-number="31">      trans_dict_std[[</a>
-<a class="sourceLine" id="cb39-32" data-line-number="32">        <span class="kw">which</span>(trans_dict_std<span class="op">$</span>field_u3n <span class="op">==</span><span class="st"> </span>u3n_ift_match_t[i]), <span class="st">'form_u3n'</span></a>
+<a class="sourceLine" id="cb39-32" data-line-number="32">        <span class="kw">which</span>(trans_dict_std<span class="op">$</span>field_u3n <span class="op">==</span><span class="st"> </span>u3n_ift_match_t[i]), <span class="st">&quot;form_u3n&quot;</span></a>
 <a class="sourceLine" id="cb39-33" data-line-number="33">        ]],</a>
-<a class="sourceLine" id="cb39-34" data-line-number="34">      <span class="dt">pattern =</span> <span class="st">'ivp_'</span>,</a>
-<a class="sourceLine" id="cb39-35" data-line-number="35">      <span class="dt">replacement =</span> <span class="st">'tvp_'</span>)</a>
-<a class="sourceLine" id="cb39-36" data-line-number="36">  trans_dict_std[curr_row, <span class="st">'Notes'</span>] &lt;-</a>
-<a class="sourceLine" id="cb39-37" data-line-number="37"><span class="st">    '__ synthetic field in UDS 2, UDS 3 (Archive) __'</span></a>
-<a class="sourceLine" id="cb39-38" data-line-number="38">  trans_dict_std[curr_row, <span class="st">'std_source'</span>] &lt;-<span class="st"> 'field_u3n'</span></a>
-<a class="sourceLine" id="cb39-39" data-line-number="39">  trans_dict_std[curr_row, <span class="st">'std_field'</span>] &lt;-</a>
-<a class="sourceLine" id="cb39-40" data-line-number="40"><span class="st">    </span>trans_dict_std[[curr_row, <span class="st">'field_u3n'</span>]]</a>
+<a class="sourceLine" id="cb39-34" data-line-number="34">      <span class="dt">pattern =</span> <span class="st">&quot;ivp_&quot;</span>,</a>
+<a class="sourceLine" id="cb39-35" data-line-number="35">      <span class="dt">replacement =</span> <span class="st">&quot;tvp_&quot;</span>)</a>
+<a class="sourceLine" id="cb39-36" data-line-number="36">  trans_dict_std[curr_row, <span class="st">&quot;Notes&quot;</span>] &lt;-</a>
+<a class="sourceLine" id="cb39-37" data-line-number="37"><span class="st">    &quot;__ synthetic field in UDS 2, UDS 3 (Archive) __&quot;</span></a>
+<a class="sourceLine" id="cb39-38" data-line-number="38">  trans_dict_std[curr_row, <span class="st">&quot;std_source&quot;</span>] &lt;-<span class="st"> &quot;field_u3n&quot;</span></a>
+<a class="sourceLine" id="cb39-39" data-line-number="39">  trans_dict_std[curr_row, <span class="st">&quot;std_field&quot;</span>] &lt;-</a>
+<a class="sourceLine" id="cb39-40" data-line-number="40"><span class="st">    </span>trans_dict_std[[curr_row, <span class="st">&quot;field_u3n&quot;</span>]]</a>
 <a class="sourceLine" id="cb39-41" data-line-number="41">}</a>
 <a class="sourceLine" id="cb39-42" data-line-number="42"><span class="kw">tail</span>(trans_dict_std) <span class="co"># %&gt;% pretty_print_df()</span></a></code></pre></div>
 <pre><code>##      field_u2 form_u2 field_u3a form_u3a    field_u3n form_u3n
@@ -2343,11 +2344,11 @@ div.tocify {
 ## 4049  field_u3n tele_langcls
 ## 4050  field_u3n  tele_clssub</code></pre>
 <p>Now remove any instances of non-existing field names after <code>fu_*</code> and <code>tele_*</code> preprends.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="co"># _ Remove any instances of 'fu_NA', 'tele_NA', 'fu_', 'tele_' -----</span></a>
-<a class="sourceLine" id="cb41-2" data-line-number="2">trans_dict_std &lt;-<span class="st"> </span>trans_dict_std <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">na_if</span>(<span class="st">'fu_NA'</span>)</a>
-<a class="sourceLine" id="cb41-3" data-line-number="3">trans_dict_std &lt;-<span class="st"> </span>trans_dict_std <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">na_if</span>(<span class="st">'tele_NA'</span>)</a>
-<a class="sourceLine" id="cb41-4" data-line-number="4">trans_dict_std &lt;-<span class="st"> </span>trans_dict_std <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">na_if</span>(<span class="st">'fu_'</span>)</a>
-<a class="sourceLine" id="cb41-5" data-line-number="5">trans_dict_std &lt;-<span class="st"> </span>trans_dict_std <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">na_if</span>(<span class="st">'tele_'</span>)</a>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="co"># _ Remove any instances of &quot;fu_NA&quot;, &quot;tele_NA&quot;, &quot;fu_&quot;, &quot;tele_&quot; -----</span></a>
+<a class="sourceLine" id="cb41-2" data-line-number="2">trans_dict_std &lt;-<span class="st"> </span>trans_dict_std <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">na_if</span>(<span class="st">&quot;fu_NA&quot;</span>)</a>
+<a class="sourceLine" id="cb41-3" data-line-number="3">trans_dict_std &lt;-<span class="st"> </span>trans_dict_std <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">na_if</span>(<span class="st">&quot;tele_NA&quot;</span>)</a>
+<a class="sourceLine" id="cb41-4" data-line-number="4">trans_dict_std &lt;-<span class="st"> </span>trans_dict_std <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">na_if</span>(<span class="st">&quot;fu_&quot;</span>)</a>
+<a class="sourceLine" id="cb41-5" data-line-number="5">trans_dict_std &lt;-<span class="st"> </span>trans_dict_std <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">na_if</span>(<span class="st">&quot;tele_&quot;</span>)</a>
 <a class="sourceLine" id="cb41-6" data-line-number="6"><span class="kw">tail</span>(trans_dict_std) <span class="co"># %&gt;% pretty_print_df()</span></a></code></pre></div>
 <pre><code>##      field_u2 form_u2 field_u3a form_u3a    field_u3n form_u3n
 ## 4045     &lt;NA&gt;    &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt; tele_langc5f   tvp_z1
@@ -2437,8 +2438,9 @@ div.tocify {
 <a class="sourceLine" id="cb47-4" data-line-number="4">                                   <span class="dt">nrow =</span> <span class="kw">sum</span>(<span class="kw">nrow</span>(df_u2_ift),</a>
 <a class="sourceLine" id="cb47-5" data-line-number="5">                                              <span class="kw">nrow</span>(df_u3a_ift),</a>
 <a class="sourceLine" id="cb47-6" data-line-number="6">                                              <span class="kw">nrow</span>(df_u3n)),</a>
-<a class="sourceLine" id="cb47-7" data-line-number="7">                                   <span class="dt">ncol =</span> <span class="kw">nrow</span>(trans_dict_std)))</a>
-<a class="sourceLine" id="cb47-8" data-line-number="8"><span class="kw">names</span>(df_u2_u3a_u3n) &lt;-<span class="st"> </span>trans_dict_std<span class="op">$</span>std_field</a></code></pre></div>
+<a class="sourceLine" id="cb47-7" data-line-number="7">                                   <span class="dt">ncol =</span> <span class="kw">nrow</span>(trans_dict_std))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb47-8" data-line-number="8"><span class="st">  </span><span class="kw">as_tibble</span>()</a>
+<a class="sourceLine" id="cb47-9" data-line-number="9"><span class="kw">names</span>(df_u2_u3a_u3n) &lt;-<span class="st"> </span>trans_dict_std<span class="op">$</span>std_field</a></code></pre></div>
 </div>
 <div id="build-df_u2_u3a_u3n" class="section level3">
 <h3>Build <code>df_u2_u3a_u3n</code></h3>
@@ -2449,28 +2451,28 @@ div.tocify {
 <pre><code>## Number of columns in df_u2_u3a_u3n df:</code></pre>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq_len</span>(<span class="kw">nrow</span>(trans_dict_std))) {</a>
 <a class="sourceLine" id="cb50-2" data-line-number="2">  <span class="co"># for (i in 1:601) {</span></a>
-<a class="sourceLine" id="cb50-3" data-line-number="3">  <span class="kw">cat</span>(<span class="kw">paste0</span>(i, <span class="st">' '</span>))</a>
+<a class="sourceLine" id="cb50-3" data-line-number="3">  <span class="kw">cat</span>(<span class="kw">paste0</span>(i, <span class="st">&quot; &quot;</span>))</a>
 <a class="sourceLine" id="cb50-4" data-line-number="4">  </a>
 <a class="sourceLine" id="cb50-5" data-line-number="5">  <span class="co">## Build temp UDS 2 vector</span></a>
-<a class="sourceLine" id="cb50-6" data-line-number="6">  <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(trans_dict_std[i, <span class="st">'field_u2'</span>]) <span class="op">&amp;&amp;</span></a>
-<a class="sourceLine" id="cb50-7" data-line-number="7"><span class="st">      </span><span class="op">!</span><span class="kw">is.null</span>(df_u2_ift[[trans_dict_std[i, <span class="st">'field_u2'</span>]]])) {</a>
-<a class="sourceLine" id="cb50-8" data-line-number="8">    temp_u2_vec &lt;-<span class="st"> </span>df_u2_ift[[trans_dict_std[i, <span class="st">'field_u2'</span>]]]</a>
+<a class="sourceLine" id="cb50-6" data-line-number="6">  <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(trans_dict_std[i, <span class="st">&quot;field_u2&quot;</span>]) <span class="op">&amp;&amp;</span></a>
+<a class="sourceLine" id="cb50-7" data-line-number="7"><span class="st">      </span><span class="op">!</span><span class="kw">is.null</span>(df_u2_ift[[trans_dict_std[i, <span class="st">&quot;field_u2&quot;</span>]]])) {</a>
+<a class="sourceLine" id="cb50-8" data-line-number="8">    temp_u2_vec &lt;-<span class="st"> </span>df_u2_ift[[trans_dict_std[i, <span class="st">&quot;field_u2&quot;</span>]]]</a>
 <a class="sourceLine" id="cb50-9" data-line-number="9">  } <span class="cf">else</span> {</a>
 <a class="sourceLine" id="cb50-10" data-line-number="10">    temp_u2_vec &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA_character_</span>, <span class="dt">times =</span> <span class="kw">nrow</span>(df_u2_ift))</a>
 <a class="sourceLine" id="cb50-11" data-line-number="11">  }</a>
 <a class="sourceLine" id="cb50-12" data-line-number="12">  </a>
 <a class="sourceLine" id="cb50-13" data-line-number="13">  <span class="co">## Build temp UDS 3 (Archive) vector</span></a>
-<a class="sourceLine" id="cb50-14" data-line-number="14">  <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(trans_dict_std[i, <span class="st">'field_u3a'</span>]) <span class="op">&amp;&amp;</span></a>
-<a class="sourceLine" id="cb50-15" data-line-number="15"><span class="st">      </span><span class="op">!</span><span class="kw">is.null</span>(df_u3a_ift[[trans_dict_std[i, <span class="st">'field_u3a'</span>]]])) {</a>
-<a class="sourceLine" id="cb50-16" data-line-number="16">    temp_u3a_vec &lt;-<span class="st"> </span>df_u3a_ift[[trans_dict_std[i, <span class="st">'field_u3a'</span>]]]</a>
+<a class="sourceLine" id="cb50-14" data-line-number="14">  <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(trans_dict_std[i, <span class="st">&quot;field_u3a&quot;</span>]) <span class="op">&amp;&amp;</span></a>
+<a class="sourceLine" id="cb50-15" data-line-number="15"><span class="st">      </span><span class="op">!</span><span class="kw">is.null</span>(df_u3a_ift[[trans_dict_std[i, <span class="st">&quot;field_u3a&quot;</span>]]])) {</a>
+<a class="sourceLine" id="cb50-16" data-line-number="16">    temp_u3a_vec &lt;-<span class="st"> </span>df_u3a_ift[[trans_dict_std[i, <span class="st">&quot;field_u3a&quot;</span>]]]</a>
 <a class="sourceLine" id="cb50-17" data-line-number="17">  } <span class="cf">else</span> {</a>
 <a class="sourceLine" id="cb50-18" data-line-number="18">    temp_u3a_vec &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA_character_</span>, <span class="dt">times =</span> <span class="kw">nrow</span>(df_u3a_ift))</a>
 <a class="sourceLine" id="cb50-19" data-line-number="19">  }</a>
 <a class="sourceLine" id="cb50-20" data-line-number="20">  </a>
 <a class="sourceLine" id="cb50-21" data-line-number="21">  <span class="co">## Build temp UDS 3 (New) vector</span></a>
-<a class="sourceLine" id="cb50-22" data-line-number="22">  <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(trans_dict_std[i, <span class="st">'field_u3n'</span>]) <span class="op">&amp;&amp;</span></a>
-<a class="sourceLine" id="cb50-23" data-line-number="23"><span class="st">      </span><span class="op">!</span><span class="kw">is.null</span>(df_u3n[[trans_dict_std[i, <span class="st">'field_u3n'</span>]]])) {</a>
-<a class="sourceLine" id="cb50-24" data-line-number="24">    temp_u3n_vec &lt;-<span class="st"> </span>df_u3n[[trans_dict_std[i, <span class="st">'field_u3n'</span>]]]</a>
+<a class="sourceLine" id="cb50-22" data-line-number="22">  <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(trans_dict_std[i, <span class="st">&quot;field_u3n&quot;</span>]) <span class="op">&amp;&amp;</span></a>
+<a class="sourceLine" id="cb50-23" data-line-number="23"><span class="st">      </span><span class="op">!</span><span class="kw">is.null</span>(df_u3n[[trans_dict_std[i, <span class="st">&quot;field_u3n&quot;</span>]]])) {</a>
+<a class="sourceLine" id="cb50-24" data-line-number="24">    temp_u3n_vec &lt;-<span class="st"> </span>df_u3n[[trans_dict_std[i, <span class="st">&quot;field_u3n&quot;</span>]]]</a>
 <a class="sourceLine" id="cb50-25" data-line-number="25">  } <span class="cf">else</span> {</a>
 <a class="sourceLine" id="cb50-26" data-line-number="26">    temp_u3n_vec &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA_character_</span>, <span class="dt">times =</span> <span class="kw">nrow</span>(df_u3n))</a>
 <a class="sourceLine" id="cb50-27" data-line-number="27">  }</a>
@@ -2500,19 +2502,21 @@ div.tocify {
 </div>
 <div id="reduce-the-size-of-df_u2_u3a_u3n-by-guessing-column-data-types" class="section level3">
 <h3>Reduce the size of <code>df_u2_u3a_u3n</code> by guessing column data types</h3>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="kw">print</span>(<span class="kw">object.size</span>(df_u2_u3a_u3n), <span class="dt">units =</span> <span class="st">'auto'</span>)</a></code></pre></div>
-<pre><code>## 89.4 Mb</code></pre>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="kw">print</span>(<span class="kw">object.size</span>(df_u2_u3a_u3n), <span class="dt">units =</span> <span class="st">&quot;auto&quot;</span>)</a></code></pre></div>
+<pre><code>## 89.5 Mb</code></pre>
 <div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="co"># _ Guess column types</span></a>
 <a class="sourceLine" id="cb55-2" data-line-number="2">df_u2_u3a_u3n &lt;-<span class="st"> </span><span class="kw">suppressMessages</span>( readr<span class="op">::</span><span class="kw">type_convert</span>(df_u2_u3a_u3n) )</a>
-<a class="sourceLine" id="cb55-3" data-line-number="3"><span class="kw">print</span>(<span class="kw">object.size</span>(df_u2_u3a_u3n), <span class="dt">units =</span> <span class="st">'auto'</span>)</a></code></pre></div>
-<pre><code>## 66.7 Mb</code></pre>
+<a class="sourceLine" id="cb55-3" data-line-number="3"><span class="kw">print</span>(<span class="kw">object.size</span>(df_u2_u3a_u3n), <span class="dt">units =</span> <span class="st">&quot;auto&quot;</span>)</a></code></pre></div>
+<pre><code>## 66.8 Mb</code></pre>
 </div>
 </div>
-<div id="write-harmonized-data-to-csv" class="section level2">
-<h2>Write Harmonized Data To CSV</h2>
-<p>Write the resulting harmonized dataset <code>df_u2_u3a_u3n</code> to a CSV file of the same name.</p>
+<div id="write-harmonized-data-to-file" class="section level2">
+<h2>Write Harmonized Data To File</h2>
+<p>Write the resulting harmonized dataset <code>df_u2_u3a_u3n</code> to a CSV and RDS files of the same name.</p>
 <div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="co"># WRITE TO CSV ----</span></a>
-<a class="sourceLine" id="cb57-2" data-line-number="2">readr<span class="op">::</span><span class="kw">write_csv</span>(df_u2_u3a_u3n, <span class="st">'df_u2_u3a_u3n.csv'</span>, <span class="dt">na =</span> <span class="st">''</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb57-2" data-line-number="2">readr<span class="op">::</span><span class="kw">write_csv</span>(df_u2_u3a_u3n, <span class="st">&quot;MDI Data/df_u2_u3a_u3n.csv&quot;</span>, <span class="dt">na =</span> <span class="st">&quot;&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1"><span class="co"># WRITE TO RDS ---</span></a>
+<a class="sourceLine" id="cb58-2" data-line-number="2"><span class="kw">saveRDS</span>(df_u2_u3a_u3n, <span class="st">&quot;MDI Data/df_u2_u3a_u3n.Rds&quot;</span>)</a></code></pre></div>
 </div>
 </div>
 <div id="build-data-dictionary" class="section level1">
@@ -2521,88 +2525,94 @@ div.tocify {
 <h2>Get UDS Fields</h2>
 <div id="uds-2-5" class="section level3">
 <h3>UDS 2</h3>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1"><span class="co"># UDS 2</span></a>
-<a class="sourceLine" id="cb58-2" data-line-number="2">data_dict_fields_u2_raw &lt;-<span class="st"> </span>trans_dict_std <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb58-3" data-line-number="3"><span class="st">  </span><span class="kw">select</span>(std_source, std_field) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb58-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(std_source <span class="op">==</span><span class="st"> 'field_u2'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb58-5" data-line-number="5"><span class="st">  </span><span class="kw">pull</span>(std_field)</a></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1"><span class="co"># UDS 2</span></a>
+<a class="sourceLine" id="cb59-2" data-line-number="2">data_dict_fields_u2_raw &lt;-<span class="st"> </span>trans_dict_std <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb59-3" data-line-number="3"><span class="st">  </span><span class="kw">select</span>(std_source, std_field) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb59-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(std_source <span class="op">==</span><span class="st"> &quot;field_u2&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb59-5" data-line-number="5"><span class="st">  </span><span class="kw">pull</span>(std_field)</a></code></pre></div>
 </div>
 <div id="uds-3-archive-5" class="section level3">
 <h3>UDS 3 Archive</h3>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1"><span class="co"># UDS 3 (Archive)</span></a>
-<a class="sourceLine" id="cb59-2" data-line-number="2">data_dict_fields_u3a_raw &lt;-<span class="st"> </span>trans_dict_std <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb59-3" data-line-number="3"><span class="st">  </span><span class="kw">select</span>(std_source, std_field) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb59-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(std_source <span class="op">==</span><span class="st"> 'field_u3a'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb59-5" data-line-number="5"><span class="st">  </span><span class="kw">pull</span>(std_field)</a></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1"><span class="co"># UDS 3 (Archive)</span></a>
+<a class="sourceLine" id="cb60-2" data-line-number="2">data_dict_fields_u3a_raw &lt;-<span class="st"> </span>trans_dict_std <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb60-3" data-line-number="3"><span class="st">  </span><span class="kw">select</span>(std_source, std_field) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb60-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(std_source <span class="op">==</span><span class="st"> &quot;field_u3a&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb60-5" data-line-number="5"><span class="st">  </span><span class="kw">pull</span>(std_field)</a></code></pre></div>
 </div>
 <div id="uds-3-new-4" class="section level3">
 <h3>UDS 3 New</h3>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1"><span class="co"># UDS 3 (New)</span></a>
-<a class="sourceLine" id="cb60-2" data-line-number="2">data_dict_fields_u3n_raw &lt;-<span class="st"> </span>trans_dict_std <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-3" data-line-number="3"><span class="st">  </span><span class="kw">select</span>(std_source, std_field) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(std_source <span class="op">==</span><span class="st"> 'field_u3n'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-5" data-line-number="5"><span class="st">  </span><span class="kw">pull</span>(std_field)</a></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1"><span class="co"># UDS 3 (New)</span></a>
+<a class="sourceLine" id="cb61-2" data-line-number="2">data_dict_fields_u3n_raw &lt;-<span class="st"> </span>trans_dict_std <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb61-3" data-line-number="3"><span class="st">  </span><span class="kw">select</span>(std_source, std_field) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb61-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(std_source <span class="op">==</span><span class="st"> &quot;field_u3n&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb61-5" data-line-number="5"><span class="st">  </span><span class="kw">pull</span>(std_field)</a></code></pre></div>
 </div>
 </div>
 <div id="retrieve-data-dictionary-via-redcap-api" class="section level2">
 <h2>Retrieve Data Dictionary via REDCap API</h2>
 <div id="uds-2-6" class="section level3">
 <h3>UDS 2</h3>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1">json_data_dict_u2 &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(</a>
-<a class="sourceLine" id="cb61-2" data-line-number="2">  <span class="dt">uri=</span>REDCAP_API_URI,</a>
-<a class="sourceLine" id="cb61-3" data-line-number="3">  <span class="dt">token=</span>REDCAP_API_TOKEN_UDS2,</a>
-<a class="sourceLine" id="cb61-4" data-line-number="4">  <span class="dt">content=</span><span class="st">'metadata'</span>,</a>
-<a class="sourceLine" id="cb61-5" data-line-number="5">  <span class="dt">format=</span><span class="st">'json'</span>,</a>
-<a class="sourceLine" id="cb61-6" data-line-number="6">  <span class="dt">returnFormat=</span><span class="st">'json'</span>,</a>
-<a class="sourceLine" id="cb61-7" data-line-number="7">  <span class="dt">.opts =</span> <span class="kw">list</span>(<span class="dt">ssl.verifypeer =</span> <span class="ot">FALSE</span>) <span class="co"># using linux</span></a>
-<a class="sourceLine" id="cb61-8" data-line-number="8">)</a>
-<a class="sourceLine" id="cb61-9" data-line-number="9">df_data_dict_u2_all &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(json_data_dict_u2)</a>
-<a class="sourceLine" id="cb61-10" data-line-number="10">df_data_dict_u2 &lt;-<span class="st"> </span>df_data_dict_u2_all <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb61-11" data-line-number="11"><span class="st">  </span><span class="kw">filter</span>(field_name <span class="op">%in%</span><span class="st"> </span>data_dict_fields_u2_raw)</a></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1"><span class="cf">if</span> (GET_API_DATA) {</a>
+<a class="sourceLine" id="cb62-2" data-line-number="2">  json_data_dict_u2 &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(</a>
+<a class="sourceLine" id="cb62-3" data-line-number="3">    <span class="dt">uri=</span>REDCAP_API_URI,</a>
+<a class="sourceLine" id="cb62-4" data-line-number="4">    <span class="dt">token=</span>REDCAP_API_TOKEN_UDS2,</a>
+<a class="sourceLine" id="cb62-5" data-line-number="5">    <span class="dt">content=</span><span class="st">&quot;metadata&quot;</span>,</a>
+<a class="sourceLine" id="cb62-6" data-line-number="6">    <span class="dt">format=</span><span class="st">&quot;json&quot;</span>,</a>
+<a class="sourceLine" id="cb62-7" data-line-number="7">    <span class="dt">returnFormat=</span><span class="st">&quot;json&quot;</span>,</a>
+<a class="sourceLine" id="cb62-8" data-line-number="8">    <span class="dt">.opts =</span> <span class="kw">list</span>(<span class="dt">ssl.verifypeer =</span> <span class="ot">FALSE</span>) <span class="co"># using linux</span></a>
+<a class="sourceLine" id="cb62-9" data-line-number="9">  )</a>
+<a class="sourceLine" id="cb62-10" data-line-number="10">}</a>
+<a class="sourceLine" id="cb62-11" data-line-number="11">df_data_dict_u2_all &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(json_data_dict_u2)</a>
+<a class="sourceLine" id="cb62-12" data-line-number="12">df_data_dict_u2 &lt;-<span class="st"> </span>df_data_dict_u2_all <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb62-13" data-line-number="13"><span class="st">  </span><span class="kw">filter</span>(field_name <span class="op">%in%</span><span class="st"> </span>data_dict_fields_u2_raw)</a></code></pre></div>
 </div>
 <div id="uds-3-archive-6" class="section level3">
 <h3>UDS 3 (Archive)</h3>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1">json_data_dict_u3a &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(</a>
-<a class="sourceLine" id="cb62-2" data-line-number="2">  <span class="dt">uri=</span>REDCAP_API_URI,</a>
-<a class="sourceLine" id="cb62-3" data-line-number="3">  <span class="dt">token=</span>REDCAP_API_TOKEN_UDS3a,</a>
-<a class="sourceLine" id="cb62-4" data-line-number="4">  <span class="dt">content=</span><span class="st">'metadata'</span>,</a>
-<a class="sourceLine" id="cb62-5" data-line-number="5">  <span class="dt">format=</span><span class="st">'json'</span>,</a>
-<a class="sourceLine" id="cb62-6" data-line-number="6">  <span class="dt">returnFormat=</span><span class="st">'json'</span>,</a>
-<a class="sourceLine" id="cb62-7" data-line-number="7">  <span class="dt">.opts =</span> <span class="kw">list</span>(<span class="dt">ssl.verifypeer =</span> <span class="ot">FALSE</span>) <span class="co"># using linux</span></a>
-<a class="sourceLine" id="cb62-8" data-line-number="8">)</a>
-<a class="sourceLine" id="cb62-9" data-line-number="9">df_data_dict_u3a_all &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(json_data_dict_u3a)</a>
-<a class="sourceLine" id="cb62-10" data-line-number="10">df_data_dict_u3a &lt;-<span class="st"> </span>df_data_dict_u3a_all <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb62-11" data-line-number="11"><span class="st">  </span><span class="kw">filter</span>(field_name <span class="op">%in%</span><span class="st"> </span>data_dict_fields_u3a_raw)</a></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1"><span class="cf">if</span> (GET_API_DATA) {</a>
+<a class="sourceLine" id="cb63-2" data-line-number="2">  json_data_dict_u3a &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(</a>
+<a class="sourceLine" id="cb63-3" data-line-number="3">    <span class="dt">uri=</span>REDCAP_API_URI,</a>
+<a class="sourceLine" id="cb63-4" data-line-number="4">    <span class="dt">token=</span>REDCAP_API_TOKEN_UDS3a,</a>
+<a class="sourceLine" id="cb63-5" data-line-number="5">    <span class="dt">content=</span><span class="st">&quot;metadata&quot;</span>,</a>
+<a class="sourceLine" id="cb63-6" data-line-number="6">    <span class="dt">format=</span><span class="st">&quot;json&quot;</span>,</a>
+<a class="sourceLine" id="cb63-7" data-line-number="7">    <span class="dt">returnFormat=</span><span class="st">&quot;json&quot;</span>,</a>
+<a class="sourceLine" id="cb63-8" data-line-number="8">    <span class="dt">.opts =</span> <span class="kw">list</span>(<span class="dt">ssl.verifypeer =</span> <span class="ot">FALSE</span>) <span class="co"># using linux</span></a>
+<a class="sourceLine" id="cb63-9" data-line-number="9">  )</a>
+<a class="sourceLine" id="cb63-10" data-line-number="10">}</a>
+<a class="sourceLine" id="cb63-11" data-line-number="11">df_data_dict_u3a_all &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(json_data_dict_u3a)</a>
+<a class="sourceLine" id="cb63-12" data-line-number="12">df_data_dict_u3a &lt;-<span class="st"> </span>df_data_dict_u3a_all <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb63-13" data-line-number="13"><span class="st">  </span><span class="kw">filter</span>(field_name <span class="op">%in%</span><span class="st"> </span>data_dict_fields_u3a_raw)</a></code></pre></div>
 </div>
 <div id="uds-3-new-5" class="section level3">
 <h3>UDS 3 (New)</h3>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1">json_data_dict_u3n &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(</a>
-<a class="sourceLine" id="cb63-2" data-line-number="2">  <span class="dt">uri=</span>REDCAP_API_URI,</a>
-<a class="sourceLine" id="cb63-3" data-line-number="3">  <span class="dt">token=</span>REDCAP_API_TOKEN_UDS3n,</a>
-<a class="sourceLine" id="cb63-4" data-line-number="4">  <span class="dt">content=</span><span class="st">'metadata'</span>,</a>
-<a class="sourceLine" id="cb63-5" data-line-number="5">  <span class="dt">format=</span><span class="st">'json'</span>,</a>
-<a class="sourceLine" id="cb63-6" data-line-number="6">  <span class="dt">returnFormat=</span><span class="st">'json'</span>,</a>
-<a class="sourceLine" id="cb63-7" data-line-number="7">  <span class="dt">.opts =</span> <span class="kw">list</span>(<span class="dt">ssl.verifypeer =</span> <span class="ot">FALSE</span>) <span class="co"># using linux</span></a>
-<a class="sourceLine" id="cb63-8" data-line-number="8">)</a>
-<a class="sourceLine" id="cb63-9" data-line-number="9">df_data_dict_u3n_all &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(json_data_dict_u3n)</a>
-<a class="sourceLine" id="cb63-10" data-line-number="10">df_data_dict_u3n &lt;-<span class="st"> </span>df_data_dict_u3n_all <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb63-11" data-line-number="11"><span class="st">  </span><span class="kw">filter</span>(field_name <span class="op">%in%</span><span class="st"> </span>data_dict_fields_u3n_raw)</a></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" data-line-number="1"><span class="cf">if</span> (GET_API_DATA) {</a>
+<a class="sourceLine" id="cb64-2" data-line-number="2">  json_data_dict_u3n &lt;-<span class="st"> </span>RCurl<span class="op">::</span><span class="kw">postForm</span>(</a>
+<a class="sourceLine" id="cb64-3" data-line-number="3">    <span class="dt">uri=</span>REDCAP_API_URI,</a>
+<a class="sourceLine" id="cb64-4" data-line-number="4">    <span class="dt">token=</span>REDCAP_API_TOKEN_UDS3n,</a>
+<a class="sourceLine" id="cb64-5" data-line-number="5">    <span class="dt">content=</span><span class="st">&quot;metadata&quot;</span>,</a>
+<a class="sourceLine" id="cb64-6" data-line-number="6">    <span class="dt">format=</span><span class="st">&quot;json&quot;</span>,</a>
+<a class="sourceLine" id="cb64-7" data-line-number="7">    <span class="dt">returnFormat=</span><span class="st">&quot;json&quot;</span>,</a>
+<a class="sourceLine" id="cb64-8" data-line-number="8">    <span class="dt">.opts =</span> <span class="kw">list</span>(<span class="dt">ssl.verifypeer =</span> <span class="ot">FALSE</span>) <span class="co"># using linux</span></a>
+<a class="sourceLine" id="cb64-9" data-line-number="9">  )</a>
+<a class="sourceLine" id="cb64-10" data-line-number="10">}</a>
+<a class="sourceLine" id="cb64-11" data-line-number="11">df_data_dict_u3n_all &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(json_data_dict_u3n)</a>
+<a class="sourceLine" id="cb64-12" data-line-number="12">df_data_dict_u3n &lt;-<span class="st"> </span>df_data_dict_u3n_all <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb64-13" data-line-number="13"><span class="st">  </span><span class="kw">filter</span>(field_name <span class="op">%in%</span><span class="st"> </span>data_dict_fields_u3n_raw)</a></code></pre></div>
 </div>
 </div>
 <div id="rowbind-data-dictionaries-order" class="section level2">
 <h2>Rowbind Data Dictionaries &amp; Order</h2>
 <p>Order by form name, then field name.</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" data-line-number="1">df_data_dict &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(df_data_dict_u2,</a>
-<a class="sourceLine" id="cb64-2" data-line-number="2">                          df_data_dict_u3a,</a>
-<a class="sourceLine" id="cb64-3" data-line-number="3">                          df_data_dict_u3n)</a>
-<a class="sourceLine" id="cb64-4" data-line-number="4">df_data_dict_form &lt;-<span class="st"> </span>df_data_dict <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb64-5" data-line-number="5"><span class="st">  </span><span class="kw">arrange</span>(form_name, field_name)</a>
-<a class="sourceLine" id="cb64-6" data-line-number="6"><span class="co"># df_data_dict_field &lt;- df_data_dict %&gt;% </span></a>
-<a class="sourceLine" id="cb64-7" data-line-number="7"><span class="co">#   arrange(field_name)</span></a>
-<a class="sourceLine" id="cb64-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb64-9" data-line-number="9"><span class="kw">head</span>(df_data_dict_form) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb64-10" data-line-number="10"><span class="st">  </span><span class="kw">select</span>(field_name, form_name, section_header, field_type, field_label,</a>
-<a class="sourceLine" id="cb64-11" data-line-number="11">         select_choices_or_calculations, field_note) <span class="co"># %&gt;% pretty_print_df()</span></a></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1">df_data_dict &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(df_data_dict_u2,</a>
+<a class="sourceLine" id="cb65-2" data-line-number="2">                          df_data_dict_u3a,</a>
+<a class="sourceLine" id="cb65-3" data-line-number="3">                          df_data_dict_u3n)</a>
+<a class="sourceLine" id="cb65-4" data-line-number="4">df_data_dict_form &lt;-<span class="st"> </span>df_data_dict <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb65-5" data-line-number="5"><span class="st">  </span><span class="kw">arrange</span>(form_name, field_name)</a>
+<a class="sourceLine" id="cb65-6" data-line-number="6"><span class="co"># df_data_dict_field &lt;- df_data_dict %&gt;% </span></a>
+<a class="sourceLine" id="cb65-7" data-line-number="7"><span class="co">#   arrange(field_name)</span></a>
+<a class="sourceLine" id="cb65-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb65-9" data-line-number="9"><span class="kw">head</span>(df_data_dict_form) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb65-10" data-line-number="10"><span class="st">  </span><span class="kw">select</span>(field_name, form_name, section_header, field_type, field_label,</a>
+<a class="sourceLine" id="cb65-11" data-line-number="11">         select_choices_or_calculations, field_note) <span class="co"># %&gt;% pretty_print_df()</span></a></code></pre></div>
 <pre><code>##      field_name form_name section_header field_type
 ## 1     adco_date      adco                      text
 ## 2 adco_initials      adco                      text
@@ -2631,16 +2641,16 @@ div.tocify {
 ## 4           
 ## 5           
 ## 6</code></pre>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" data-line-number="1"><span class="co"># head(df_data_dict_field) %&gt;% </span></a>
-<a class="sourceLine" id="cb66-2" data-line-number="2"><span class="co">#   kable() %&gt;% </span></a>
-<a class="sourceLine" id="cb66-3" data-line-number="3"><span class="co">#   kable_styling(</span></a>
-<a class="sourceLine" id="cb66-4" data-line-number="4"><span class="co">#     bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;condensed&quot;, &quot;responsive&quot;), </span></a>
-<a class="sourceLine" id="cb66-5" data-line-number="5"><span class="co">#     font_size = 9)</span></a></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1"><span class="co"># head(df_data_dict_field) %&gt;% </span></a>
+<a class="sourceLine" id="cb67-2" data-line-number="2"><span class="co">#   kable() %&gt;% </span></a>
+<a class="sourceLine" id="cb67-3" data-line-number="3"><span class="co">#   kable_styling(</span></a>
+<a class="sourceLine" id="cb67-4" data-line-number="4"><span class="co">#     bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;condensed&quot;, &quot;responsive&quot;), </span></a>
+<a class="sourceLine" id="cb67-5" data-line-number="5"><span class="co">#     font_size = 9)</span></a></code></pre></div>
 </div>
 <div id="write-harmonized-unified-data-dictionary-to-csv" class="section level2">
 <h2>Write Harmonized Unified Data Dictionary To CSV</h2>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1">readr<span class="op">::</span><span class="kw">write_csv</span>(df_data_dict_form, <span class="st">'df_data_dict_form.csv'</span>, <span class="dt">na =</span> <span class="st">''</span>)</a>
-<a class="sourceLine" id="cb67-2" data-line-number="2"><span class="co"># readr::write_csv(df_data_dict_field, 'df_data_dict_field.csv', na = '')</span></a></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" data-line-number="1">readr<span class="op">::</span><span class="kw">write_csv</span>(df_data_dict_form, <span class="st">&quot;df_data_dict_form.csv&quot;</span>, <span class="dt">na =</span> <span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb68-2" data-line-number="2"><span class="co"># readr::write_csv(df_data_dict_field, &quot;df_data_dict_field.csv&quot;, na = &quot;&quot;)</span></a></code></pre></div>
 </div>
 </div>
 

@@ -1,6 +1,6 @@
 .Rproj.user
 .Rhistory
-.RData
+*.RData
 .Ruserdata
 .DS_Store
 ~*
@@ -9,7 +9,10 @@
 Archive/*
 Data\ Dictionaries/*
 Raw\ Data/*
+MDI\ Data/*
 Book*.xlsx
 codebook_filter.R
 ec_explanation.*
 grant_blurb.txt
+madc_integ_queries.R
+madcbrain_postgresql.R
