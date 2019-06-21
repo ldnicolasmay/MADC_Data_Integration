@@ -9,7 +9,7 @@
 Archive/*
 Data\ Dictionaries/*
 Raw\ Data/*
-MDI\ Data/*
+# MDI\ Data/*
 Book*.xlsx
 codebook_filter.R
 ec_explanation.*
