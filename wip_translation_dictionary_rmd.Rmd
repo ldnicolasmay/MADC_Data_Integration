@@ -22,6 +22,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r load_libs}
 # USEFUL LIBRARIES ----
 suppressMessages( library(dplyr) )
+suppressMessages( library(readr) )
 suppressMessages( library(stringr) )
 ```
 
@@ -373,7 +374,7 @@ if (GET_API_DATA) {
     content="record",
     format="json",
     type="flat",
-    fields=fields_u3n,
+    # fields=fields_u3n,
     rawOrLabel="raw",
     rawOrLabelHeaders="raw",
     exportCheckboxLabel="false",
@@ -1053,7 +1054,30 @@ for (sd in std_forms) {
     df_u2_u3a_u3n %>% 
     select(fields_tmp) %>% 
     get_nonempty_records(relevant_fields = fields_rlvnt) %>%
-    get_nonempty_fields()
+    get_nonempty_fields() %>% 
+    type_convert(col_types = cols(.default = col_guess()))
+  
+  # Find columns that are guessed as integers
+  # (readr::type_convert() above doesn't coerce to integers)
+  col_types <- 
+    purrr::map(ls_dfs_u2_u3a_u3n[[sd]], guess_parser, guess_integer = TRUE)
+  
+  ls_dfs_u2_u3a_u3n[[sd]] <-
+  purrr::imap_dfc(.x = col_types,
+                  .f = function(.x, .y) {
+                    
+                    # .x is col_type value
+                    # .y is col_type name
+                    
+                    if (.x == "integer") {
+                      ls_dfs_u2_u3a_u3n[[sd]][[.y]] <- 
+                        ls_dfs_u2_u3a_u3n[[sd]][[.y]] %>% as.integer()
+                    } else {
+                      ls_dfs_u2_u3a_u3n[[sd]][[.y]] <-
+                        ls_dfs_u2_u3a_u3n[[sd]][[.y]]
+                    }
+                    
+                  })
 }
 ```
 
