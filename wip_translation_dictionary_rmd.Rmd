@@ -1054,7 +1054,7 @@ for (sd in std_forms) {
     df_u2_u3a_u3n %>% 
     select(fields_tmp) %>% 
     get_nonempty_records(relevant_fields = fields_rlvnt) %>%
-    get_nonempty_fields() %>% 
+    # get_nonempty_fields() %>% # saves space but better to have every field
     type_convert(col_types = cols(.default = col_guess()))
   
   # Find columns that are guessed as integers
