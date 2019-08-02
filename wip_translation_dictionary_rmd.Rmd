@@ -73,7 +73,7 @@ if (GET_API_DATA) {
     content="exportFieldNames",
     format="json",
     returnFormat="json",
-    .opts = list(ssl.verifypeer = FALSE) # using linux
+    .opts = list(ssl.verifypeer = TRUE) # using linux
   )
 }
 export_fields_u2_df <- jsonlite::fromJSON(export_fields_u2_json) %>% 
@@ -94,7 +94,7 @@ if (GET_API_DATA) {
     content="exportFieldNames",
     format="json",
     returnFormat="json",
-    .opts = list(ssl.verifypeer = FALSE) # using linux
+    .opts = list(ssl.verifypeer = TRUE) # using linux
   )
 }
 export_fields_u3a_df <- jsonlite::fromJSON(export_fields_u3a_json) %>% 
@@ -115,7 +115,7 @@ if (GET_API_DATA) {
     content="exportFieldNames",
     format="json",
     returnFormat="json",
-    .opts = list(ssl.verifypeer = FALSE) # using linux
+    .opts = list(ssl.verifypeer = TRUE) # using linux
   )
 }
 export_fields_u3n_df <- jsonlite::fromJSON(export_fields_u3n_json) %>% 
@@ -136,7 +136,7 @@ if (GET_API_DATA) {
     content="exportFieldNames",
     format="json",
     returnFormat="json",
-    .opts = list(ssl.verifypeer = FALSE) # using linux
+    .opts = list(ssl.verifypeer = TRUE) # using linux
   )
 }
 export_fields_ms_df <- jsonlite::fromJSON(export_fields_ms_json) %>% 
@@ -160,8 +160,9 @@ if (GET_API_DATA) {
     content="metadata",
     format="json",
     returnFormat="json",
-    .opts = list(ssl.verifypeer = FALSE) # using linux
-  )
+    .opts = list(ssl.verifypeer = TRUE) # using linux
+  ) %>% 
+    str_replace_all(pattern = "\r\n|\r|\n|\t", replacement = " ")
 }
 data_dict_u2_df <- jsonlite::fromJSON(data_dict_u2_json) %>% 
   as_tibble() %>% 
@@ -181,8 +182,9 @@ if (GET_API_DATA) {
     content="metadata",
     format="json",
     returnFormat="json",
-    .opts = list(ssl.verifypeer = FALSE) # using linux
-  )
+    .opts = list(ssl.verifypeer = TRUE) # using linux
+  ) %>% 
+    str_replace_all(pattern = "\r\n|\r|\n|\t", replacement = " ")
 }
 data_dict_u3a_df <- jsonlite::fromJSON(data_dict_u3a_json) %>% 
   as_tibble() %>% 
@@ -202,8 +204,9 @@ if (GET_API_DATA) {
     content="metadata",
     format="json",
     returnFormat="json",
-    .opts = list(ssl.verifypeer = FALSE) # using linux
-  )
+    .opts = list(ssl.verifypeer = TRUE) # using linux
+  ) %>% 
+    str_replace_all(pattern = "\r\n|\r|\n|\t", replacement = " ")
 }
 data_dict_u3n_df <- jsonlite::fromJSON(data_dict_u3n_json) %>% 
   as_tibble() %>% 
@@ -223,8 +226,9 @@ if (GET_API_DATA) {
     content="metadata",
     format="json",
     returnFormat="json",
-    .opts = list(ssl.verifypeer = FALSE) # using linux
-  )
+    .opts = list(ssl.verifypeer = TRUE) # using linux
+  ) %>% 
+    str_replace_all(pattern = "\r\n|\r|\n|\t", replacement = " ")
 }
 data_dict_ms_df <- jsonlite::fromJSON(data_dict_ms_json) %>% 
   as_tibble() %>% 
@@ -325,9 +329,9 @@ if (GET_API_DATA) {
     exportSurveyFields="false",
     exportDataAccessGroups="false",
     returnFormat="json",
-    .opts = list(ssl.verifypeer = FALSE) # using linux
-  )
-  json_u2 <- str_replace_all(json_u2, "\r\n", " ")
+    .opts = list(ssl.verifypeer = TRUE) # using linux
+  ) %>% 
+    str_replace_all(pattern = "\r\n|\r|\n|\t", replacement = " ")
 }
 df_u2 <- jsonlite::fromJSON(json_u2) %>% 
   as_tibble() %>% 
@@ -355,9 +359,9 @@ if (GET_API_DATA) {
     exportSurveyFields="false",
     exportDataAccessGroups="false",
     returnFormat="json",
-    .opts = list(ssl.verifypeer = FALSE) # using linux
-  )
-  json_u3a <- str_replace_all(json_u3a, "\r\n", " ")
+    .opts = list(ssl.verifypeer = TRUE) # using linux
+  ) %>% 
+    str_replace_all(pattern = "\r\n|\r|\n|\t", replacement = " ")
 }
 df_u3a <- jsonlite::fromJSON(json_u3a) %>% 
   as_tibble() %>% 
@@ -381,9 +385,9 @@ if (GET_API_DATA) {
     exportSurveyFields="false",
     exportDataAccessGroups="false",
     returnFormat="json",
-    .opts = list(ssl.verifypeer = FALSE) # using linux
-  )
-  json_u3n <- str_replace_all(json_u3n, "\r\n", " ")
+    .opts = list(ssl.verifypeer = TRUE) # using linux
+  ) %>% 
+    str_replace_all(pattern = "\r\n|\r|\n|\t", replacement = " ")
 }
 df_u3n <- jsonlite::fromJSON(json_u3n) %>% 
   as_tibble() %>% 
@@ -1063,21 +1067,21 @@ for (sd in std_forms) {
     purrr::map(ls_dfs_u2_u3a_u3n[[sd]], guess_parser, guess_integer = TRUE)
   
   ls_dfs_u2_u3a_u3n[[sd]] <-
-  purrr::imap_dfc(.x = col_types,
-                  .f = function(.x, .y) {
-                    
-                    # .x is col_type value
-                    # .y is col_type name
-                    
-                    if (.x == "integer") {
-                      ls_dfs_u2_u3a_u3n[[sd]][[.y]] <- 
-                        ls_dfs_u2_u3a_u3n[[sd]][[.y]] %>% as.integer()
-                    } else {
-                      ls_dfs_u2_u3a_u3n[[sd]][[.y]] <-
-                        ls_dfs_u2_u3a_u3n[[sd]][[.y]]
-                    }
-                    
-                  })
+    purrr::imap_dfc(.x = col_types,
+                    .f = function(.x, .y) {
+                      
+                      # .x is col_type value
+                      # .y is col_type name
+                      
+                      if (.x == "integer") {
+                        ls_dfs_u2_u3a_u3n[[sd]][[.y]] <- 
+                          ls_dfs_u2_u3a_u3n[[sd]][[.y]] %>% as.integer()
+                      } else {
+                        ls_dfs_u2_u3a_u3n[[sd]][[.y]] <-
+                          ls_dfs_u2_u3a_u3n[[sd]][[.y]]
+                      }
+                      
+                    })
 }
 ```
 
@@ -1131,8 +1135,9 @@ if (GET_API_DATA) {
     content="metadata",
     format="json",
     returnFormat="json",
-    .opts = list(ssl.verifypeer = FALSE) # using linux
-  )
+    .opts = list(ssl.verifypeer = TRUE) # using linux
+  ) %>% 
+    str_replace_all(pattern = "\r\n|\r|\n|\t", replacement = " ")
 }
 df_data_dict_u2_all <- jsonlite::fromJSON(json_data_dict_u2)
 df_data_dict_u2 <- df_data_dict_u2_all %>% 
@@ -1148,8 +1153,9 @@ if (GET_API_DATA) {
     content="metadata",
     format="json",
     returnFormat="json",
-    .opts = list(ssl.verifypeer = FALSE) # using linux
-  )
+    .opts = list(ssl.verifypeer = TRUE) # using linux
+  ) %>% 
+    str_replace_all(pattern = "\r\n|\r|\n|\t", replacement = " ")
 }
 df_data_dict_u3a_all <- jsonlite::fromJSON(json_data_dict_u3a)
 df_data_dict_u3a <- df_data_dict_u3a_all %>% 
@@ -1165,8 +1171,9 @@ if (GET_API_DATA) {
     content="metadata",
     format="json",
     returnFormat="json",
-    .opts = list(ssl.verifypeer = FALSE) # using linux
-  )
+    .opts = list(ssl.verifypeer = TRUE) # using linux
+  ) %>% 
+    str_replace_all(pattern = "\r\n|\r|\n|\t", replacement = " ")
 }
 df_data_dict_u3n_all <- jsonlite::fromJSON(json_data_dict_u3n)
 df_data_dict_u3n <- df_data_dict_u3n_all %>% 
