@@ -64,7 +64,7 @@ pretty_print_df <- function(df) {
 ## Get REDCap Project Data Fields
 
 ### UDS 2
-```{r}
+```{r dl_uds2_data_fields}
 # _ UDS 2 ----
 if (GET_API_DATA) {
   export_fields_u2_json <- RCurl::postForm(
@@ -85,7 +85,7 @@ head(export_fields_u2_df) # %>% pretty_print_df()
 ```
 
 ### UDS 3 Archive
-```{r}
+```{r dl_uds3_archive_data_fields}
 # _ UDS 3 (Archive) ----
 if (GET_API_DATA) {
   export_fields_u3a_json <- RCurl::postForm(
@@ -106,7 +106,7 @@ head(export_fields_u3a_df) # %>% pretty_print_df()
 ```
 
 ### UDS 3 New
-```{r}
+```{r dl_uds3_new_data_fields}
 # _ UDS 3 (New) ----
 if (GET_API_DATA) {
   export_fields_u3n_json <- RCurl::postForm(
@@ -127,7 +127,7 @@ head(export_fields_u3n_df) # %>% pretty_print_df()
 ```
 
 ### MiNDSet Registry
-```{r}
+```{r dl_mindset_data_fields}
 # _ MiNDSet ----
 if (GET_API_DATA) {
   export_fields_ms_json <- RCurl::postForm(
@@ -151,7 +151,7 @@ head(export_fields_ms_df) # %>% pretty_print_df()
 ## Get REDCap Project Data Dictionaries
 
 ### UDS 2
-```{r}
+```{r dl_uds2_data_dict}
 # _ UDS 2 ----
 if (GET_API_DATA) {
   data_dict_u2_json <- RCurl::postForm(
@@ -173,7 +173,7 @@ head(data_dict_u2_df) # %>% pretty_print_df()
 ```
 
 ### UDS 3 Archive
-```{r}
+```{r dl_uds3_archive_data_dict}
 # _ UDS 3 (Archive) ----
 if (GET_API_DATA) {
   data_dict_u3a_json <- RCurl::postForm(
@@ -195,7 +195,7 @@ head(data_dict_u3a_df) # %>% pretty_print_df()
 ```
 
 ### UDS 3 New
-```{r}
+```{r dl_uds3_new_data_dict}
 # _ UDS 3 (New) ----
 if (GET_API_DATA) {
   data_dict_u3n_json <- RCurl::postForm(
@@ -217,7 +217,7 @@ head(data_dict_u3n_df) # %>% pretty_print_df()
 ```
 
 ### MiNDSet Registry
-```{r}
+```{r dl_mindset_data_dict}
 # _ UDS 3 (Archive) ----
 if (GET_API_DATA) {
   data_dict_ms_json <- RCurl::postForm(
@@ -313,7 +313,7 @@ fields_u3n <- fields_u3n_raw %>% paste(collapse = ",")
 ## REDCap API Data Retrieval
 
 ### UDS 2
-```{r}
+```{r dl_uds2_data}
 # _ UDS 2 ----
 if (GET_API_DATA) {
   json_u2 <- RCurl::postForm(
@@ -343,7 +343,7 @@ df_u2 <- jsonlite::fromJSON(json_u2) %>%
 ```
 
 ### UDS 3 Archive
-```{r}
+```{r dl_uds3_archive_data}
 # _ UDS 3 (Archive) ----
 if (GET_API_DATA) {
   json_u3a <- RCurl::postForm(
@@ -369,7 +369,7 @@ df_u3a <- jsonlite::fromJSON(json_u3a) %>%
 ```
 
 ### UDS 3 New
-```{r}
+```{r dl_uds3_new_data}
 # _ UDS 3 (New) ----
 if (GET_API_DATA) {
   json_u3n <- RCurl::postForm(

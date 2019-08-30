@@ -6,6 +6,7 @@
 ~*
 *.csv
 *.jpg
+*.odt
 Archive/*
 Data\ Dictionaries/*
 Raw\ Data/*
