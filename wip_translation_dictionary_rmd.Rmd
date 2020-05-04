@@ -30,10 +30,10 @@ suppressMessages( library(stringr) )
 
 ```{r}
 # USEFUL VARS ----
-source("~/Box Sync/Documents/R_helpers/config.R")
+source("~/Box/Documents/R_helpers/config.R")
 rm(BOX_CLIENT_ID); rm(BOX_CLIENT_SECRET); rm(BOX_REDIRECT_URI)
 rm(REDCAP_DATA_REQUESTS_TOKEN)
-source("~/Box Sync/Documents/R_helpers/helpers.R")
+source("~/Box/Documents/R_helpers/helpers.R")
 
 ## switch to access API (TRUE) or not (FALSE)
 GET_API_DATA <- TRUE
@@ -67,14 +67,15 @@ pretty_print_df <- function(df) {
 ```{r dl_uds2_data_fields}
 # _ UDS 2 ----
 if (GET_API_DATA) {
-  export_fields_u2_json <- RCurl::postForm(
-    uri=REDCAP_API_URI,
-    token=REDCAP_API_TOKEN_UDS2,
-    content="exportFieldNames",
-    format="json",
-    returnFormat="json",
-    .opts = list(ssl.verifypeer = TRUE) # using linux
-  )
+  export_fields_u2_json <- 
+    RCurl::postForm(
+      uri=REDCAP_API_URI,
+      token=REDCAP_API_TOKEN_UDS2,
+      content="exportFieldNames",
+      format="json",
+      returnFormat="json",
+      .opts = list(ssl.verifypeer = TRUE) # using linux
+    )
 }
 export_fields_u2_df <- jsonlite::fromJSON(export_fields_u2_json) %>% 
   as_tibble() %>% 
@@ -88,14 +89,15 @@ head(export_fields_u2_df) # %>% pretty_print_df()
 ```{r dl_uds3_archive_data_fields}
 # _ UDS 3 (Archive) ----
 if (GET_API_DATA) {
-  export_fields_u3a_json <- RCurl::postForm(
-    uri=REDCAP_API_URI,
-    token=REDCAP_API_TOKEN_UDS3a,
-    content="exportFieldNames",
-    format="json",
-    returnFormat="json",
-    .opts = list(ssl.verifypeer = TRUE) # using linux
-  )
+  export_fields_u3a_json <- 
+    RCurl::postForm(
+      uri=REDCAP_API_URI,
+      token=REDCAP_API_TOKEN_UDS3a,
+      content="exportFieldNames",
+      format="json",
+      returnFormat="json",
+      .opts = list(ssl.verifypeer = TRUE) # using linux
+    )
 }
 export_fields_u3a_df <- jsonlite::fromJSON(export_fields_u3a_json) %>% 
   as_tibble() %>% 
@@ -109,14 +111,15 @@ head(export_fields_u3a_df) # %>% pretty_print_df()
 ```{r dl_uds3_new_data_fields}
 # _ UDS 3 (New) ----
 if (GET_API_DATA) {
-  export_fields_u3n_json <- RCurl::postForm(
-    uri=REDCAP_API_URI,
-    token=REDCAP_API_TOKEN_UDS3n,
-    content="exportFieldNames",
-    format="json",
-    returnFormat="json",
-    .opts = list(ssl.verifypeer = TRUE) # using linux
-  )
+  export_fields_u3n_json <- 
+    RCurl::postForm(
+      uri=REDCAP_API_URI,
+      token=REDCAP_API_TOKEN_UDS3n,
+      content="exportFieldNames",
+      format="json",
+      returnFormat="json",
+      .opts = list(ssl.verifypeer = TRUE) # using linux
+    )
 }
 export_fields_u3n_df <- jsonlite::fromJSON(export_fields_u3n_json) %>% 
   as_tibble() %>% 
@@ -130,14 +133,15 @@ head(export_fields_u3n_df) # %>% pretty_print_df()
 ```{r dl_mindset_data_fields}
 # _ MiNDSet ----
 if (GET_API_DATA) {
-  export_fields_ms_json <- RCurl::postForm(
-    uri=REDCAP_API_URI,
-    token=REDCAP_API_TOKEN_MINDSET,
-    content="exportFieldNames",
-    format="json",
-    returnFormat="json",
-    .opts = list(ssl.verifypeer = TRUE) # using linux
-  )
+  export_fields_ms_json <- 
+    RCurl::postForm(
+      uri=REDCAP_API_URI,
+      token=REDCAP_API_TOKEN_MINDSET,
+      content="exportFieldNames",
+      format="json",
+      returnFormat="json",
+      .opts = list(ssl.verifypeer = TRUE) # using linux
+    )
 }
 export_fields_ms_df <- jsonlite::fromJSON(export_fields_ms_json) %>% 
   as_tibble() %>% 
@@ -154,14 +158,15 @@ head(export_fields_ms_df) # %>% pretty_print_df()
 ```{r dl_uds2_data_dict}
 # _ UDS 2 ----
 if (GET_API_DATA) {
-  data_dict_u2_json <- RCurl::postForm(
-    uri=REDCAP_API_URI,
-    token=REDCAP_API_TOKEN_UDS2,
-    content="metadata",
-    format="json",
-    returnFormat="json",
-    .opts = list(ssl.verifypeer = TRUE) # using linux
-  ) %>% 
+  data_dict_u2_json <- 
+    RCurl::postForm(
+      uri=REDCAP_API_URI,
+      token=REDCAP_API_TOKEN_UDS2,
+      content="metadata",
+      format="json",
+      returnFormat="json",
+      .opts = list(ssl.verifypeer = TRUE) # using linux
+    ) %>% 
     str_replace_all(pattern = "\r\n|\r|\n|\t", replacement = " ")
 }
 data_dict_u2_df <- jsonlite::fromJSON(data_dict_u2_json) %>% 
@@ -176,14 +181,15 @@ head(data_dict_u2_df) # %>% pretty_print_df()
 ```{r dl_uds3_archive_data_dict}
 # _ UDS 3 (Archive) ----
 if (GET_API_DATA) {
-  data_dict_u3a_json <- RCurl::postForm(
-    uri=REDCAP_API_URI,
-    token=REDCAP_API_TOKEN_UDS3a,
-    content="metadata",
-    format="json",
-    returnFormat="json",
-    .opts = list(ssl.verifypeer = TRUE) # using linux
-  ) %>% 
+  data_dict_u3a_json <- 
+    RCurl::postForm(
+      uri=REDCAP_API_URI,
+      token=REDCAP_API_TOKEN_UDS3a,
+      content="metadata",
+      format="json",
+      returnFormat="json",
+      .opts = list(ssl.verifypeer = TRUE) # using linux
+    ) %>% 
     str_replace_all(pattern = "\r\n|\r|\n|\t", replacement = " ")
 }
 data_dict_u3a_df <- jsonlite::fromJSON(data_dict_u3a_json) %>% 
@@ -198,14 +204,15 @@ head(data_dict_u3a_df) # %>% pretty_print_df()
 ```{r dl_uds3_new_data_dict}
 # _ UDS 3 (New) ----
 if (GET_API_DATA) {
-  data_dict_u3n_json <- RCurl::postForm(
-    uri=REDCAP_API_URI,
-    token=REDCAP_API_TOKEN_UDS3n,
-    content="metadata",
-    format="json",
-    returnFormat="json",
-    .opts = list(ssl.verifypeer = TRUE) # using linux
-  ) %>% 
+  data_dict_u3n_json <- 
+    RCurl::postForm(
+      uri=REDCAP_API_URI,
+      token=REDCAP_API_TOKEN_UDS3n,
+      content="metadata",
+      format="json",
+      returnFormat="json",
+      .opts = list(ssl.verifypeer = TRUE) # using linux
+    ) %>% 
     str_replace_all(pattern = "\r\n|\r|\n|\t", replacement = " ")
 }
 data_dict_u3n_df <- jsonlite::fromJSON(data_dict_u3n_json) %>% 
@@ -220,14 +227,15 @@ head(data_dict_u3n_df) # %>% pretty_print_df()
 ```{r dl_mindset_data_dict}
 # _ UDS 3 (Archive) ----
 if (GET_API_DATA) {
-  data_dict_ms_json <- RCurl::postForm(
-    uri=REDCAP_API_URI,
-    token=REDCAP_API_TOKEN_MINDSET,
-    content="metadata",
-    format="json",
-    returnFormat="json",
-    .opts = list(ssl.verifypeer = TRUE) # using linux
-  ) %>% 
+  data_dict_ms_json <- 
+    RCurl::postForm(
+      uri=REDCAP_API_URI,
+      token=REDCAP_API_TOKEN_MINDSET,
+      content="metadata",
+      format="json",
+      returnFormat="json",
+      .opts = list(ssl.verifypeer = TRUE) # using linux
+    ) %>% 
     str_replace_all(pattern = "\r\n|\r|\n|\t", replacement = " ")
 }
 data_dict_ms_df <- jsonlite::fromJSON(data_dict_ms_json) %>% 
@@ -316,22 +324,9 @@ fields_u3n <- fields_u3n_raw %>% paste(collapse = ",")
 ```{r dl_uds2_data}
 # _ UDS 2 ----
 if (GET_API_DATA) {
-  json_u2 <- RCurl::postForm(
-    uri=REDCAP_API_URI,
-    token=REDCAP_API_TOKEN_UDS2,
-    content="record",
-    format="json",
-    type="flat",
-    fields=fields_u2,
-    rawOrLabel="raw",
-    rawOrLabelHeaders="raw",
-    exportCheckboxLabel="false",
-    exportSurveyFields="false",
-    exportDataAccessGroups="false",
-    returnFormat="json",
-    .opts = list(ssl.verifypeer = TRUE) # using linux
-  ) %>% 
-    str_replace_all(pattern = "\r\n|\r|\n|\t", replacement = " ")
+  json_u2 <- export_redcap_records(uri    = REDCAP_API_URI,
+                                   token  = REDCAP_API_TOKEN_UDS2,
+                                   fields = fields_u2)
 }
 df_u2 <- jsonlite::fromJSON(json_u2) %>% 
   as_tibble() %>% 
@@ -346,22 +341,9 @@ df_u2 <- jsonlite::fromJSON(json_u2) %>%
 ```{r dl_uds3_archive_data}
 # _ UDS 3 (Archive) ----
 if (GET_API_DATA) {
-  json_u3a <- RCurl::postForm(
-    uri=REDCAP_API_URI,
-    token=REDCAP_API_TOKEN_UDS3a,
-    content="record",
-    format="json",
-    type="flat",
-    fields=fields_u3a,
-    rawOrLabel="raw",
-    rawOrLabelHeaders="raw",
-    exportCheckboxLabel="false",
-    exportSurveyFields="false",
-    exportDataAccessGroups="false",
-    returnFormat="json",
-    .opts = list(ssl.verifypeer = TRUE) # using linux
-  ) %>% 
-    str_replace_all(pattern = "\r\n|\r|\n|\t", replacement = " ")
+  json_u3a <- export_redcap_records(uri    = REDCAP_API_URI,
+                                    token  = REDCAP_API_TOKEN_UDS3a,
+                                    fields = fields_u3a)
 }
 df_u3a <- jsonlite::fromJSON(json_u3a) %>% 
   as_tibble() %>% 
@@ -372,22 +354,8 @@ df_u3a <- jsonlite::fromJSON(json_u3a) %>%
 ```{r dl_uds3_new_data}
 # _ UDS 3 (New) ----
 if (GET_API_DATA) {
-  json_u3n <- RCurl::postForm(
-    uri=REDCAP_API_URI,
-    token=REDCAP_API_TOKEN_UDS3n,
-    content="record",
-    format="json",
-    type="flat",
-    # fields=fields_u3n,
-    rawOrLabel="raw",
-    rawOrLabelHeaders="raw",
-    exportCheckboxLabel="false",
-    exportSurveyFields="false",
-    exportDataAccessGroups="false",
-    returnFormat="json",
-    .opts = list(ssl.verifypeer = TRUE) # using linux
-  ) %>% 
-    str_replace_all(pattern = "\r\n|\r|\n|\t", replacement = " ")
+  json_u3n <- export_redcap_records(uri   = REDCAP_API_URI,
+                                    token = REDCAP_API_TOKEN_UDS3n)
 }
 df_u3n <- jsonlite::fromJSON(json_u3n) %>% 
   as_tibble() %>% 
@@ -404,7 +372,7 @@ df_u3n <- df_u3n %>%
 This comes in handy when diagnosising and resolving possible code errors.
 
 ```{r}
-readr::write_csv(df_u2, "./Raw Data/df_u2.csv", na = "")
+readr::write_csv(df_u2,  "./Raw Data/df_u2.csv",  na = "")
 readr::write_csv(df_u3a, "./Raw Data/df_u3a.csv", na = "")
 readr::write_csv(df_u3n, "./Raw Data/df_u3n.csv", na = "")
 ```
@@ -470,7 +438,7 @@ df_u3a_f <- df_u3a %>%
   filter(a1pkt_type == "F") %>% 
   rename_at(.vars = vars(one_of(u3a_fvp_vars)),
             # .funs = funs(str_replace(., "(.*)", "fu_")))
-            .funs = list(~str_replace(., "(.*)", "fu_")))
+            .funs = list(~str_replace(., "(.*)", "fu_\\1")))
 # _ _ UDS 3 (Archive) TVP ----
 u3n_tvp_vars <- str_replace(fields_u3n_raw_tele, "tele_", "")
 u3a_tvp_vars <- trans_dict %>% 
@@ -481,7 +449,7 @@ df_u3a_t <- df_u3a %>%
   filter(a1pkt_type == "T") %>% 
   rename_at(.vars = vars(one_of(u3a_tvp_vars)),
             # .funs = funs(str_replace(., "(.*)", "tele_")))
-            .funs = list(~str_replace(., "(.*)", "tele_")))
+            .funs = list(~str_replace(., "(.*)", "tele_\\1")))
 # _ _ Row bind UDS 3 (Archive) I+F+T ----
 df_u3a_ift <- bind_rows(df_u3a_i, df_u3a_f, df_u3a_t)
 ```
@@ -1056,7 +1024,7 @@ for (sd in std_forms) {
   
   ls_dfs_u2_u3a_u3n[[sd]] <- 
     df_u2_u3a_u3n %>% 
-    select(fields_tmp) %>% 
+    select(all_of(fields_tmp)) %>% 
     get_nonempty_records(relevant_fields = fields_rlvnt) %>%
     # get_nonempty_fields() %>% # saves space but better to have every field
     type_convert(col_types = cols(.default = col_guess()))
